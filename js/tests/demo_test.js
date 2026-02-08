@@ -1,4 +1,4 @@
-// DEMO TEST - For quick testing
+﻿// DEMO TEST - For quick testing
 
 const testDefinition = {
     id: "demo-test",
@@ -206,6 +206,8 @@ function showResultsPage() {
     answersContainer.appendChild(answersList);
 
     if (typeof Storage !== 'undefined') {
+        const resultId = Storage.saveResult(testResults.testId, testResults);
+        testResults.resultId = resultId;
         Storage.recordTestTaken(testResults.testId, testResults.testTitle);
     }
 
@@ -214,6 +216,12 @@ function showResultsPage() {
 
 // ===== PAGE NAVIGATION =====
 function setupPageNavigation() {
+    document.getElementById('results-back-btn').addEventListener('click', () => {
+        document.getElementById('results-page').style.display = 'none';
+        document.getElementById('test-page').style.display = 'block';
+        document.getElementById('test-page').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
     document.getElementById('interpretation-btn').addEventListener('click', showDemographicsPage);
     
     document.getElementById('back-to-results-btn').addEventListener('click', () => {
@@ -288,3 +296,4 @@ function showPaymentPage() {
 
 // ===== INITIALIZE ON PAGE LOAD =====
 document.addEventListener('DOMContentLoaded', initializeTest);
+

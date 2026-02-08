@@ -1,4 +1,4 @@
-// BDI-PC Test - DATA + LOGIC COMBINED IN ONE FILE
+﻿// BDI-PC Test - DATA + LOGIC COMBINED IN ONE FILE
 
 const testDefinition = {
     id: "bdi-pc",
@@ -220,12 +220,12 @@ function submitTest() {
     const interpretation = Scoring.getInterpretation(totalScore, testData.scoring.ranges);
     const percentage = Scoring.calculatePercentage(totalScore, testData.scoring.max);
 
-    testResults = {
-        testId: testData.id,
-        testTitle: testData.title,
-        score: totalScore,
-        maxScore: testData.scoring.max,
-        percentage: percentage,
+      testResults = {
+          testId: testData.id,
+          testTitle: testData.title,
+          score: totalScore,
+          maxScore: testData.scoring.max,
+          percentage: percentage,
         interpretation: interpretation,
         answers: answers.map((answer, index) => ({
             questionId: testData.questions[index].id,
@@ -270,6 +270,8 @@ function showResultsPage() {
     answersContainer.appendChild(answersList);
 
     if (typeof Storage !== 'undefined') {
+        const resultId = Storage.saveResult(testResults.testId, testResults);
+        testResults.resultId = resultId;
         Storage.recordTestTaken(testResults.testId, testResults.testTitle);
     }
 
@@ -279,6 +281,13 @@ function showResultsPage() {
 
 // ===== PAGE NAVIGATION =====
 function setupPageNavigation() {
+    // Back to answers
+    document.getElementById('results-back-btn').addEventListener('click', () => {
+        document.getElementById('results-page').style.display = 'none';
+        document.getElementById('test-page').style.display = 'block';
+        document.getElementById('test-page').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
     // Interpretation button
     document.getElementById('interpretation-btn').addEventListener('click', showDemographicsPage);
     
@@ -360,3 +369,4 @@ function showPaymentPage() {
 
 // ===== INITIALIZE ON PAGE LOAD =====
 document.addEventListener('DOMContentLoaded', initializeTest);
+

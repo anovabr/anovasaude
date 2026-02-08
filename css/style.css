@@ -1,4 +1,4 @@
-/* Complete Stylesheet - Landing + Test Pages */
+﻿/* Complete Stylesheet - Landing + Test Pages */
 
 * {
     margin: 0;
@@ -49,6 +49,115 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+}
+
+.progress-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--border);
+    background: var(--bg-cream);
+    border-radius: 999px;
+    font-size: 0.9rem;
+    color: var(--text-dark);
+    line-height: 1.2;
+}
+
+.progress-chip__label {
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.progress-chip__count strong {
+    color: var(--primary);
+}
+
+.progress-actions {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+}
+
+.progress-btn {
+    border: 1px solid var(--border);
+    background: var(--bg-white);
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: var(--primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.progress-btn:hover {
+    border-color: var(--accent);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+.progress-btn--ghost {
+    background: transparent;
+}
+
+.progress-panel {
+    position: absolute;
+    top: 120%;
+    right: 0;
+    width: 280px;
+    background: var(--bg-white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    padding: 1rem;
+    display: none;
+    z-index: 200;
+}
+
+.progress-panel--open {
+    display: block;
+}
+
+.progress-panel h4 {
+    margin: 0 0 0.5rem;
+    font-family: 'Crimson Pro', serif;
+    color: var(--primary);
+    font-size: 1rem;
+}
+
+.progress-panel__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.progress-panel__item {
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-cream);
+}
+
+.progress-panel__title {
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.25rem;
+}
+
+.progress-panel__meta {
+    font-size: 0.9rem;
+    color: var(--text-light);
 }
 
 .logo {
@@ -209,6 +318,12 @@ body {
 
 .tests-dashboard__summary p {
     color: var(--text-light);
+}
+
+.tests-dashboard__sub {
+    color: var(--text-light);
+    margin-bottom: 0.4rem;
+    font-size: 0.95rem;
 }
 
 .tests-taken-list {
@@ -598,7 +713,7 @@ body {
     display: flex;
     gap: 1.5rem;
     justify-content: flex-start;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     margin-top: 2rem;
     padding-top: 2rem;
     border-top: 1px solid var(--border);
@@ -653,8 +768,34 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    .nav {
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .nav-brand {
+        width: 100%;
+        justify-content: space-between;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
     .nav-links {
-        display: none;
+        width: 100%;
+        justify-content: flex-start;
+        gap: 1.5rem;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .progress-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .progress-chip {
+        padding: 0.3rem 0.65rem;
+        font-size: 0.85rem;
     }
 
     .features-grid,
@@ -898,3 +1039,13 @@ body {
         font-size: 0.95rem;
     }
 }
+
+
+.actions-bar { flex-wrap: nowrap; align-items: center; }
+.actions-bar .post-action { display: inline-flex; }
+
+
+.actions-bar { flex-wrap: nowrap; align-items: center; gap: 1rem; }
+.actions-bar .post-action { display: inline-flex; }
+@media (max-width: 768px) { .actions-bar { flex-wrap: wrap; } }
+

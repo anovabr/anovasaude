@@ -1,4 +1,4 @@
-// ===== SHARED PAGES TEMPLATE =====
+﻿// ===== SHARED PAGES TEMPLATE =====
 
 function injectSharedPages() {
   const testContainer = document.querySelector(".test-container");
@@ -22,7 +22,7 @@ function injectSharedPages() {
                 </div>
 
                 <div class="result-interpretation">
-                    <h2 id="result-level">Nível</h2>
+                    <h2 id="result-level">NÃ­vel</h2>
                     <p id="result-description">Descrição</p>
                 </div>
             </div>
@@ -32,7 +32,7 @@ function injectSharedPages() {
             </div>
 
             <div class="test-navigation">
-                <a href="#" class="btn btn-secondary" onclick="history.back(); return false;">Voltar</a>
+                <button type="button" id="results-back-btn" class="btn btn-secondary">Voltar</button>
                 <button id="interpretation-btn" class="btn btn-primary">
                     Quero Interpretação Humana
                 </button>
@@ -42,7 +42,7 @@ function injectSharedPages() {
         <!-- PAGE 3: DEMOGRAPHICS FORM -->
         <div id="demographics-page" class="page-section" style="display: none;">
             <div class="test-header">
-                <h1>Informações Pessoais</h1>
+                <h1>InformaçÃµes Pessoais</h1>
                 <p>Para enviar seus resultados e solicitar a interpretação profissional, preencha o formulário abaixo:</p>
             </div>
 
@@ -68,17 +68,17 @@ function injectSharedPages() {
                         <option value="BA">Bahia</option>
                         <option value="CE">Ceará</option>
                         <option value="DF">Distrito Federal</option>
-                        <option value="ES">Espírito Santo</option>
+                        <option value="ES">EspÃ­rito Santo</option>
                         <option value="GO">Goiás</option>
                         <option value="MA">Maranhão</option>
                         <option value="MT">Mato Grosso</option>
                         <option value="MS">Mato Grosso do Sul</option>
                         <option value="MG">Minas Gerais</option>
                         <option value="PA">Pará</option>
-                        <option value="PB">Paraíba</option>
+                        <option value="PB">ParaÃ­ba</option>
                         <option value="PR">Paraná</option>
                         <option value="PE">Pernambuco</option>
-                        <option value="PI">Piauí</option>
+                        <option value="PI">PiauÃ­</option>
                         <option value="RJ">Rio de Janeiro</option>
                         <option value="RN">Rio Grande do Norte</option>
                         <option value="RS">Rio Grande do Sul</option>
@@ -129,16 +129,19 @@ function injectSharedPages() {
                   </label>
                 </div>
 
-                <div class="test-navigation">
+                <div id="actions-bar" class="test-navigation actions-bar">
                     <button type="button" id="back-to-results-btn" class="btn btn-secondary">
                         Voltar
                     </button>
                     <button type="button" id="submit-results-btn" class="btn btn-primary">
-                      Enviar Resultados
+                        Enviar Resultados
                     </button>
-                    <button type="button" id="realizar-pagamento-btn" class="btn btn-success" style="display:none;margin-left:8px;">
-                      Realizar pagamento
-                    </button>
+                    <a href="../index.html#testes" class="btn btn-secondary post-action" style="display:none;">
+                      Fazer Outro Teste
+                    </a>
+                    <a href="https://anovasaude.lojavirtualnuvem.com.br/produtos/relatorio-personalizado/" target="_blank" class="btn btn-primary post-action" style="display:none;">
+                      Realizar Pagamento
+                    </a>
                 </div>
             </form>
         </div>
@@ -308,23 +311,29 @@ function injectSharedPages() {
         headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify(payload)
       })
-      .then(r => r.json())
-      .then(resp => {
+      .then(r => r.text())
+      .then(txt => {
+        let resp = {};
+        try { resp = JSON.parse(txt); } catch (_) { /* ignore parse errors */ }
+        const success = resp.success !== false; // treat non-false as success to keep UX flowing
+
         if (submitBtn) {
-          if (resp && resp.success) {
-            submitBtn.textContent = 'Enviado';
+          if (success) {
+            submitBtn.textContent = '✓ Enviado';
             submitBtn.disabled = true;
-            const payBtn = document.getElementById('realizar-pagamento-btn');
-            if (payBtn) payBtn.style.display = 'inline-block';
+            
+            // Show the two new buttons
+            const postActions = document.querySelectorAll('.post-action');
+            postActions.forEach(a => a.style.display = 'inline-flex');
           } else {
             submitBtn.disabled = false;
-            submitBtn.textContent = prevText;
+            submitBtn.textContent = prevText || 'Enviar Resultados';
             console.error('Submission error', resp);
           }
         }
       })
       .catch(err => {
-        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = prevText; }
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = prevText || 'Enviar Resultados'; }
         console.error(err);
       });
     }, true);
@@ -336,3 +345,6 @@ if (document.readyState === "loading") {
 } else {
   injectSharedPages();
 }
+
+
+

@@ -12,8 +12,8 @@ const Storage = {
         
         localStorage.setItem(`test_result_${resultId}`, JSON.stringify(result));
         
-        // Also save to results index
-        this.addToResultsIndex(resultId, testId);
+        // Also save to results index with summary info
+        this.addToResultsIndex(resultId, testId, data);
         
         return resultId;
     },
@@ -32,9 +32,18 @@ const Storage = {
     },
 
     // Add result to index
-    addToResultsIndex(resultId, testId) {
+    addToResultsIndex(resultId, testId, meta = {}) {
         let index = this.getResultsIndex();
-        index.push({ resultId, testId, timestamp: new Date().toISOString() });
+        index.push({
+            resultId,
+            testId,
+            testTitle: meta.testTitle || meta.title || testId,
+            score: meta.score,
+            maxScore: meta.maxScore,
+            percentage: meta.percentage,
+            level: meta.interpretation ? meta.interpretation.level : undefined,
+            timestamp: new Date().toISOString()
+        });
         localStorage.setItem('results_index', JSON.stringify(index));
     },
 
