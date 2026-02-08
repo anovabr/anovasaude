@@ -39,6 +39,16 @@ function initializeTest() {
     document.getElementById('test-title').textContent = testData.title;
     document.getElementById('test-description').textContent = testData.description;
     document.getElementById('test-instructions').innerHTML = testData.instructions;
+
+    if (typeof Storage !== 'undefined' && Storage.isTestTaken(testData.id)) {
+        const notice = document.createElement('div');
+        notice.className = 'test-taken-notice';
+        notice.textContent = 'Você já concluiu este teste. Confira seu histórico na página inicial.';
+        document.getElementById('instructions-container').appendChild(notice);
+        const submitBtn = document.getElementById('submit-btn');
+        if (submitBtn) submitBtn.disabled = true;
+        return;
+    }
     
     if (testData.citation) {
         const citationEl = document.createElement('p');
@@ -194,6 +204,10 @@ function showResultsPage() {
     });
     
     answersContainer.appendChild(answersList);
+
+    if (typeof Storage !== 'undefined') {
+        Storage.recordTestTaken(testResults.testId, testResults.testTitle);
+    }
 
     document.getElementById('results-page').style.display = 'block';
 }

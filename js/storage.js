@@ -65,5 +65,29 @@ const Storage = {
             localStorage.removeItem(`test_result_${item.resultId}`);
         });
         localStorage.removeItem('results_index');
+        localStorage.removeItem('tests_taken');
+    },
+
+    // Track tests taken for dashboard
+    getTakenTests() {
+        const data = localStorage.getItem('tests_taken');
+        return data ? JSON.parse(data) : [];
+    },
+
+    isTestTaken(testId) {
+        return this.getTakenTests().some(test => test.testId === testId);
+    },
+
+    recordTestTaken(testId, testTitle) {
+        if (!testId) return;
+        const tests = this.getTakenTests();
+        const existing = tests.find(test => test.testId === testId);
+        if (existing) return;
+        tests.push({
+            testId,
+            testTitle: testTitle || testId,
+            completedAt: new Date().toISOString()
+        });
+        localStorage.setItem('tests_taken', JSON.stringify(tests));
     }
 };

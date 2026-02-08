@@ -189,6 +189,39 @@ body {
     background: var(--bg-cream);
 }
 
+.tests-dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0 3rem;
+    padding: 1.5rem;
+    background: var(--bg-white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
+.tests-dashboard__summary h3,
+.tests-dashboard__list h4 {
+    color: var(--primary);
+    margin-bottom: 0.6rem;
+    font-family: 'Crimson Pro', serif;
+}
+
+.tests-dashboard__summary p {
+    color: var(--text-light);
+}
+
+.tests-taken-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    color: var(--text-light);
+}
+
+.tests-taken-list li + li {
+    margin-top: 0.4rem;
+}
+
 .tests-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -203,6 +236,12 @@ body {
     padding: 2rem;
     transition: all 0.3s;
     cursor: pointer;
+}
+
+.test-card--taken {
+    opacity: 0.65;
+    cursor: default;
+    pointer-events: none;
 }
 
 .test-card:hover {
@@ -251,6 +290,19 @@ body {
     display: flex;
     align-items: center;
     gap: 0.4rem;
+}
+
+.test-status {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.3rem 0.7rem;
+    background: rgba(26, 77, 46, 0.1);
+    color: var(--primary);
+    font-size: 0.75rem;
+    border-radius: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
 }
 
 .cta-section {
@@ -390,6 +442,16 @@ body {
     color: var(--text-light);
     line-height: 1.7;
     margin-bottom: 0.5rem;
+}
+
+.test-taken-notice {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    background: rgba(26, 77, 46, 0.08);
+    border-left: 3px solid var(--primary);
+    border-radius: 6px;
+    color: var(--primary);
+    font-weight: 600;
 }
 
 /* Progress Bar */
@@ -535,7 +597,8 @@ body {
 .test-navigation {
     display: flex;
     gap: 1.5rem;
-    justify-content: space-between;
+    justify-content: flex-start;
+    flex-wrap: wrap;
     margin-top: 2rem;
     padding-top: 2rem;
     border-top: 1px solid var(--border);
