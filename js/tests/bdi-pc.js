@@ -1,30 +1,104 @@
-// BDI-PC Test Logic
-let testData = null;
+// BDI-PC Test - DATA + LOGIC COMBINED IN ONE FILE
+
+const testDefinition = {
+    id: "bdi-pc",
+    title: "Inventário Beck de Depressão - Atenção Primária (BDI-PC)",
+    description: "Instrumento de rastreamento rápido para sintomas depressivos",
+    citation: "Validado por Anunciação, Caregnato e Silva (2019). Uso apenas complementar.",
+    reference: "ANUNCIACAO, Luis; CAREGNATO, Maricy; SILVA, Flávio Soares Correa da. Aspectos psicométricos do Inventário Beck de Depressão-II e do Beck Atenção Primária em usuários do Facebook. J. bras. psiquiatr., Rio de Janeiro, v. 68, n. 2, p. 83-91, June 2019.",
+    instructions: "Este questionário consiste em 7 grupos de afirmações. Por favor, leia cada uma delas cuidadosamente. Depois, escolha uma frase de cada grupo, que melhor descreve o modo como você tem se sentido nas duas últimas semanas, incluindo hoje. Se mais de uma afirmação em um grupo lhe parecer igualmente apropriada, escolha a de número mais alto neste grupo. Verifique se não marcou mais de uma afirmação por grupo.",
+    questions: [
+        {
+            id: 1,
+            title: "Tristeza",
+            options: [
+                { value: 0, text: "Não me sinto triste" },
+                { value: 1, text: "Eu me sinto triste grande parte do tempo" },
+                { value: 2, text: "Estou triste o tempo todo" },
+                { value: 3, text: "Estou tão triste ou tão infeliz que não consigo suportar" }
+            ]
+        },
+        {
+            id: 2,
+            title: "Pensamentos ou desejos suicidas",
+            options: [
+                { value: 0, text: "Não tenho nenhum pensamento de me matar" },
+                { value: 1, text: "Tenho pensamentos de me matar, mas não levaria isso adiante" },
+                { value: 2, text: "Gostaria de me matar" },
+                { value: 3, text: "Eu me mataria se tivesse oportunidade" }
+            ]
+        },
+        {
+            id: 3,
+            title: "Pessimismo",
+            options: [
+                { value: 0, text: "Não estou desanimado(a) a respeito do meu futuro" },
+                { value: 1, text: "Eu me sinto mais desanimado(a) a respeito do meu futuro do que de costume" },
+                { value: 2, text: "Não espero que as coisas deem certo para mim" },
+                { value: 3, text: "Sinto que não há esperança quanto ao meu futuro. Acho que só vai piorar" }
+            ]
+        },
+        {
+            id: 4,
+            title: "Perda de interesse",
+            options: [
+                { value: 0, text: "Não perdi o interesse por outras pessoas ou por minhas atividades" },
+                { value: 1, text: "Estou menos interessado pelas outras pessoas ou coisas do que costumava estar" },
+                { value: 2, text: "Perdi quase todo o interesse por outras pessoas ou coisas" },
+                { value: 3, text: "É difícil me interessar por alguma coisa" }
+            ]
+        },
+        {
+            id: 5,
+            title: "Fracasso passado",
+            options: [
+                { value: 0, text: "Não me sinto um(a) fracassado(a)" },
+                { value: 1, text: "Tenho fracassado mais do que deveria" },
+                { value: 2, text: "Quando penso no passado vejo muitos fracassos" },
+                { value: 3, text: "Sinto que como pessoa sou um fracasso total" }
+            ]
+        },
+        {
+            id: 6,
+            title: "Autoestima",
+            options: [
+                { value: 0, text: "Eu me sinto como sempre me senti em relação a mim mesmo(a)" },
+                { value: 1, text: "Perdi a confiança em mim mesmo(a)" },
+                { value: 2, text: "Estou desapontado(a) comigo mesmo(a)" },
+                { value: 3, text: "Não gosto de mim" }
+            ]
+        },
+        {
+            id: 7,
+            title: "Autocrítica",
+            options: [
+                { value: 0, text: "Não me critico nem me culpo mais do que o habitual" },
+                { value: 1, text: "Estou sendo mais crítico(a) comigo mesmo(a) do que costumava ser" },
+                { value: 2, text: "Eu me crítico por todos os meus erros" },
+                { value: 3, text: "Eu me culpo por tudo de ruim que acontece" }
+            ]
+        }
+    ],
+    scoring: {
+        min: 0,
+        max: 21,
+        ranges: [
+            { min: 0, max: 3, level: "Mínimo", description: "Sintomas depressivos mínimos ou ausentes." },
+            { min: 4, max: 7, level: "Leve", description: "Sintomas depressivos leves." },
+            { min: 8, max: 15, level: "Moderado", description: "Sintomas depressivos moderados. Recomenda-se acompanhamento profissional." },
+            { min: 16, max: 21, level: "Grave", description: "Sintomas depressivos graves. É importante buscar ajuda profissional." }
+        ]
+    }
+};
+
+let testData = testDefinition;
 let answers = [];
 
-// Load test data
-async function loadTestData() {
-    try {
-        const response = await fetch('../../data/bdi-pc.json');
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        testData = await response.json();
-        initializeTest();
-    } catch (error) {
-        console.error('Error loading test data:', error);
-        alert('Erro ao carregar o teste. Por favor, recarregue a página.');
-    }
-}
-
-// Initialize test
 function initializeTest() {
-    // Set header info
     document.getElementById('test-title').textContent = testData.title;
     document.getElementById('test-description').textContent = testData.description;
     document.getElementById('test-instructions').innerHTML = testData.instructions;
     
-    // Add citation if exists
     if (testData.citation) {
         const citationEl = document.createElement('p');
         citationEl.style.fontSize = '0.9rem';
@@ -35,17 +109,11 @@ function initializeTest() {
         document.getElementById('instructions-container').appendChild(citationEl);
     }
 
-    // Initialize answers array
     answers = new Array(testData.questions.length).fill(null);
-
-    // Render questions
     renderQuestions();
-
-    // Setup form submission
     setupFormSubmission();
 }
 
-// Render all questions
 function renderQuestions() {
     const container = document.getElementById('questions-container');
     container.innerHTML = '';
@@ -56,7 +124,6 @@ function renderQuestions() {
     });
 }
 
-// Create question card element
 function createQuestionCard(question, index) {
     const card = document.createElement('div');
     card.className = 'question-card';
@@ -73,8 +140,7 @@ function createQuestionCard(question, index) {
     const optionsGroup = document.createElement('div');
     optionsGroup.className = 'options-group';
 
-    // Use options from the question itself
-    question.options.forEach((option, optIndex) => {
+    question.options.forEach((option) => {
         const label = document.createElement('label');
         label.className = 'option-label';
         label.innerHTML = `
@@ -88,7 +154,6 @@ function createQuestionCard(question, index) {
             <span>${option.value}. ${option.text}</span>
         `;
 
-        // Add change listener
         const radio = label.querySelector('input');
         radio.addEventListener('change', (e) => handleAnswerChange(e, index));
 
@@ -102,41 +167,32 @@ function createQuestionCard(question, index) {
     return card;
 }
 
-// Handle answer selection
 function handleAnswerChange(event, questionIndex) {
     const value = parseInt(event.target.value);
     const label = event.target.dataset.label;
 
-    // Save answer
     answers[questionIndex] = { value, label };
 
-    // Update UI - highlight selected option
     const card = document.getElementById(`question-${questionIndex}`);
     const labels = card.querySelectorAll('.option-label');
     labels.forEach(l => l.classList.remove('selected'));
     event.target.closest('.option-label').classList.add('selected');
 
-    // Update progress
     updateProgress();
-
-    // Check if all questions answered
     checkCompletion();
 }
 
-// Update progress bar
 function updateProgress() {
     const answeredCount = answers.filter(a => a !== null).length;
     const percentage = (answeredCount / testData.questions.length) * 100;
     document.getElementById('progress-fill').style.width = `${percentage}%`;
 }
 
-// Check if test is complete
 function checkCompletion() {
     const allAnswered = answers.every(a => a !== null);
     document.getElementById('submit-btn').disabled = !allAnswered;
 }
 
-// Setup form submission
 function setupFormSubmission() {
     document.getElementById('test-form').addEventListener('submit', (e) => {
         e.preventDefault();
@@ -144,14 +200,11 @@ function setupFormSubmission() {
     });
 }
 
-// Submit test and calculate results
 function submitTest() {
-    // Calculate score
     const totalScore = Scoring.calculateScore(answers);
     const interpretation = Scoring.getInterpretation(totalScore, testData.scoring.ranges);
     const percentage = Scoring.calculatePercentage(totalScore, testData.scoring.max);
 
-    // Format data
     const resultData = {
         score: totalScore,
         maxScore: testData.scoring.max,
@@ -168,12 +221,8 @@ function submitTest() {
         reference: testData.reference
     };
 
-    // Save to localStorage
     const resultId = Storage.saveResult(testData.id, resultData);
-
-    // Redirect to results page
     window.location.href = `../resultado.html?id=${resultId}`;
 }
 
-// Initialize when page loads
-document.addEventListener('DOMContentLoaded', loadTestData);
+document.addEventListener('DOMContentLoaded', initializeTest);
