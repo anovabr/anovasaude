@@ -1,92 +1,31 @@
-// BDI-PC Test - DATA + LOGIC COMBINED IN ONE FILE
+// DEMO TEST - For quick testing
 
 const testDefinition = {
-    id: "bdi-pc",
-    title: "Inventário Beck de Depressão - Atenção Primária (BDI-PC)",
-    description: "Instrumento de rastreamento rápido para sintomas depressivos",
-    citation: "Validado por Anunciação, Caregnato e Silva (2019). Uso apenas complementar.",
-    reference: "ANUNCIACAO, Luis; CAREGNATO, Maricy; SILVA, Flávio Soares Correa da. Aspectos psicométricos do Inventário Beck de Depressão-II e do Beck Atenção Primária em usuários do Facebook. J. bras. psiquiatr., Rio de Janeiro, v. 68, n. 2, p. 83-91, June 2019.",
-    instructions: "Este questionário consiste em 7 grupos de afirmações. Por favor, leia cada uma delas cuidadosamente. Depois, escolha uma frase de cada grupo, que melhor descreve o modo como você tem se sentido nas duas últimas semanas, incluindo hoje. Se mais de uma afirmação em um grupo lhe parecer igualmente apropriada, escolha a de número mais alto neste grupo. Verifique se não marcou mais de uma afirmação por grupo.",
+    id: "demo-test",
+    title: "Teste de Demonstração",
+    description: "Um teste rápido com apenas 2 questões para demonstração",
+    citation: "Teste de demonstração apenas",
+    reference: "Não aplicável",
+    instructions: "Responda as 2 questões abaixo e veja seus resultados instantaneamente.",
     questions: [
         {
             id: 1,
-            title: "Tristeza",
+            title: "Como você se sente hoje?",
             options: [
-                { value: 0, text: "Não me sinto triste" },
-                { value: 1, text: "Eu me sinto triste grande parte do tempo" },
-                { value: 2, text: "Estou triste o tempo todo" },
-                { value: 3, text: "Estou tão triste ou tão infeliz que não consigo suportar" }
-            ]
-        },
-        {
-            id: 2,
-            title: "Pensamentos ou desejos suicidas",
-            options: [
-                { value: 0, text: "Não tenho nenhum pensamento de me matar" },
-                { value: 1, text: "Tenho pensamentos de me matar, mas não levaria isso adiante" },
-                { value: 2, text: "Gostaria de me matar" },
-                { value: 3, text: "Eu me mataria se tivesse oportunidade" }
-            ]
-        },
-        {
-            id: 3,
-            title: "Pessimismo",
-            options: [
-                { value: 0, text: "Não estou desanimado(a) a respeito do meu futuro" },
-                { value: 1, text: "Eu me sinto mais desanimado(a) a respeito do meu futuro do que de costume" },
-                { value: 2, text: "Não espero que as coisas deem certo para mim" },
-                { value: 3, text: "Sinto que não há esperança quanto ao meu futuro. Acho que só vai piorar" }
-            ]
-        },
-        {
-            id: 4,
-            title: "Perda de interesse",
-            options: [
-                { value: 0, text: "Não perdi o interesse por outras pessoas ou por minhas atividades" },
-                { value: 1, text: "Estou menos interessado pelas outras pessoas ou coisas do que costumava estar" },
-                { value: 2, text: "Perdi quase todo o interesse por outras pessoas ou coisas" },
-                { value: 3, text: "É difícil me interessar por alguma coisa" }
-            ]
-        },
-        {
-            id: 5,
-            title: "Fracasso passado",
-            options: [
-                { value: 0, text: "Não me sinto um(a) fracassado(a)" },
-                { value: 1, text: "Tenho fracassado mais do que deveria" },
-                { value: 2, text: "Quando penso no passado vejo muitos fracassos" },
-                { value: 3, text: "Sinto que como pessoa sou um fracasso total" }
-            ]
-        },
-        {
-            id: 6,
-            title: "Autoestima",
-            options: [
-                { value: 0, text: "Eu me sinto como sempre me senti em relação a mim mesmo(a)" },
-                { value: 1, text: "Perdi a confiança em mim mesmo(a)" },
-                { value: 2, text: "Estou desapontado(a) comigo mesmo(a)" },
-                { value: 3, text: "Não gosto de mim" }
-            ]
-        },
-        {
-            id: 7,
-            title: "Autocrítica",
-            options: [
-                { value: 0, text: "Não me critico nem me culpo mais do que o habitual" },
-                { value: 1, text: "Estou sendo mais crítico(a) comigo mesmo(a) do que costumava ser" },
-                { value: 2, text: "Eu me crítico por todos os meus erros" },
-                { value: 3, text: "Eu me culpo por tudo de ruim que acontece" }
+                { value: 0, text: "Muito bem" },
+                { value: 1, text: "Bem" },
+                { value: 2, text: "Neutro" },
+                { value: 3, text: "Mal" }
             ]
         }
     ],
     scoring: {
         min: 0,
-        max: 21,
+        max: 3,
         ranges: [
-            { min: 0, max: 3, level: "Mínimo", description: "Sintomas depressivos mínimos ou ausentes." },
-            { min: 4, max: 7, level: "Leve", description: "Sintomas depressivos leves." },
-            { min: 8, max: 15, level: "Moderado", description: "Sintomas depressivos moderados. Recomenda-se acompanhamento profissional." },
-            { min: 16, max: 21, level: "Grave", description: "Sintomas depressivos graves. É importante buscar ajuda profissional." }
+            { min: 0, max: 1, level: "Ótimo", description: "Você está se sentindo muito bem!" },
+            { min: 2, max: 2, level: "Bom", description: "Tudo parece estar indo bem." },
+            { min: 3, max: 3, level: "Regular", description: "Talvez seja hora de se cuidar um pouco." }
         ]
     }
 };
@@ -233,16 +172,13 @@ function submitTest() {
 
 // ===== RESULTS PAGE =====
 function showResultsPage() {
-    // Hide test page
     document.getElementById('test-page').style.display = 'none';
     
-    // Display results
     document.getElementById('result-score').textContent = testResults.score;
     document.getElementById('result-max').textContent = testResults.maxScore;
     document.getElementById('result-level').textContent = testResults.interpretation.level;
     document.getElementById('result-description').textContent = testResults.interpretation.description;
 
-    // Display answers
     const answersContainer = document.getElementById('result-answers-container');
     const answersList = document.createElement('div');
     answersList.className = 'answers-list';
@@ -259,22 +195,18 @@ function showResultsPage() {
     
     answersContainer.appendChild(answersList);
 
-    // Show results page
     document.getElementById('results-page').style.display = 'block';
 }
 
 // ===== PAGE NAVIGATION =====
 function setupPageNavigation() {
-    // Interpretation button
     document.getElementById('interpretation-btn').addEventListener('click', showDemographicsPage);
     
-    // Back button in demographics
     document.getElementById('back-to-results-btn').addEventListener('click', () => {
         document.getElementById('demographics-page').style.display = 'none';
         document.getElementById('results-page').style.display = 'block';
     });
 
-    // Demographics form submission
     document.getElementById('demographics-form').addEventListener('submit', (e) => {
         e.preventDefault();
         submitDemographics();
@@ -295,13 +227,11 @@ function submitDemographics() {
     const phone = document.getElementById('phone').value;
     const email = document.getElementById('email').value;
 
-    // Validate birth date format
     if (!isValidBirthDate(birthDate)) {
         alert('Por favor, insira uma data válida no formato DD/MM/AAAA');
         return;
     }
 
-    // Package complete submission
     const completeSubmission = {
         ...testResults,
         demographics: {
@@ -316,10 +246,8 @@ function submitDemographics() {
         submittedAt: new Date().toISOString()
     };
 
-    // Save to localStorage (temporary - will be replaced with Firebase)
     localStorage.setItem('pending_submission', JSON.stringify(completeSubmission));
 
-    // Show payment page
     showPaymentPage();
 }
 

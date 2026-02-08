@@ -1,57 +1,11 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BDI-PC | Anova Saúde</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/style.css">
-</head>
-<body>
-    <header class="header">
-        <div class="container">
-            <nav class="nav">
-                <a href="../index.html" class="logo">
-                    <img src="../logo.png" alt="Anova Saúde">
-                </a>
-                <ul class="nav-links">
-                    <li><a href="../index.html#testes">Catálogo de Testes</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+// ===== SHARED PAGES TEMPLATE =====
+// This file injects pages 2, 3, 4 into any test HTML
+// Just include this script and call injectSharedPages()
 
-    <div class="test-container">
-        <!-- PAGE 1: TEST FORM -->
-        <div id="test-page" class="page-section">
-            <div class="test-header">
-                <h1 id="test-title">Carregando...</h1>
-                <p id="test-description"></p>
-            </div>
-
-            <div class="test-instructions" id="instructions-container">
-                <h3>Instruções</h3>
-                <p id="test-instructions"></p>
-            </div>
-
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
-            </div>
-
-            <form id="test-form">
-                <div id="questions-container"></div>
-
-                <div class="test-navigation">
-                    <a href="../index.html" class="btn btn-secondary">Voltar</a>
-                    <button type="submit" class="btn btn-primary" id="submit-btn" disabled>
-                        Finalizar Teste
-                    </button>
-                </div>
-            </form>
-        </div>
-
+function injectSharedPages() {
+    const testContainer = document.querySelector('.test-container');
+    
+    const sharedPagesHTML = `
         <!-- PAGE 2: RESULTS PAGE -->
         <div id="results-page" class="page-section" style="display: none;">
             <div class="test-header">
@@ -61,7 +15,7 @@
             <div class="result-box">
                 <div class="result-score-display">
                     <div class="score-number" id="result-score">0</div>
-                    <div class="score-max">de <span id="result-max">21</span></div>
+                    <div class="score-max">de <span id="result-max">1</span></div>
                 </div>
 
                 <div class="result-interpretation">
@@ -75,7 +29,7 @@
             </div>
 
             <div class="test-navigation">
-                <a href="../index.html" class="btn btn-secondary">Voltar</a>
+                <a href="../index.html" class="btn btn-secondary">Voltar ao Início</a>
                 <button id="interpretation-btn" class="btn btn-primary">
                     Quero Interpretação Humana
                 </button>
@@ -193,9 +147,15 @@
                 </a>
             </div>
         </div>
-    </div>
+    `;
+    
+    // Insert shared pages after page 1
+    testContainer.insertAdjacentHTML('beforeend', sharedPagesHTML);
+}
 
-    <script src="../js/utils.js"></script>
-    <script src="../js/tests/bdi-pc.js"></script>
-</body>
-</html>
+// Auto-inject when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', injectSharedPages);
+} else {
+    injectSharedPages();
+}

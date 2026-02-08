@@ -1,0 +1,65 @@
+How to Update Anova Saúde Project
+Step 1: Open VS Code
+Click on VS Code icon
+Go to File → Open Folder
+Select your project folder: C:\Users\psipu\OneDrive\Documentos\anovasaude
+
+Step 2: Load the Folder
+The folder will open in VS Code
+You'll see all your files in the Explorer panel on the left
+Step 3: Make Your Changes
+Option A - Edit Existing Files:
+
+Click on file in Explorer (e.g., js/tests/bdi-pc.js)
+Edit the code
+Save with Ctrl + S
+Option B - Create New Files:
+
+Right-click on folder (e.g., js/tests/)
+Select New File
+Type filename (e.g., gad7.js)
+Add your code
+Save with Ctrl + S
+Option C - Delete Files:
+
+Right-click on file in Explorer
+Click Delete
+Confirm
+Step 4: Push to GitHub
+Open Terminal in VS Code:
+
+Press Ctrl + `` (backtick) or View → Terminal
+Run these commands (one at a time):
+
+bash
+git status
+(Shows what changed - just to verify)
+
+bash
+git add .
+(Adds all changes)
+
+bash
+git commit -m "Description of what you changed"
+Example:
+
+bash
+git commit -m "Add GAD7 test and update scoring logic"
+bash
+git push
+(Sends to GitHub)
+
+If you get an error about pulling first:
+
+bash
+git pull
+git push
+Quick Checklist Before Pushing:
+✅ Did you save all files? (Ctrl + S)
+✅ Did you test the changes locally?
+✅ Does your commit message describe what changed?
+That's it! Every time you make changes, just:
+
+Make changes in VS Code
+Save (Ctrl + S)
+Terminal: git add . → git commit -m "description" → git push
