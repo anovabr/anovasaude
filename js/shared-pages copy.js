@@ -29,7 +29,7 @@ function injectSharedPages() {
             </div>
 
             <div class="test-navigation">
-                <a href="../index.html" class="btn btn-secondary">Voltar ao Início</a>
+                <a href="#" class="btn btn-secondary" onclick="history.back(); return false;">Voltar</a>
                 <button id="interpretation-btn" class="btn btn-primary">
                     Quero Interpretação Humana
                 </button>
@@ -141,7 +141,7 @@ function injectSharedPages() {
             </div>
 
             <div class="test-navigation">
-                <a href="../index.html" class="btn btn-secondary">Voltar ao Início</a>
+                <a href="#" class="btn btn-secondary" onclick="history.back(); return false;">Voltar</a>
                 <a href="https://anovasaude.lojavirtualnuvem.com.br/produtos/relatorio-personalizado/" target="_blank" class="btn btn-primary">
                     Ir para Pagamento
                 </a>
