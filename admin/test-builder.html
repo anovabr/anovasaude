@@ -1,0 +1,411 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Construtor de Testes (Interno)</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    body { background: var(--bg-cream, #faf8f5); }
+    .builder-container { max-width: 1100px; margin: 2rem auto; padding: 1.5rem; background: #fff; border: 1px solid var(--border, #e8e3db); border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+    .builder-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+    .section-head h3 { margin: 0; }
+    .field { display: flex; flex-direction: column; margin-bottom: 0.75rem; }
+    .field label { font-weight: 600; margin-bottom: 0.3rem; color: var(--primary, #1a4d2e); }
+    .field input, .field textarea, .field select { padding: 0.6rem; border: 1px solid var(--border, #e8e3db); border-radius: 6px; font-size: 0.95rem; }
+    .field textarea { min-height: 90px; }
+    .pill { display: inline-flex; align-items: center; gap: .5rem; padding: .4rem .7rem; border-radius: 999px; border: 1px solid var(--border, #e8e3db); background: var(--bg-cream, #faf8f5); }
+    .item-card { border: 1px solid var(--border, #e8e3db); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; background: var(--bg-cream, #faf8f5); }
+    .item-actions { display: flex; gap: .5rem; justify-content: flex-end; flex-wrap: wrap; margin-top: 0.5rem; }
+    .btn-small { padding: 0.35rem 0.6rem; font-size: 0.85rem; background: #e53935; color: #fff; border: 1px solid #d32f2f; border-radius: 4px; cursor: pointer; }
+    .btn-small:hover { background: #d32f2f; }
+    .rows { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: .5rem; align-items: center; }
+    .muted { color: var(--text-light, #5a5a5a); font-size: 0.9rem; }
+    pre { background: #0b1021; color: #f8f8f2; padding: 1rem; border-radius: 8px; overflow: auto; font-size: 0.9rem; max-height: 500px; }
+    .progress-btn { padding: 0.5rem 1rem; background: var(--primary, #1a4d2e); color: white; border: none; border-radius: 6px; cursor: pointer; }
+    .progress-btn:hover { background: var(--primary-light, #2d6a4f); }
+    .btn-primary { padding: 0.7rem 1.5rem; background: var(--primary, #1a4d2e); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; }
+  </style>
+</head>
+<body>
+  <div class="builder-container">
+    <h2 class="section-title" style="text-align:left;">Construtor de Testes (Interno)</h2>
+    <p class="section-subtitle" style="text-align:left;">Preencha os campos, adicione questões e fatores. Exporte um JSON para salvar em <code>tests/&lt;id&gt;.json</code>.</p>
+
+    <div class="builder-grid">
+      <div>
+        <div class="field"><label for="test-id">ID (slug)</label><input id="test-id" placeholder="ex: gad7" /></div>
+        <div class="field"><label for="test-title">Título</label><input id="test-title" placeholder="Escala..." /></div>
+        <div class="field"><label for="test-tag">Tag/Categoria</label><input id="test-tag" placeholder="Ansiedade, Depressão, etc." /></div>
+        <div class="field"><label for="article-url">Artigo (URL)</label><input id="article-url" placeholder="https://..." /></div>
+        <div class="rows">
+          <label class="pill"><input type="checkbox" id="featured" /> Destaque (homepage)</label>
+          <label class="pill"><input type="checkbox" id="curadoria" /> Curadoria Anova</label>
+        </div>
+      </div>
+      <div>
+        <div class="field"><label for="test-desc">Descrição curta</label><textarea id="test-desc"></textarea></div>
+        <div class="field"><label for="test-instr">Instruções</label><textarea id="test-instr"></textarea></div>
+        <div class="rows">
+          <div class="field"><label for="est-time">Tempo estimado</label><input id="est-time" placeholder="3-5 min" /></div>
+          <div class="field"><label for="qtd-quest">Qtd. questões (auto)</label><input id="qtd-quest" readonly /></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <h3>Questões</h3>
+      <button class="progress-btn" id="add-question">+ Adicionar questão</button>
+    </div>
+    <div id="questions-list"></div>
+
+    <div class="section-head" style="margin-top:1rem;">
+      <h3>Fatores / Domínios</h3>
+      <button class="progress-btn" id="add-factor">+ Adicionar fator</button>
+    </div>
+    <div id="factors-list"></div>
+
+    <div style="margin-top:1.5rem; display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
+      <button class="btn-primary" id="export-json">Exportar JSON</button>
+      <button class="progress-btn" id="toggle-preview">Mostrar código</button>
+      <button class="progress-btn" id="copy-json">Copiar</button>
+      <span class="muted">O arquivo será baixado como <code>&lt;id&gt;.json</code>. Coloque em <code>/tests/</code>.</span>
+    </div>
+
+    <div id="preview-wrap" style="margin-top:1.5rem; display:none;">
+      <h4>Pré-visualização</h4>
+      <pre id="preview"></pre>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    const qList = document.getElementById('questions-list');
+    const fList = document.getElementById('factors-list');
+    const preview = document.getElementById('preview');
+    const previewWrap = document.getElementById('preview-wrap');
+    const togglePreviewBtn = document.getElementById('toggle-preview');
+    const copyBtn = document.getElementById('copy-json');
+    const qCount = document.getElementById('qtd-quest');
+
+    const state = { questions: [], factors: [] };
+
+    function updatePreview() {
+      const data = collectData(false);
+      preview.textContent = JSON.stringify(data, null, 2);
+      qCount.value = state.questions.length;
+    }
+
+    function collectData(includeEmpty=true) {
+      const get = id => document.getElementById(id).value.trim();
+      const data = {
+        id: get('test-id'),
+        title: get('test-title'),
+        description: get('test-desc'),
+        tag: get('test-tag'),
+        articleUrl: get('article-url'),
+        featured: document.getElementById('featured').checked,
+        curadoria: document.getElementById('curadoria').checked,
+        instructions: get('test-instr'),
+        estimatedTime: get('est-time'),
+        questionCount: state.questions.length,
+        questions: state.questions.map(q => ({
+          id: q.id,
+          title: q.title.value.trim(),
+          type: q.type.value,
+          options: (q.options || []).map(opt => ({ value: Number(opt.value.value), text: opt.text.value.trim() })),
+          min: q.min?.value ? Number(q.min.value) : undefined,
+          max: q.max?.value ? Number(q.max.value) : undefined,
+          step: q.step?.value ? Number(q.step.value) : undefined
+        })),
+        scoring: {
+          min: 0,
+          max: Math.max(...state.questions.flatMap(q => (q.options||[]).map(o => Number(o.value.value))), 0) * state.questions.length || null,
+          factors: state.factors.map(f => ({
+            id: f.id.value.trim() || slugify(f.name.value),
+            name: f.name.value.trim(),
+            questionIds: (f.qids.value || '').split(',').map(s => s.trim()).filter(Boolean).map(Number),
+            ranges: f.ranges.map(r => ({
+              min: Number(r.min.value),
+              max: Number(r.max.value),
+              level: r.level.value.trim(),
+              description: r.desc.value.trim()
+            }))
+          }))
+        }
+      };
+      if (!includeEmpty) {
+        Object.keys(data).forEach(k => (data[k] === '' || data[k] === null) && delete data[k]);
+      }
+      return data;
+    }
+
+    function addQuestion(prefill) {
+      const idx = state.questions.length + 1;
+      const wrap = document.createElement('div'); 
+      wrap.className = 'item-card';
+      
+      const title = input('Título da questão', prefill?.title || '');
+      const type = select('Tipo', ['single','likert','yesno','scale','multi','text']);
+
+      const optionsWrap = document.createElement('div'); 
+      optionsWrap.className = 'item-actions';
+      const optList = document.createElement('div');
+      
+      const min = input('Mín (escala)'); 
+      const max = input('Máx (escala)'); 
+      const step = input('Passo (escala)');
+
+      const entry = { 
+        id: idx, 
+        title: title.input, 
+        type: type.input, 
+        options: [], 
+        min: min.input, 
+        max: max.input, 
+        step: step.input 
+      };
+
+      const optAdd = button('+ opção', () => addOption(optList, entry));
+      optionsWrap.append(optAdd);
+
+      const dupBtn = button('Duplicar', () => {
+        addQuestion({
+          title: title.input.value,
+          type: type.input.value,
+          options: entry.options.map(o => ({ value: o.value.value, text: o.text.value })),
+          min: min.input.value,
+          max: max.input.value,
+          step: step.input.value
+        });
+      });
+      dupBtn.classList.add('btn-small');
+      
+      const removeBtn = button('Remover questão', () => { 
+        qList.removeChild(wrap); 
+        state.questions = state.questions.filter(q => q !== entry); 
+        updatePreview(); 
+      });
+      removeBtn.classList.add('btn-small');
+
+      wrap.append(title.el, type.el, optList, min.el, max.el, step.el, optionsWrap, dupBtn, removeBtn);
+
+      state.questions.push(entry);
+      qList.appendChild(wrap);
+
+      type.input.addEventListener('change', () => {
+        const needsOptions = ['single','likert','yesno','multi'].includes(type.input.value);
+        optList.style.display = needsOptions ? 'block' : 'none';
+        optionsWrap.style.display = needsOptions ? 'flex' : 'none';
+        min.el.style.display = max.el.style.display = step.el.style.display = (type.input.value === 'scale') ? 'block' : 'none';
+        updatePreview();
+      });
+
+      type.input.value = prefill?.type || 'single';
+      const needsOptions = ['single','likert','yesno','multi'].includes(type.input.value);
+      optList.style.display = needsOptions ? 'block' : 'none';
+      optionsWrap.style.display = needsOptions ? 'flex' : 'none';
+      min.el.style.display = max.el.style.display = step.el.style.display = (type.input.value === 'scale') ? 'block' : 'none';
+
+      if (needsOptions) {
+        const opts = prefill?.options?.length ? prefill.options : [ {value:0,text:''}, {value:1,text:''} ];
+        opts.forEach(o => addOption(optList, entry, o.value, o.text));
+      }
+      
+      if (type.input.value === 'scale') {
+        if (prefill?.min) min.input.value = prefill.min;
+        if (prefill?.max) max.input.value = prefill.max;
+        if (prefill?.step) step.input.value = prefill.step;
+      }
+      
+      updatePreview();
+    }
+
+    function addFactor() {
+      const wrap = document.createElement('div'); 
+      wrap.className = 'item-card';
+      
+      const name = input('Nome do fator', 'Extroversão');
+      const fid = input('ID do fator (opcional)');
+      const qids = input('Questões (IDs separados por vírgula)', '1,5,9');
+
+      const rangesWrap = document.createElement('div'); 
+      rangesWrap.className = 'item-actions';
+      const rangesList = document.createElement('div');
+      
+      const entry = { 
+        name: name.input, 
+        id: fid.input, 
+        qids: qids.input, 
+        ranges: [] 
+      };
+      
+      const addR = button('+ faixa do fator', () => addFactorRange(rangesList, entry));
+      rangesWrap.append(addR);
+
+      const removeBtn = button('Remover fator', () => { 
+        fList.removeChild(wrap); 
+        state.factors = state.factors.filter(f => f !== entry); 
+        updatePreview(); 
+      });
+      removeBtn.classList.add('btn-small');
+
+      wrap.append(name.el, fid.el, qids.el, rangesList, rangesWrap, removeBtn);
+
+      state.factors.push(entry);
+      fList.appendChild(wrap);
+
+      addFactorRange(rangesList, entry);
+      updatePreview();
+    }
+
+    function addFactorRange(container, factorEntry) {
+      const box = document.createElement('div'); 
+      box.className = 'item-card';
+      box.style.marginLeft = '1rem';
+      
+      const min = input('Min'); 
+      const max = input('Max'); 
+      const level = input('Nível'); 
+      const desc = textarea('Descrição');
+      
+      const entry = { 
+        min: min.input, 
+        max: max.input, 
+        level: level.input, 
+        desc: desc.input 
+      };
+      
+      const rm = button('Remover faixa', () => { 
+        container.removeChild(box); 
+        factorEntry.ranges = factorEntry.ranges.filter(r => r !== entry); 
+        updatePreview(); 
+      });
+      rm.classList.add('btn-small');
+      
+      box.append(min.el, max.el, level.el, desc.el, rm);
+      
+      factorEntry.ranges.push(entry);
+      container.appendChild(box);
+      updatePreview();
+    }
+
+    function slugify(str='') {
+      return str.toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g,'')
+        .replace(/[^a-z0-9]+/g,'-')
+        .replace(/(^-|-$)/g,'');
+    }
+
+    function addOption(container, qEntry, defVal='0', defText='') {
+      const row = document.createElement('div'); 
+      row.className = 'rows';
+      row.style.marginBottom = '0.5rem';
+      
+      const val = input('Valor', defVal); 
+      const txt = input('Texto', defText);
+      
+      const optEntry = { value: val.input, text: txt.input };
+      
+      const rm = button('x', () => { 
+        container.removeChild(row); 
+        qEntry.options = qEntry.options.filter(o => o !== optEntry); 
+        updatePreview(); 
+      });
+      rm.classList.add('btn-small');
+      
+      row.append(val.el, txt.el, rm);
+      
+      qEntry.options.push(optEntry);
+      container.appendChild(row);
+      updatePreview();
+    }
+
+    function input(labelText, placeholder='') {
+      const wrap = document.createElement('div'); 
+      wrap.className='field';
+      const label = document.createElement('label'); 
+      label.textContent = labelText;
+      const input = document.createElement('input'); 
+      input.placeholder = placeholder;
+      wrap.append(label,input);
+      input.addEventListener('input', updatePreview);
+      return { el: wrap, input };
+    }
+    
+    function textarea(labelText) {
+      const wrap = document.createElement('div'); 
+      wrap.className='field';
+      const label = document.createElement('label'); 
+      label.textContent = labelText;
+      const input = document.createElement('textarea');
+      wrap.append(label,input);
+      input.addEventListener('input', updatePreview);
+      return { el: wrap, input };
+    }
+    
+    function select(labelText, options) {
+      const wrap = document.createElement('div'); 
+      wrap.className='field';
+      const label = document.createElement('label'); 
+      label.textContent = labelText;
+      const sel = document.createElement('select');
+      options.forEach(o => { 
+        const opt=document.createElement('option'); 
+        opt.value=o; 
+        opt.textContent=o; 
+        sel.appendChild(opt); 
+      });
+      wrap.append(label, sel);
+      sel.addEventListener('change', updatePreview);
+      return { el: wrap, input: sel };
+    }
+    
+    function button(text, onClick) {
+      const btn = document.createElement('button');
+      btn.type='button'; 
+      btn.className='progress-btn'; 
+      btn.textContent=text;
+      btn.addEventListener('click', onClick);
+      return btn;
+    }
+
+    document.getElementById('add-question').addEventListener('click', () => addQuestion());
+    document.getElementById('add-factor').addEventListener('click', addFactor);
+    
+    document.getElementById('export-json').addEventListener('click', () => {
+      const data = collectData();
+      if (!data.id) return alert('Defina o ID do teste');
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `${data.id}.json`;
+      a.click();
+    });
+
+    togglePreviewBtn.addEventListener('click', () => {
+      const showing = previewWrap.style.display !== 'none';
+      previewWrap.style.display = showing ? 'none' : 'block';
+      togglePreviewBtn.textContent = showing ? 'Mostrar código' : 'Ocultar código';
+    });
+
+    copyBtn.addEventListener('click', async () => {
+      const data = collectData(false);
+      try {
+        await navigator.clipboard.writeText(JSON.stringify(data, null, 2));
+        copyBtn.textContent = 'Copiado!';
+        setTimeout(() => copyBtn.textContent = 'Copiar', 1200);
+      } catch (err) {
+        alert('Não foi possível copiar');
+      }
+    });
+
+    addFactor();
+    addQuestion();
+    updatePreview();
+  })();
+  </script>
+</body>
+</html>

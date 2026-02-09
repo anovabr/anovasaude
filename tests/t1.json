@@ -1,0 +1,97 @@
+{
+  "id": "t1",
+  "title": "",
+  "description": "",
+  "tag": "",
+  "articleUrl": "",
+  "featured": false,
+  "curadoria": false,
+  "instructions": "",
+  "estimatedTime": "",
+  "questionCount": 2,
+  "questions": [
+    {
+      "id": 1,
+      "title": "1. Eu tenho acumulado tantas coisas que elas já estão me atrapalhando",
+      "type": "likert",
+      "options": [
+        {
+          "value": 0,
+          "text": "Nem um pouco"
+        },
+        {
+          "value": 1,
+          "text": "Um pouco"
+        },
+        {
+          "value": 2,
+          "text": "Moderadamente"
+        },
+        {
+          "value": 3,
+          "text": "Muito"
+        },
+        {
+          "value": 4,
+          "text": "Extremamente"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "2. Eu verifico coisas mais vezes do que é necessário.",
+      "type": "likert",
+      "options": [
+        {
+          "value": 0,
+          "text": ""
+        },
+        {
+          "value": 1,
+          "text": ""
+        },
+        {
+          "value": 2,
+          "text": ""
+        },
+        {
+          "value": 3,
+          "text": ""
+        },
+        {
+          "value": 4,
+          "text": ""
+        }
+      ]
+    }
+  ],
+  "scoring": {
+    "min": 0,
+    "max": 8,
+    "ranges": [
+      {
+        "min": 0,
+        "max": 4,
+        "level": "",
+        "description": ""
+      }
+    ],
+    "factors": [
+      {
+        "id": "Fator 1",
+        "name": "Geral",
+        "questionIds": [
+          1
+        ],
+        "ranges": [
+          {
+            "min": 0,
+            "max": 4,
+            "level": "Leve",
+            "description": ""
+          }
+        ]
+      }
+    ]
+  }
+}

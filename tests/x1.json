@@ -1,0 +1,81 @@
+{
+  "id": "x1",
+  "title": "escala x1",
+  "description": "xxx",
+  "tag": "ansiedade",
+  "articleUrl": "",
+  "featured": true,
+  "curadoria": false,
+  "instructions": "xx",
+  "estimatedTime": "",
+  "questionCount": 2,
+  "questions": [
+    {
+      "id": 1,
+      "title": "1. Eu tenho acumulado tantas coisas que elas já estão me atrapalhando",
+      "type": "likert",
+      "options": [
+        {
+          "value": 0,
+          "text": ""
+        },
+        {
+          "value": 1,
+          "text": ""
+        },
+        {
+          "value": 2,
+          "text": ""
+        },
+        {
+          "value": 3,
+          "text": ""
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "2. Eu verifico coisas mais vezes do que é necessário",
+      "type": "likert",
+      "options": [
+        {
+          "value": 0,
+          "text": ""
+        },
+        {
+          "value": 1,
+          "text": ""
+        },
+        {
+          "value": 0,
+          "text": ""
+        },
+        {
+          "value": 0,
+          "text": ""
+        }
+      ]
+    }
+  ],
+  "scoring": {
+    "min": 0,
+    "max": 6,
+    "factors": [
+      {
+        "id": "fator-1",
+        "name": "fator 1",
+        "questionIds": [
+          1
+        ],
+        "ranges": [
+          {
+            "min": 0,
+            "max": 4,
+            "level": "Fudeu",
+            "description": ""
+          }
+        ]
+      }
+    ]
+  }
+}

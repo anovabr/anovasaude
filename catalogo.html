@@ -37,46 +37,60 @@
     <section class="tests-section" style="padding-top:4rem;">
         <div class="container">
             <h2 class="section-title">Catálogo de Testes</h2>
-            <p class="section-subtitle">Instrumentos com artigos, acervo do meu grupo e pesquisas em andamento.</p>
+            <p class="section-subtitle">Instrumentos com artigos, curadoria Anova e destaques.</p>
 
-            <div class="tests-grid">
-                <div class="test-card" data-destaque="false" data-test-id="demo-test" data-test-title="Teste de Demonstração" onclick="window.location.href='html_tests/demo_test.html'">
-                    <span class="ribbon">Curadoria Anova</span>
-                    <span class="test-tag">DEMO</span>
-                    <h4>Teste de Demonstração</h4>
-                    <p>Um teste rápido com apenas 2 questões. Perfeito para experimentar como funciona a plataforma.</p>
-                    <div class="test-meta"><span>⏱️ 1 min</span><span>📊 2 questões</span></div>
-                    <div class="test-actions">
-                        <a class="badge badge--article" href="https://example.com/artigo/demo" target="_blank" rel="noopener">Artigo</a>
-                    </div>
-                </div>
-
-                <div class="test-card" data-destaque="true" data-test-id="bdi-pc" data-test-title="Escala de Depressão para Atenção Primária (BDI-PC)" onclick="window.location.href='html_tests/bdi-pc.html'">
-                    <span class="ribbon">Curadoria Anova</span>
-                    <span class="test-tag">Depressão</span>
-                    <h4>Escala de Depressão para Atenção Primária (BDI-PC)</h4>
-                    <p>Instrumento de rastreamento rápido para sintomas depressivos em contextos de atenção primária à saúde.</p>
-                    <div class="test-meta"><span>⏱️ 3-5 min</span><span>📊 7 questões</span></div>
-                    <div class="test-actions">
-                        <a class="badge badge--article" href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank" rel="noopener">Artigo</a>
-                    </div>
-                </div>
-
-                <div class="test-card" data-destaque="true" data-test-id="gad7" data-test-title="Escala de Ansiedade Generalizada (GAD-7)" onclick="window.location.href='html_tests/gad7.html'">
-                    <span class="test-tag">Ansiedade</span>
-                    <h4>Escala de Ansiedade Generalizada (GAD-7)</h4>
-                    <p>Avaliação breve e eficaz de sintomas de ansiedade generalizada amplamente utilizada na prática clínica.</p>
-                    <div class="test-meta"><span>⏱️ 3-5 min</span><span>📊 7 questões</span></div>
-                    <div class="test-actions">
-                        <a class="badge badge--article" href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank" rel="noopener">Artigo</a>
-                    </div>
-                </div>
-            </div>
+            <div class="tests-grid" id="catalog-grid"></div>
         </div>
     </section>
 
     <script src="js/storage.js"></script>
     <script src="js/dashboard.js"></script>
-    <script src="js/index.js"></script>
+    <script>
+    (function(){
+        const grid = document.getElementById('catalog-grid');
+
+        function createCard(test) {
+            const card = document.createElement('div');
+            card.className = 'test-card';
+            card.setAttribute('data-test-id', test.id);
+            if (test.featured) card.setAttribute('data-destaque', 'true');
+
+            const ribbon = test.curadoria ? '<span class="ribbon">Curadoria Anova</span>' : '';
+            const article = test.articleUrl ? `<a class="badge badge--article" href="${test.articleUrl}" target="_blank" rel="noopener">Artigo</a>` : '';
+
+            card.innerHTML = `
+                ${ribbon}
+                <span class="test-tag">${test.tag || 'Teste'}</span>
+                <h4>${test.title}</h4>
+                <p>${test.description || ''}</p>
+                <div class="test-meta"><span>⏱️ ${test.estimatedTime || ''}</span><span>📊 ${test.questionCount || ''} questões</span></div>
+                <div class="test-actions">
+                    ${article}
+                </div>
+            `;
+
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', (e) => {
+                if (e.target.closest('.badge')) return;
+                window.location.href = `html_tests/test.html?id=${encodeURIComponent(test.id)}`;
+            });
+            return card;
+        }
+
+        function render(tests) {
+            grid.innerHTML = '';
+            tests.forEach(t => grid.appendChild(createCard(t)));
+            if (window.ProgressDashboard) window.ProgressDashboard.refresh();
+        }
+
+        fetch('tests/index.json')
+            .then(r => r.json())
+            .then(render)
+            .catch(err => {
+                console.error(err);
+                grid.innerHTML = '<p>Não foi possível carregar o catálogo.</p>';
+            });
+    })();
+    </script>
 </body>
 </html>

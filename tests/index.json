@@ -1,0 +1,508 @@
+﻿[
+  {
+    "id": "demo-test",
+    "title": "Teste de Demonstração",
+    "description": "Um teste rápido com apenas 2 questões para demonstração.",
+    "tag": "DEMO",
+    "articleUrl": "https://example.com/artigo/demo",
+    "featured": true,
+    "curadoria": true,
+    "estimatedTime": "1 min",
+    "questionCount": 2
+  },
+  {
+    "id": "ocir",
+    "title": "Inventário de Obsessões e Compulsões - OCI-R",
+    "description": "Inventário breve para rastreio de obsessões e compulsões.",
+    "tag": "Ansiedade",
+    "articleUrl": "",
+    "featured": false,
+    "curadoria": false,
+    "estimatedTime": "",
+    "questionCount": 1
+  },
+  {
+  "id": "t1",
+  "featured": false,
+  "curadoria": false,
+  "questionCount": 2,
+  "questions": [
+    {
+      "id": 1,
+      "title": "1. Eu tenho acumulado tantas coisas que elas já estão me atrapalhando",
+      "type": "likert",
+      "options": [
+        {
+          "value": 0,
+          "text": "Nem um pouco"
+        },
+        {
+          "value": 1,
+          "text": "Um pouco"
+        },
+        {
+          "value": 2,
+          "text": "Moderadamente"
+        },
+        {
+          "value": 3,
+          "text": "Muito"
+        },
+        {
+          "value": 4,
+          "text": "Extremamente"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "2. Eu verifico coisas mais vezes do que é necessário.",
+      "type": "likert",
+      "options": [
+        {
+          "value": 0,
+          "text": ""
+        },
+        {
+          "value": 1,
+          "text": ""
+        },
+        {
+          "value": 2,
+          "text": ""
+        },
+        {
+          "value": 3,
+          "text": ""
+        },
+        {
+          "value": 4,
+          "text": ""
+        }
+      ]
+    }
+  ],
+  "scoring": {
+    "min": 0,
+    "max": 8,
+    "ranges": [
+      {
+        "min": 0,
+        "max": 4,
+        "level": "",
+        "description": ""
+      }
+    ],
+    "factors": [
+      {
+        "id": "Fator 1",
+        "name": "Geral",
+        "questionIds": [
+          1
+        ],
+        "ranges": [
+          {
+            "min": 0,
+            "max": 4,
+            "level": "Leve",
+            "description": ""
+          }
+        ]
+      }
+    ]
+  }
+},
+{
+  "id": "gad7",
+  "title": "ex",
+  "description": "x",
+  "tag": "x",
+  "featured": false,
+  "curadoria": false,
+  "instructions": "xx",
+  "questionCount": 2,
+  "questions": [
+    {
+      "id": 1,
+      "title": "111",
+      "type": "yesno",
+      "options": [
+        {
+          "value": 1,
+          "text": ""
+        },
+        {
+          "value": 2,
+          "text": ""
+        },
+        {
+          "value": 3,
+          "text": ""
+        },
+        {
+          "value": 4,
+          "text": ""
+        },
+        {
+          "value": 5,
+          "text": ""
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "2222",
+      "type": "likert",
+      "options": [
+        {
+          "value": 0,
+          "text": ""
+        },
+        {
+          "value": 0,
+          "text": ""
+        },
+        {
+          "value": 0,
+          "text": ""
+        },
+        {
+          "value": 0,
+          "text": ""
+        },
+        {
+          "value": 0,
+          "text": ""
+        }
+      ]
+    }
+  ],
+  "scoring": {
+    "min": 0,
+    "max": 10,
+    "ranges": [
+      {
+        "min": 2,
+        "max": 5,
+        "level": "fudido",
+        "description": "ddada"
+      },
+      {
+        "min": 6,
+        "max": 10,
+        "level": "ferrado",
+        "description": "dasda"
+      }
+    ],
+    "factors": [
+      {
+        "id": "",
+        "name": "",
+        "questionIds": [],
+        "ranges": [
+          {
+            "min": 0,
+            "max": 0,
+            "level": "",
+            "description": ""
+          }
+        ]
+      }
+    ]
+  }
+},
+{
+  "id": "x1",
+  "title": "escala x1",
+  "description": "xxx",
+  "tag": "ansiedade",
+  "featured": true,
+  "curadoria": false,
+  "instructions": "xx",
+  "questionCount": 2,
+  "questions": [
+    {
+      "id": 1,
+      "title": "1. Eu tenho acumulado tantas coisas que elas já estão me atrapalhando",
+      "type": "likert",
+      "options": [
+        {
+          "value": 0,
+          "text": ""
+        },
+        {
+          "value": 1,
+          "text": ""
+        },
+        {
+          "value": 2,
+          "text": ""
+        },
+        {
+          "value": 3,
+          "text": ""
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "2. Eu verifico coisas mais vezes do que é necessário",
+      "type": "likert",
+      "options": [
+        {
+          "value": 0,
+          "text": ""
+        },
+        {
+          "value": 1,
+          "text": ""
+        },
+        {
+          "value": 0,
+          "text": ""
+        },
+        {
+          "value": 0,
+          "text": ""
+        }
+      ]
+    }
+  ],
+  "scoring": {
+    "min": 0,
+    "max": 6,
+    "factors": [
+      {
+        "id": "fator-1",
+        "name": "fator 1",
+        "questionIds": [
+          1
+        ],
+        "ranges": [
+          {
+            "min": 0,
+            "max": 4,
+            "level": "Fudeu",
+            "description": ""
+          }
+        ]
+      }
+    ]
+  }
+},
+{
+  "id": "teste1",
+  "description": "descricao curta",
+  "tag": "ansiedade",
+  "featured": false,
+  "curadoria": false,
+  "instructions": "instrucoes de resposa",
+  "questionCount": 2,
+  "questions": [
+    {
+      "id": 1,
+      "title": "q1",
+      "type": "likert",
+      "options": [
+        {
+          "value": 1,
+          "text": ""
+        },
+        {
+          "value": 2,
+          "text": ""
+        },
+        {
+          "value": 3,
+          "text": ""
+        },
+        {
+          "value": 4,
+          "text": ""
+        },
+        {
+          "value": 5,
+          "text": ""
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "q2",
+      "type": "likert",
+      "options": [
+        {
+          "value": 1,
+          "text": ""
+        },
+        {
+          "value": 2,
+          "text": ""
+        },
+        {
+          "value": 3,
+          "text": ""
+        },
+        {
+          "value": 4,
+          "text": ""
+        },
+        {
+          "value": 5,
+          "text": ""
+        }
+      ]
+    }
+  ],
+  "scoring": {
+    "min": 0,
+    "max": 10,
+    "factors": [
+      {
+        "id": "geral",
+        "name": "geral",
+        "questionIds": [
+          1,
+          2
+        ],
+        "ranges": [
+          {
+            "min": 2,
+            "max": 4,
+            "level": "Leve",
+            "description": "level leve"
+          },
+          {
+            "min": 5,
+            "max": 10,
+            "level": "alto",
+            "description": "nivel super alto alto"
+          }
+        ]
+      }
+    ]
+  }
+},
+{
+  "id": "teste_claude",
+  "title": "Escala de Ansiedade do Claude",
+  "description": "desc1",
+  "tag": "Depressão",
+  "featured": false,
+  "curadoria": false,
+  "instructions": "instruçòes",
+  "questionCount": 2,
+  "questions": [
+    {
+      "id": 1,
+      "title": "q1 ok",
+      "type": "likert",
+      "options": [
+        {
+          "value": 1,
+          "text": ""
+        },
+        {
+          "value": 2,
+          "text": ""
+        },
+        {
+          "value": 3,
+          "text": ""
+        },
+        {
+          "value": 4,
+          "text": ""
+        },
+        {
+          "value": 5,
+          "text": ""
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "q2 ok",
+      "type": "likert",
+      "options": [
+        {
+          "value": 1,
+          "text": ""
+        },
+        {
+          "value": 2,
+          "text": ""
+        },
+        {
+          "value": 3,
+          "text": ""
+        },
+        {
+          "value": 4,
+          "text": ""
+        },
+        {
+          "value": 5,
+          "text": ""
+        }
+      ]
+    }
+  ],
+  "scoring": {
+    "min": 0,
+    "max": 10,
+    "factors": [
+      {
+        "id": "fator-geral",
+        "name": "Fator Geral",
+        "questionIds": [
+          1,
+          2
+        ],
+        "ranges": [
+          {
+            "min": 2,
+            "max": 5,
+            "level": "Baixo",
+            "description": "Descriçàopara baixo"
+          },
+          {
+            "min": 6,
+            "max": 10,
+            "level": "Alto",
+            "description": "Nivel alto do fator"
+          }
+        ]
+      },
+      {
+        "id": "fator-1",
+        "name": "Fator 1",
+        "questionIds": [
+          1
+        ],
+        "ranges": [
+          {
+            "min": 1,
+            "max": 2,
+            "level": "baixo",
+            "description": "n baixo"
+          },
+          {
+            "min": 3,
+            "max": 4,
+            "level": "medio",
+            "description": "nivel medio"
+          },
+          {
+            "min": 5,
+            "max": 5,
+            "level": "alto",
+            "description": "nivel alto"
+          }
+        ]
+      }
+    ]
+  }
+}
+
+]

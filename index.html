@@ -48,6 +48,39 @@
         </div>
     </section>
     <iframe id="catalog-source" src="catalogo.html" style="display:none;" aria-hidden="true"></iframe>
+
+    <!-- Static fallback for local file:// only -->
+    <template id="catalog-static">
+        <div class="test-card" data-test-id="demo-test" data-test-title="Teste de Demonstração">
+            <span class="ribbon">Curadoria Anova</span>
+            <span class="test-tag">DEMO</span>
+            <h4>Teste de Demonstração</h4>
+            <p>Um teste rápido com apenas 2 questões. Perfeito para experimentar como funciona a plataforma.</p>
+            <div class="test-meta"><span>⏱️ 1 min</span><span>📊 2 questões</span></div>
+            <div class="test-actions">
+                <a class="badge badge--article" href="https://example.com/artigo/demo" target="_blank" rel="noopener">Artigo</a>
+            </div>
+        </div>
+        <div class="test-card" data-test-id="bdi-pc" data-test-title="Escala de Depressão para Atenção Primária (BDI-PC)">
+            <span class="ribbon">Curadoria Anova</span>
+            <span class="test-tag">Depressão</span>
+            <h4>Escala de Depressão para Atenção Primária (BDI-PC)</h4>
+            <p>Instrumento de rastreamento rápido para sintomas depressivos em contextos de atenção primária à saúde.</p>
+            <div class="test-meta"><span>⏱️ 3-5 min</span><span>📊 7 questões</span></div>
+            <div class="test-actions">
+                <a class="badge badge--article" href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank" rel="noopener">Artigo</a>
+            </div>
+        </div>
+        <div class="test-card" data-test-id="gad7" data-test-title="Escala de Ansiedade Generalizada (GAD-7)">
+            <span class="test-tag">Ansiedade</span>
+            <h4>Escala de Ansiedade Generalizada (GAD-7)</h4>
+            <p>Avaliação breve e eficaz de sintomas de ansiedade generalizada amplamente utilizada na prática clínica.</p>
+            <div class="test-meta"><span>⏱️ 3-5 min</span><span>📊 7 questões</span></div>
+            <div class="test-actions">
+                <a class="badge badge--article" href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank" rel="noopener">Artigo</a>
+            </div>
+        </div>
+    </template>
         
     <!-- Como Funciona Section -->
     <section id="como-funciona" class="features">
