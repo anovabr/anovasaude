@@ -91,9 +91,11 @@
     const card = document.getElementById(`question-${idx}`);
     card.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
     event.target.closest('.option-label').classList.add('selected');
+    card.classList.add('question-answered');
     
     updateProgress();
     checkCompletion();
+    autoAdvance(idx);
   }
 
   function handleScale(event, idx) {
@@ -101,8 +103,11 @@
     answers[idx] = { value: v, label: v.toString() };
     const val = document.getElementById(`scale-val-${idx}`);
     if (val) val.textContent = v;
+    const card = document.getElementById(`question-${idx}`);
+    if (card) card.classList.add('question-answered');
     updateProgress();
     checkCompletion();
+    autoAdvance(idx);
   }
 
   function updateProgress() {
@@ -110,6 +115,23 @@
     const pct = (answered / answers.length) * 100;
     const fill = document.getElementById('progress-fill');
     if (fill) fill.style.width = `${pct}%`;
+  }
+
+  function autoAdvance(idx) {
+    const nextIdx = answers.findIndex((a, i) => i > idx && a === null);
+    if (nextIdx === -1) {
+      const btn = document.getElementById('submit-btn');
+      if (btn) btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    const nextCard = document.getElementById(`question-${nextIdx}`);
+    if (nextCard) {
+      const rect = nextCard.getBoundingClientRect();
+      const inView = rect.top >= 0 && rect.bottom <= window.innerHeight * 0.85;
+      if (!inView) {
+        nextCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
   }
 
   function checkCompletion() {
@@ -195,14 +217,23 @@
 
   function showResults(results) {
     document.getElementById('test-page').style.display = 'none';
-    
-    document.getElementById('result-score').textContent = results.score;
-    document.getElementById('result-max').textContent = results.maxScore;
-    document.getElementById('result-level').textContent = results.interpretation.level;
-    document.getElementById('result-description').textContent = results.interpretation.description;
 
-    // Show factors breakdown if multiple
-    if (results.factors && results.factors.length > 1) {
+    const defaultTextEl = document.getElementById('results-default-text');
+    if (defaultTextEl) {
+      defaultTextEl.innerHTML = `Você realizou com sucesso o ${testData.title}. Os resultados apresentados abaixo correspondem a uma descrição sintética e informativa, baseada no artigo científico no qual este instrumento foi desenvolvido e descrito.<br><br>Este material não possui valor jurídico e não constitui documento psicológico, não se enquadrando entre aqueles previstos na Resolução CFP nº 06/2019.<br><br>Ainda assim, a síntese apresentada pode auxiliar na compreensão inicial de características psicológicas, servindo como informação complementar. Caso deseje, esses resultados podem ser levados a um profissional de saúde mental, especialmente psicólogos ou psiquiatras, para uma avaliação clínica adequada.`;
+    }
+    
+    const scoreEl = document.getElementById('result-score');
+    if (scoreEl) scoreEl.textContent = results.score;
+    const maxEl = document.getElementById('result-max');
+    if (maxEl) maxEl.textContent = results.maxScore;
+    const levelEl = document.getElementById('result-level');
+    if (levelEl) levelEl.textContent = results.interpretation.level;
+    const descEl = document.getElementById('result-description');
+    if (descEl) descEl.textContent = results.interpretation.description;
+
+    // Show factors breakdown
+    if (results.factors && results.factors.length > 0) {
       const breakdown = document.getElementById('factors-breakdown');
       const factorsList = document.getElementById('factors-list');
       if (breakdown && factorsList) {
@@ -210,12 +241,27 @@
         factorsList.innerHTML = '';
         results.factors.forEach(f => {
           const item = document.createElement('div');
-          item.className = 'answer-item';
+          item.className = 'factor-card';
+          const maxScore = f.maxScore || 0;
+          const pct = maxScore ? Math.min(100, Math.round((f.score / maxScore) * 100)) : 0;
           item.innerHTML = `
-            <div class="answer-question">${f.name}</div>
-            <div class="answer-value">${f.score} / ${f.maxScore} • ${f.level}</div>
+            <div class="factor-header">
+              <div class="factor-title">${f.name}</div>
+              <div class="factor-level">${f.level || ''}</div>
+            </div>
+            <div class="factor-bar">
+              <span class="factor-min">0</span>
+              <div class="factor-track">
+                <div class="factor-fill" style="width:0%;"><span class="factor-value">${f.score}</span></div>
+              </div>
+              <span class="factor-max">${maxScore}</span>
+            </div>
           `;
           factorsList.appendChild(item);
+          requestAnimationFrame(() => {
+            const fill = item.querySelector('.factor-fill');
+            if (fill) fill.style.width = `${pct}%`;
+          });
         });
       }
       
@@ -227,7 +273,15 @@
 
     // Show answers
     const answersContainer = document.getElementById('result-answers-container');
-    if (answersContainer) {
+    const answersWrapper = document.getElementById('answers-wrapper');
+    const toggleBtn = document.getElementById('toggle-answers-btn');
+    const target = answersWrapper || answersContainer;
+    if (target) {
+      if (answersWrapper && toggleBtn) {
+        answersWrapper.style.display = 'none';
+        toggleBtn.textContent = 'Ver respostas completas';
+      }
+      target.innerHTML = '';
       const list = document.createElement('div');
       list.className = 'answers-list';
       results.answers.forEach((ans, idx) => {
@@ -239,7 +293,7 @@
         `;
         list.appendChild(item);
       });
-      answersContainer.appendChild(list);
+      target.appendChild(list);
     }
 
     // Save to storage
@@ -247,8 +301,12 @@
       Storage.saveResult(results.testId, results);
       Storage.recordTestTaken(results.testId, results.testTitle);
     }
+    if (window.ProgressDashboard && typeof window.ProgressDashboard.refresh === 'function') {
+      window.ProgressDashboard.refresh();
+    }
 
     document.getElementById('results-page').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'auto' });
   }
 
   document.addEventListener('DOMContentLoaded', loadTest);

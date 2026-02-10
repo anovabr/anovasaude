@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seus Resultados | Anova Saúde</title>
+    <link rel="icon" type="image/x-icon" href="logo_icon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="nav-brand">
+                    <a href="index.html" class="logo">
+                        <img src="logo.png" alt="Anova Saúde">
+                    </a>
+                    <div class="progress-chip" aria-live="polite">
+                        <span class="progress-chip__label">Seu progresso</span>
+                        <span class="progress-chip__count"><strong id="tests-taken-count-header" data-count-tests>0</strong> testes</span>
+                    </div>
+                    <div class="progress-actions">
+                        <button type="button" class="progress-btn" id="view-results-btn" title="Ver resultados">Ver</button>
+                        <button type="button" class="progress-btn progress-btn--ghost" id="clear-results-btn" title="Limpar resultados">Limpar</button>
+                    </div>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html#testes">Catálogo de Testes</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="tests-section" style="padding-top:4rem;">
+        <div class="container">
+            <h2 class="section-title">Seus Resultados</h2>
+            <p class="section-subtitle">Acompanhe todos os testes que você realizou.</p>
+            <div id="results-list"></div>
+        </div>
+    </section>
+
+    <script src="js/storage.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/results-dashboard.js"></script>
+</body>
+</html>

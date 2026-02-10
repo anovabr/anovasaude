@@ -195,8 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (viewBtn) {
         viewBtn.addEventListener('click', () => {
-            renderResultsPanel();
-            panel.classList.toggle('progress-panel--open');
+            window.location.href = new URL('../dashboard.html', window.location.href).href;
         });
     }
 

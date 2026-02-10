@@ -29,6 +29,14 @@
                 </div>
                 <ul class="nav-links">
                     <li><a href="catalogo.html">Catálogo de Testes</a></li>
+                    <li><a href="mailto:contato@anovasaude.com">Contato</a></li>
+                    <li>
+                        <a class="nav-icon" href="https://instagram.com/anovaneurostat" target="_blank" rel="noopener" aria-label="Instagram">
+                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <path d="M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4zm0 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H7zm5 3a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm6.2-.7a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                            </svg>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -98,13 +106,13 @@
                 <div class="feature-card">
                     <div class="feature-icon">2</div>
                     <h3>Complete a Avaliação</h3>
-                    <p>Responda às questões em seu próprio ritmo. Receba resultados automáticos imediatamente após a conclusão.</p>
+                    <p>Responda às questões sem necessidade de criar login ou conta. Receba resultados automáticos imediatamente após a conclusão.</p>
                 </div>
                 
                 <div class="feature-card">
                     <div class="feature-icon">3</div>
                     <h3>Interpretação Profissional</h3>
-                    <p>Solicite uma análise detalhada elaborada por profissionais qualificados, com insights personalizados e recomendações específicas.</p>
+                    <p>Caso queira, solicite uma análise detalhada elaborada pela nossa equipe, com insights personalizados e recomendações específicas.</p>
                 </div>
             </div>
         </div>
@@ -168,47 +176,36 @@
         </div>
     </div>
 
+    <!-- Footer Modal -->
+    <div class="team-modal" id="footer-modal" aria-hidden="true">
+        <div class="team-modal__backdrop" id="footer-modal-backdrop"></div>
+        <div class="team-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="footer-modal-title">
+            <button class="team-modal__close" id="footer-modal-close" aria-label="Fechar">×</button>
+            <h3 id="footer-modal-title"></h3>
+            <p id="footer-modal-body" class="team-bio"></p>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <div class="footer-content">
-                <div>
-                    <h4>Anova Saúde</h4>
-                    <p style="color: rgba(255,255,255,0.7); font-size: 0.95rem;">Avaliações psicológicas profissionais com interpretação especializada.</p>
-                </div>
-                
-                <div>
-                    <h4>Testes</h4>
-                    <ul class="footer-links">
-                        <li><a href="#">Personalidade</a></li>
-                        <li><a href="#">Ansiedade e Depressão</a></li>
-                        <li><a href="#">Atenção e TDAH</a></li>
-                        <li><a href="#">Estresse</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4>Informações</h4>
-                    <ul class="footer-links">
-                        <li><a href="#">Sobre Nós</a></li>
-                        <li><a href="#">Como Funciona</a></li>
-                        <li><a href="#">Privacidade</a></li>
-                        <li><a href="#">Termos de Uso</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4>Contato</h4>
-                    <ul class="footer-links">
-                        <li><a href="mailto:contato@anovasaude.com">contato@anovasaude.com</a></li>
-                        <li><a href="#">Perguntas Frequentes</a></li>
-                        <li><a href="#">Suporte</a></li>
-                    </ul>
-                </div>
+            <div class="footer-panels">
+                <button type="button" class="footer-panel footer-panel-link" data-title="Sobre Nós" data-body="A ANOVA Saúde é um braço da ANOVA e funciona como uma plataforma independente de triagem e educação em saúde mental, criada para oferecer acesso claro, responsável e tecnicamente fundamentado a instrumentos psicológicos padronizados. Saiba mais em <a href='https://www.anovabr.com' target='_blank' rel='noopener'>anovabr.com</a>.&#10;Este espaço foi desenvolvido principalmente para pessoas interessadas em compreender melhor seus próprios resultados psicológicos, frequentemente pacientes ou clientes, por meio de instrumentos baseados em ciência, sem promessas diagnósticas ou interpretações infundadas.&#10;Nosso objetivo é organizar informações de forma cientificamente embasada, honesta e precisa, permitindo que você compreenda melhor seus resultados, acompanhe mudanças ao longo do tempo e, se desejar, utilize esse material como apoio em uma conversa qualificada com profissionais de saúde, especialmente psicólogos e psiquiatras.&#10;A ANOVA Saúde não realiza, nem substitui, avaliação clínica, psicoterapia, consulta médica ou diagnóstico psicológico. A plataforma tem como princípio o combate à desinformação científica, oferecendo uma alternativa responsável a interpretações simplistas, automáticas ou tecnicamente inadequadas sobre saúde mental.&#10;&#10;<img class='footer-modal-photo' src='img/photo_luis_2026.jpg' alt='Professor Doutor Luis Anunciação'>&#10;A ANOVA Saúde é liderada pelo <span class='highlight-marker'>Professor Doutor Luis Anunciação</span>, professor do Departamento de Psicologia da PUC-Rio e Professor Visitante da University of Oregon. O responsável técnico possui mais de 70 artigos publicados em periódicos científicos internacionais, é o atual presidente do Instituto Brasileiro de Neuropsicologia e Comportamento, e líder do Laboratório de Métodos e Medidas. Meu currículo completo pode ser consultado <a href='http://lattes.cnpq.br/3982200733248687' target='_blank' rel='noopener'>aqui</a>.&#10;&#10;<strong>VALORES FUNDAMENTAIS</strong>&#10;<strong>Ciência em primeiro lugar.</strong>&#10;Todos os instrumentos e descrições são fundamentados em artigos científicos revisados por pares ou em manuais técnicos reconhecidos. Quando a evidência é limitada, isso é explicitado.&#10;Sem absolutamente nenhum tipo de enrolação.&#10;Não exageramos resultados, não dramatizamos interpretações e não prometemos o que os dados não sustentam. A informação é apresentada de forma direta, técnica e responsável. Você jamais vai ter um popup te vendendo produtos, pedindo e-mails ou fazendo “promoções sensacionais”. Vamos tratar você exatamente da mesma forma honesta que gostaríamos de ser tratado.&#10;<strong>Sem interesses comerciais ocultos.</strong>&#10;Não há anúncios, conteúdos patrocinados ou rankings manipulados. Quando um serviço é pago, isso é informado de forma clara. Quando é gratuito, é gratuito.&#10;<strong>Transparência acima de persuasão.</strong>&#10;Os resultados são apresentados como informação, não como diagnóstico nem como ferramenta de convencimento. Não promovemos tratamentos, produtos ou decisões.&#10;<strong>Conexão com profissionais — apenas se você quiser.</strong>&#10;A plataforma pode ser utilizada exclusivamente para entendimento pessoal. Caso deseje, os resultados podem servir como apoio para discussão com profissionais da minha equipe. Não há encaminhamento automático nem pressão. Os profissionais da ANOVA Saúde são ou foram meus alunos; todos são, no mínimo, especialistas.&#10;<strong>Respeito à autonomia.</strong>&#10;Você controla seus dados, seus resultados e o uso que faz deles. A informação é fornecida; as decisões permanecem com você. O sistema somente salvará seus dados se você autorizar.">
+                    <h5>Sobre Nós</h5>
+                </button>
+                <button type="button" class="footer-panel footer-panel-link" data-title="Como Funciona" data-body="<strong>1. Escolha do instrumento</strong>&#10;Você seleciona um instrumento disponível na plataforma e responde online. Os instrumentos com curadoria foram desenvolvidos pela nossa equipe ou resultam diretamente de nossas pesquisas. Todos os instrumentos disponíveis possuem artigos científicos revisados por pares, publicados em revistas internacionais.&#10;<strong>2. Instrumentos restritos a psicólogos ou com direitos comerciais</strong>&#10;Instrumentos restritos a profissionais de psicologia ou cujos direitos autorais pertencem a editoras técnicas (por exemplo, Pearson) não estão disponíveis na plataforma, salvo quando vinculados a projetos de pesquisa em andamento, o que é sempre claramente indicado.&#10;<strong>3. Cálculo dos escores</strong>&#10;O sistema calcula seus pontos brutos e os apresenta em relação ao mínimo e máximo possíveis do instrumento ou fator avaliado. Dependendo do instrumento, podem ser apresentados níveis ou descrições compatíveis com a literatura científica correspondente.&#10;<strong>4. Resultado informativo</strong>&#10;O resultado tem finalidade informativa e educacional, permitindo uma melhor compreensão de suas características no momento da avaliação. Esses resultados não constituem diagnóstico clínico.&#10;<strong>5. Relatório interpretativo por profissional (opcional, quando disponível)</strong>&#10;Alguns instrumentos oferecem a opção de contratação de um relatório interpretativo, elaborado por um profissional da equipe da ANOVA Saúde, sob minha supervisão. O prazo de entrega informado é necessário para análise cuidadosa dos dados e elaboração do documento técnico. Este é um serviço pago, claramente identificado no momento da contratação.&#10;<strong>6. Elaboração humana do documento</strong>&#10;Os relatórios interpretativos são produzidos integralmente por profissionais, sem o uso de ferramentas automáticas de geração de texto ou inteligência artificial para redigir o conteúdo interpretativo.&#10;<strong>7. Uso do documento</strong>&#10;O documento técnico é assinado pelo profissional responsável e tem finalidade informativa e orientativa, podendo auxiliar o próprio usuário a se compreender melhor e, se desejar, a buscar apoio profissional adequado. O documento não substitui avaliação clínica ou laudo psicológico.">
+                    <h5>Como Funciona</h5>
+                </button>
+                <button type="button" class="footer-panel footer-panel-link" data-title="Privacidade" data-body="A ANOVA Saúde trata dados pessoais com responsabilidade e apenas na medida necessária para o funcionamento da plataforma. O sistema foi desenvolvido com controle direto da nossa equipe (Javascript e Python), com medidas técnicas e administrativas voltadas à proteção das informações e à redução de riscos de acesso não autorizado.&#10;Quando aplicável, a coleta e o uso de dados para fins de pesquisa estão ancorados no projeto aprovado pela Plataforma Brasil: “Uma proposta interdisciplinar de inovação: o desenvolvimento de aplicativos e instrumentos psicológicos para otimizar a qualidade de vida” (CAAE: 63553522.7.0000.5279, Pesquisador Responsável: Luis Anunciação).&#10;&#10;<strong>Dados coletados</strong>&#10;• Respostas aos questionários e escores calculados.&#10;• Informações fornecidas voluntariamente (quando aplicável).&#10;• Dados técnicos básicos para segurança e funcionamento do site.&#10;&#10;<strong>Uso dos dados</strong>&#10;• Apresentação de resultados e geração de relatórios, quando aplicável.&#10;• Manutenção, segurança e melhoria da plataforma.&#10;• Quando autorizado, produção de documentos técnicos.&#10;&#10;<strong>O que não fazemos</strong>&#10;• Não vendemos dados.&#10;• Não utilizamos informações para publicidade direcionada baseada em saúde mental.&#10;&#10;<strong>Direitos do usuário</strong>&#10;O usuário pode, quando aplicável e dentro dos limites legais e técnicos, solicitar acesso, correção ou exclusão de seus dados, bem como revogar autorizações previamente concedidas.&#10;&#10;<strong>Armazenamento e segurança</strong>&#10;• Os dados são mantidos pelo tempo necessário para prestação do serviço e cumprimento de obrigações legais.&#10;• São adotadas medidas técnicas e administrativas para reduzir riscos de acesso não autorizado.">
+                    <h5>Privacidade</h5>
+                </button>
+                <button type="button" class="footer-panel footer-panel-link" data-title="Termos de Uso" data-body="Ao utilizar a ANOVA Saúde, você concorda com os termos abaixo.&#10;&#10;<strong>Natureza do serviço</strong>&#10;Os instrumentos e resultados disponibilizados têm finalidade informativa, educacional e de triagem. A plataforma não realiza diagnóstico, tratamento ou prescrição.&#10;&#10;<strong>Responsabilidade do usuário</strong>&#10;Os resultados devem ser utilizados de forma responsável. Em situações de sofrimento intenso, risco iminente ou emergência, o usuário deve buscar atendimento profissional imediato.&#10;&#10;<strong>Limitação de responsabilidade</strong>&#10;A ANOVA Saúde não se responsabiliza por decisões tomadas exclusivamente com base nos resultados apresentados na plataforma.&#10;&#10;<strong>Relatórios interpretativos (quando disponíveis)</strong>&#10;Quando oferecidos, os relatórios interpretativos constituem um serviço adicional, claramente informado no momento da contratação, e não substituem avaliação clínica formal, laudo psicológico ou parecer diagnóstico.&#10;&#10;<strong>Propriedade intelectual</strong>&#10;Conteúdos, marca, textos, layout e materiais próprios da plataforma não podem ser reproduzidos, distribuídos ou utilizados sem autorização prévia.&#10;&#10;<strong>Atualizações</strong>&#10;Estes termos e políticas podem ser atualizados para refletir mudanças na plataforma. A versão vigente será sempre a publicada no site.">
+                    <h5>Termos de Uso</h5>
+                </button>
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2024 Anova Saúde. Todos os direitos reservados.</p>
+                <p><img src="img/formiga.png" alt="" class="footer-logo">© 2026 Anova Saúde. Programada integralmente por Luis Anunciação.</p>
             </div>
         </div>
     </footer>
@@ -218,3 +215,5 @@
     <script src="js/index.js"></script>
 </body>
 </html>
+
+

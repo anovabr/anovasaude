@@ -14,9 +14,19 @@
     <header class="header">
         <div class="container">
             <nav class="nav">
-                <a href="../index.html" class="logo">
-                    <img src="../logo.png" alt="Anova Saúde">
-                </a>
+                <div class="nav-brand">
+                    <a href="../index.html" class="logo">
+                        <img src="../logo.png" alt="Anova Saúde">
+                    </a>
+                    <div class="progress-chip" aria-live="polite">
+                        <span class="progress-chip__label">Seu progresso</span>
+                        <span class="progress-chip__count"><strong id="tests-taken-count-header" data-count-tests>0</strong> testes</span>
+                    </div>
+                    <div class="progress-actions">
+                        <button type="button" class="progress-btn" id="view-results-btn" title="Ver resultados">Ver</button>
+                        <button type="button" class="progress-btn progress-btn--ghost" id="clear-results-btn" title="Limpar resultados">Limpar</button>
+                    </div>
+                </div>
                 <ul class="nav-links">
                     <li><a href="../index.html#testes">Catálogo de Testes</a></li>
                 </ul>
@@ -57,6 +67,7 @@
     </div>
 
     <script src="../js/storage.js"></script>
+    <script src="../js/dashboard.js"></script>
     <script src="../js/scoring.js"></script>
     <script src="../js/shared-pages.js"></script>
     <script src="../js/test-catalog.js"></script>
