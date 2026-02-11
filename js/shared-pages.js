@@ -32,7 +32,9 @@ function injectSharedPages() {
       <!-- FACTORS BREAKDOWN (if multiple) -->
       <div id="factors-breakdown" class="result-answers" style="display:none;">
         <h3>Detalhamento por Fator</h3>
-        <p class="factor-note">Estes resultados frequentemente indicam os pontos brutos obtidos e sua relação com os valores mínimo e máximo possíveis do fator ou do teste aplicado. Eles não representam, necessariamente, transformações psicométricas padronizadas, como pontos ponderados, Z-scores, T-scores ou percentis. Dessa maneira, a única interpretação possível é descritiva, sendo útil para transparência dos resultados, comparação intra-instrumento e acompanhamento longitudinal, não devendo ser interpretada como medida normativa ou diagnóstica.</p>
+        <p class="factor-note">Estes resultados indicam os pontos brutos obtidos e sua relação com os valores mínimo e máximo 
+        possíveis. Eles não possuem transformações psicométricas padronizadas, como pontos ponderados, Z-scores, T-scores ou percentis.
+        Assim, a única interpretação possível é descritiva, sendo útil para transparência dos resultados, comparação intra-instrumento e acompanhamento longitudinal, não devendo ser interpretada como medida normativa ou diagnóstica.</p>
         <div id="factors-list"></div>
       </div>
 
@@ -46,7 +48,13 @@ function injectSharedPages() {
       </div>
 
       <div class="result-box result-box--full">
-        <p><span class="result-symbol" aria-hidden="true">❖</span>É possível que <span class="highlight-marker">um psicólogo da equipe</span> tenha acesso aos seus resultados e faça um relatório técnico sobre eles, explicando de maneira mais detalhada e precisa. Este documento será enviado para você via e-mail ou whatsapp por um acesso seguro e criptografado. <br><span class="result-symbol" aria-hidden="true">❖</span>Caso você tenha esse interesse, clique em "Quero interpretação humana". Você irá preencher algumas informações sociodemográficas, poderá fazer novos testes e irá pagar uma taxa de serviço. Após 2 dias úteis, o resultado será enviado para você.</p>
+        <p><span class="result-symbol" aria-hidden="true">❖</span>Este material <span class="highlight-marker">não possui valor jurídico</span> e não constitui documento psicológico, não se enquadrando entre aqueles previstos na Resolução CFP nº 06/2019.
+        <br><span class="result-symbol" aria-hidden="true">❖</span>É possível que <span class="highlight-marker">um psicólogo da equipe</span> tenha acesso aos 
+        seus resultados e faça um relatório técnico sobre eles, explicando de maneira mais detalhada e precisa.  
+        <br><span class="result-symbol" aria-hidden="true">❖</span>Caso você tenha esse interesse <button class="interpretation-link highlight-marker" style="border:none;text-decoration:none;cursor:pointer;padding:0;font:inherit;background:transparent;font-weight:bold;">clique em "Quero interpretação humana"</button>. 
+        Você irá deverá preenher algumas informações extras, poderá fazer novos testes e irá pagar uma taxa de serviço. 
+        Após 2 dias úteis, um documento técnico será enviado para você via e-mail ou whatsapp por um acesso seguro.</p>
+
       </div>
 
       <div class="test-navigation">
@@ -229,7 +237,7 @@ function injectSharedPages() {
 
   // Navigation handlers
   document.addEventListener("click", e => {
-    if (e.target.id === "interpretation-btn") {
+    if (e.target.id === "interpretation-btn" || e.target.classList.contains("interpretation-link")) {
       document.getElementById("results-page").style.display = "none";
       document.getElementById("demographics-page").style.display = "block";
       window.scrollTo({ top: 0, behavior: "auto" });

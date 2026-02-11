@@ -1,12 +1,25 @@
 const highlightContainer = document.getElementById("tests-highlight");
 const catalogFrame = document.getElementById("catalog-source");
 
+function createVideoCard() {
+  const card = document.createElement('div');
+  card.className = 'video-card';
+  card.innerHTML = `
+    <div class="video-container">
+      <iframe src="https://www.youtube.com/embed/-vnDvcjRgKI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+    <p class="video-caption">Apresentação da proposta, por Dr. Luis Anunciação.</p>
+  `;
+  return card;
+}
+
 function renderFallback() {
   if (!highlightContainer) return;
   const tpl = document.getElementById("catalog-static");
   if (!tpl) return;
   const clone = tpl.content.cloneNode(true);
   highlightContainer.innerHTML = "";
+  highlightContainer.appendChild(createVideoCard());
   highlightContainer.appendChild(clone);
   attachClicks(highlightContainer);
   if (window.ProgressDashboard) window.ProgressDashboard.refresh();
@@ -61,6 +74,7 @@ function loadHighlightsFromJson() {
       const featured = tests.filter(t => t.featured);
       const picks = (featured.length ? featured : tests).slice(0, 3);
       highlightContainer.innerHTML = "";
+      highlightContainer.appendChild(createVideoCard());
       picks.forEach(t => highlightContainer.appendChild(createCard(t)));
       attachClicks(highlightContainer);
       if (window.ProgressDashboard) window.ProgressDashboard.refresh();
@@ -82,17 +96,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const nameEl = document.getElementById('team-modal-name');
   const roleEl = document.getElementById('team-modal-role');
   const bioEl = document.getElementById('team-modal-bio');
+  const photoContainer = document.getElementById('team-modal-photo-container');
   const footerModal = document.getElementById('footer-modal');
   const footerBackdrop = document.getElementById('footer-modal-backdrop');
   const footerClose = document.getElementById('footer-modal-close');
   const footerTitle = document.getElementById('footer-modal-title');
   const footerBody = document.getElementById('footer-modal-body');
 
-  const openModal = (name, role, bio) => {
+  const openModal = (name, role, bio, photoHtml) => {
     if (!modal) return;
     nameEl.textContent = name || '';
     roleEl.textContent = role || '';
     bioEl.textContent = bio || '';
+    if (photoContainer) {
+      photoContainer.innerHTML = photoHtml || '';
+    }
     modal.classList.add('team-modal--open');
     modal.setAttribute('aria-hidden', 'false');
   };
@@ -119,7 +137,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.querySelectorAll('.team-card').forEach(card => {
     card.addEventListener('click', () => {
-      openModal(card.dataset.name, card.dataset.role, card.dataset.bio);
+      const photoEl = card.querySelector('[class*="team-photo"]');
+      let photoHtml = '';
+      if (photoEl) {
+        if (photoEl.tagName === 'IMG') {
+          photoHtml = `<img src="${photoEl.src}" alt="${card.dataset.name}" style="width: 150px; height: 150px; object-fit: cover; border-radius: 8px;">`;
+        } else {
+          photoHtml = `<div style="width: 150px; height: 150px; display: flex; align-items: center; justify-content: center; font-size: 3rem; font-weight: bold; border-radius: 8px; background: linear-gradient(135deg, var(--primary), var(--accent)); color: white;">${photoEl.textContent}</div>`;
+        }
+      }
+      openModal(card.dataset.name, card.dataset.role, card.dataset.bio, photoHtml);
     });
   });
 
@@ -143,6 +170,33 @@ document.addEventListener("DOMContentLoaded", () => {
       openFooterModal(btn.dataset.title, btn.dataset.body);
     });
   });
+
+  // Scroll Reveal Animation
+  const revealElements = () => {
+    const reveals = document.querySelectorAll('.reveal');
+    reveals.forEach(element => {
+      const windowHeight = window.innerHeight;
+      const elementTop = element.getBoundingClientRect().top;
+      const elementVisible = 150; // Trigger 150px before element comes into view
+
+      if (elementTop < windowHeight - elementVisible) {
+        element.classList.add('active');
+      }
+    });
+  };
+
+  // Add reveal class to sections and cards on page load
+  window.addEventListener('load', () => {
+    document.querySelectorAll('section, .test-card, .feature-card, .team-card').forEach(el => {
+      if (!el.classList.contains('team-section')) { // Don't add to team-section as it has custom styling
+        el.classList.add('reveal');
+      }
+    });
+    revealElements();
+  });
+
+  window.addEventListener('scroll', revealElements);
+
 
   if (window.location.protocol === 'file:') {
     renderFallback();

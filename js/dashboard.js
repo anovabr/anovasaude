@@ -82,6 +82,15 @@ document.addEventListener('DOMContentLoaded', () => {
     ensureProgressChip(brand);
     ensureActions(brand);
 
+    const toggleBtn = document.querySelector('.nav-toggle');
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+            const open = nav.classList.toggle('nav--open');
+            toggleBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            toggleBtn.textContent = open ? '✕' : '☰';
+        });
+    }
+
     let panel = brand.querySelector('.progress-panel');
     if (!panel) {
         panel = document.createElement('div');
@@ -95,19 +104,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const countEls = document.querySelectorAll('[data-count-tests], #tests-taken-count, #tests-taken-count-header');
     const listEls = document.querySelectorAll('.tests-taken-list');
-    const cards = Array.from(document.querySelectorAll('.test-card[data-test-id]'));
     const clearBtn = document.getElementById('clear-results-btn');
     const viewBtn = document.getElementById('view-results-btn');
-
-    cards.forEach(card => {
-        if (!card.dataset.href && card.getAttribute('onclick')) {
-            card.dataset.href = card.getAttribute('onclick');
-        }
-    });
 
     const renderTakenState = () => {
         const testsTaken = Storage.getTakenTests();
         const takenIds = new Set(testsTaken.map(test => test.testId));
+
+        // Re-query cards fresh each time to catch dynamically created cards
+        const cards = Array.from(document.querySelectorAll('.test-card[data-test-id]'));
+
+        // Preserve onclick as dataset.href for any new cards
+        cards.forEach(card => {
+            if (!card.dataset.href && card.getAttribute('onclick')) {
+                card.dataset.href = card.getAttribute('onclick');
+            }
+        });
 
         countEls.forEach(el => (el.textContent = testsTaken.length));
 
@@ -198,6 +210,18 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = new URL('../dashboard.html', window.location.href).href;
         });
     }
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            if (nav.classList.contains('nav--open')) {
+                nav.classList.remove('nav--open');
+                if (toggleBtn) {
+                    toggleBtn.setAttribute('aria-expanded', 'false');
+                    toggleBtn.textContent = '☰';
+                }
+            }
+        });
+    });
 
     renderTakenState();
 

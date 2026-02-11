@@ -220,7 +220,9 @@
 
     const defaultTextEl = document.getElementById('results-default-text');
     if (defaultTextEl) {
-      defaultTextEl.innerHTML = `Você realizou com sucesso o ${testData.title}. Os resultados apresentados abaixo correspondem a uma descrição sintética e informativa, baseada no artigo científico no qual este instrumento foi desenvolvido e descrito.<br><br>Este material não possui valor jurídico e não constitui documento psicológico, não se enquadrando entre aqueles previstos na Resolução CFP nº 06/2019.<br><br>Ainda assim, a síntese apresentada pode auxiliar na compreensão inicial de características psicológicas, servindo como informação complementar. Caso deseje, esses resultados podem ser levados a um profissional de saúde mental, especialmente psicólogos ou psiquiatras, para uma avaliação clínica adequada.`;
+      defaultTextEl.innerHTML = `Você realizou com sucesso o ${testData.title}. Os resultados apresentados abaixo correspondem a uma descrição sintética e informativa, baseada no artigo científico no qual este instrumento foi desenvolvido e descrito.<br>Assim, 
+      eles auxiliam na compreensão inicial de características psicológicas e servem como informação complementar. 
+      Caso deseje, você pode imprimir este documento e levá-lo a um psicólogo para uma avaliação clínica adequada.`;
     }
     
     const scoreEl = document.getElementById('result-score');

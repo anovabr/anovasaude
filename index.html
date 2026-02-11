@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anova Saúde | Avaliações Psicológicas</title>
+    <title>Anova Saúde</title>
     <link rel="icon" type="image/x-icon" href="logo_icon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,6 +26,7 @@
                         <button type="button" class="progress-btn" id="view-results-btn" title="Ver resultados">Ver</button>
                         <button type="button" class="progress-btn progress-btn--ghost" id="clear-results-btn" title="Limpar resultados">Limpar</button>
                     </div>
+                    <button type="button" class="nav-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
                 </div>
                 <ul class="nav-links">
                     <li><a href="catalogo.html">Catálogo de Testes</a></li>
@@ -43,11 +44,9 @@
     </header>
 
     <!-- Catálogo em Destaque -->
-    <section id="testes" class="tests-section" style="padding-top: 4rem;">
+    <section id="testes" class="tests-section" style="padding-top: 2rem;">
         <div class="container">
             <h2 class="section-title">Catálogo de Testes</h2>
-            <p class="section-subtitle">Principais instrumentos — veja todos no catálogo completo.</p>
-
             <div class="tests-grid" id="tests-highlight"></div>
 
             <div style="text-align:center; margin-top:2rem;">
@@ -94,25 +93,30 @@
     <section id="como-funciona" class="features">
         <div class="container">
             <h2 class="section-title">Como Funciona</h2>
-            <p class="section-subtitle">Um processo simples e profissional para sua avaliação psicológica completa</p>
-            
+     
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">1</div>
-                    <h3>Escolha seu Teste</h3>
-                    <p>Selecione entre diversos instrumentos validados cientificamente para avaliação de diferentes aspectos da saúde mental e personalidade.</p>
+                    <div>
+                        <h3>Escolha seu Teste</h3>
+                        <p>Selecione entre diversos instrumentos validados cientificamente para avaliação de diferentes aspectos da saúde mental e personalidade.</p>
+                    </div>
                 </div>
                 
                 <div class="feature-card">
                     <div class="feature-icon">2</div>
-                    <h3>Complete a Avaliação</h3>
-                    <p>Responda às questões sem necessidade de criar login ou conta. Receba resultados automáticos imediatamente após a conclusão.</p>
+                    <div>
+                        <h3>Complete a Avaliação</h3>
+                        <p>Responda às questões sem necessidade de criar login ou conta. Receba resultados automáticos imediatamente após a conclusão.</p>
+                    </div>
                 </div>
                 
                 <div class="feature-card">
                     <div class="feature-icon">3</div>
-                    <h3>Interpretação Profissional</h3>
-                    <p>Caso queira, solicite uma análise detalhada elaborada pela nossa equipe, com insights personalizados e recomendações específicas.</p>
+                    <div>
+                        <h3>Interpretação Profissional</h3>
+                        <p>Caso queira, solicite uma análise detalhada elaborada pela nossa equipe, com insights personalizados e recomendações específicas.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -122,11 +126,10 @@
     <section class="team-section" id="equipe">
         <div class="container">
             <h2 class="section-title">Equipe</h2>
-            <p class="section-subtitle">Profissionais dedicados a cuidar da sua jornada de saúde mental.</p>
 
             <div class="team-grid">
                 <article class="team-card" data-name="Luis Anunciação" data-role="Psicólogo Clínico" data-bio="Especialista em avaliação psicológica e saúde mental comunitária. Atuação em atenção primária e pesquisa em rastreio de depressão.">
-                    <div class="team-photo">LA</div>
+                    <img src="img/photo2_luis_2026.png" alt="Luis Anunciação" class="team-photo team-photo-img">
                     <div>
                         <h3 class="team-name">Luis Anunciação</h3>
                         <p class="team-role">Psicólogo Clínico</p>
@@ -170,9 +173,14 @@
         <div class="team-modal__backdrop" id="team-modal-backdrop"></div>
         <div class="team-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="team-modal-name">
             <button class="team-modal__close" id="team-modal-close" aria-label="Fechar">×</button>
-            <h3 id="team-modal-name"></h3>
-            <p id="team-modal-role" class="team-role"></p>
-            <p id="team-modal-bio" class="team-bio"></p>
+            <div style="display: flex; gap: 2rem; align-items: flex-start;">
+                <div id="team-modal-photo-container" style="flex-shrink: 0;"></div>
+                <div>
+                    <h3 id="team-modal-name"></h3>
+                    <p id="team-modal-role" class="team-role"></p>
+                    <p id="team-modal-bio" class="team-bio"></p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -213,7 +221,46 @@
     <script src="js/storage.js"></script>
     <script src="js/dashboard.js"></script>
     <script src="js/index.js"></script>
+    <script>
+    // Footer modal functionality
+    (function() {
+        const footerModal = document.getElementById('footer-modal');
+        const footerBackdrop = document.getElementById('footer-modal-backdrop');
+        const footerClose = document.getElementById('footer-modal-close');
+        const footerTitle = document.getElementById('footer-modal-title');
+        const footerBody = document.getElementById('footer-modal-body');
+        
+        // Open footer modal
+        document.querySelectorAll('.footer-panel-link').forEach(panel => {
+            panel.addEventListener('click', () => {
+                const title = panel.dataset.title;
+                const body = panel.dataset.body;
+                
+                footerTitle.textContent = title;
+                footerBody.innerHTML = body.replace(/&#10;/g, '<br>');
+                
+                footerModal.classList.add('team-modal--open');
+                footerModal.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+        
+        // Close footer modal
+        function closeFooterModal() {
+            footerModal.classList.remove('team-modal--open');
+            footerModal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+        
+        footerClose.addEventListener('click', closeFooterModal);
+        footerBackdrop.addEventListener('click', closeFooterModal);
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && footerModal.classList.contains('team-modal--open')) {
+                closeFooterModal();
+            }
+        });
+    })();
+    </script>
 </body>
 </html>
-
-
