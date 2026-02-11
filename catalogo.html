@@ -37,8 +37,17 @@
 
     <section class="tests-section" style="padding-top:4rem;">
         <div class="container">
-            <h2 class="section-title">Catálogo de Testes</h2>
-            <p class="section-subtitle">Instrumentos com artigos, curadoria Anova e destaques.</p>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 1rem;">
+                <div>
+                    <h2 class="section-title">Catálogo de Testes</h2>
+                    <p class="section-subtitle">Instrumentos com artigos, curadoria Anova e destaques.</p>
+                </div>
+                <div class="category-filters" style="display: flex; gap: 0.75rem;">
+                    <button class="filter-btn filter-btn--active" data-category="all">Todos</button>
+                    <button class="filter-btn" data-category="para-voce">Para você</button>
+                    <button class="filter-btn" data-category="para-seu-filho">Para seu filho</button>
+                </div>
+            </div>
 
             <div class="tests-grid" id="catalog-grid"></div>
         </div>
@@ -54,6 +63,7 @@
             const card = document.createElement('div');
             card.className = 'test-card';
             card.setAttribute('data-test-id', test.id);
+            card.setAttribute('data-category', test.category || 'para-voce');
             if (test.featured) card.setAttribute('data-destaque', 'true');
 
             const ribbon = test.curadoria ? '<span class="ribbon">Curadoria Anova</span>' : '';
@@ -73,7 +83,7 @@
             card.style.cursor = 'pointer';
             card.addEventListener('click', (e) => {
                 if (e.target.closest('.badge')) return;
-                window.location.href = `html_tests/test.html?id=${encodeURIComponent(test.id)}`;
+                window.location.href = `test.html?id=${encodeURIComponent(test.id)}`;
             });
             return card;
         }
@@ -83,6 +93,27 @@
             tests.forEach(t => grid.appendChild(createCard(t)));
             if (window.ProgressDashboard) window.ProgressDashboard.refresh();
         }
+
+        // Category filtering
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('filter-btn--active'));
+                btn.classList.add('filter-btn--active');
+                
+                const selectedCategory = btn.dataset.category;
+                const cards = grid.querySelectorAll('.test-card');
+                
+                cards.forEach(card => {
+                    if (selectedCategory === 'all') {
+                        card.style.display = '';
+                    } else {
+                        const cardCategory = card.dataset.category || 'para-voce';
+                        card.style.display = cardCategory === selectedCategory ? '' : 'none';
+                    }
+                });
+            });
+        });
 
         fetch('tests/index.json')
             .then(r => r.json())

@@ -9,6 +9,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://fast.wistia.com/player.js" async></script>
+    <script src="https://fast.wistia.com/embed/r9ja6ay4hi.js" async type="module"></script>
 </head>
 <body>
     <header class="header">
@@ -46,7 +48,14 @@
     <!-- Catálogo em Destaque -->
     <section id="testes" class="tests-section" style="padding-top: 2rem;">
         <div class="container">
-            <h2 class="section-title">Catálogo de Testes</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 1rem;">
+                <h2 class="section-title">Catálogo de Testes</h2>
+                <div class="category-filters" style="display: flex; gap: 0.75rem;">
+                    <button class="filter-btn filter-btn--active" data-category="all">Todos</button>
+                    <button class="filter-btn" data-category="para-voce">Para você</button>
+                    <button class="filter-btn" data-category="para-seu-filho">Para seu filho</button>
+                </div>
+            </div>
             <div class="tests-grid" id="tests-highlight"></div>
 
             <div style="text-align:center; margin-top:2rem;">

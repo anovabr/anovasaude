@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Construtor de Testes | Anova Saúde</title>
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="/css/style.css">
   <style>
     * { box-sizing: border-box; }
     body { background: #faf8f5; margin: 0; padding: 1rem; font-family: 'Work Sans', sans-serif; }
@@ -83,6 +83,7 @@
       <button class="btn btn-primary" id="btn-new">➕ Novo Teste</button>
       <button class="btn btn-secondary" id="btn-import">📂 Importar JSON</button>
       <button class="btn btn-primary" id="btn-export">💾 Exportar JSON</button>
+      <button class="btn btn-success" id="btn-save-server">☁️ Salvar no Servidor</button>
       <button class="btn btn-secondary" id="btn-preview">👁️ Ver Prévia</button>
       <input type="file" id="file-input" accept=".json">
       <button class="btn btn-secondary btn-small" id="btn-sample" title="Preencher exemplo rápido">Exemplo</button>
@@ -110,6 +111,14 @@
           <div class="field">
             <label for="article-url">Link do Artigo Científico</label>
             <input id="article-url" type="url" placeholder="https://pubmed.ncbi.nlm.nih.gov/...">
+          </div>
+          <div class="field">
+            <label for="test-category">Categoria do Teste</label>
+            <select id="test-category">
+              <option value="para-voce">Para você</option>
+              <option value="para-seu-filho">Para seu filho</option>
+            </select>
+            <small>Interno - usado para organizar testes (não exibido para usuários)</small>
           </div>
         </div>
         <div>
@@ -232,6 +241,7 @@
         title: get('test-title'),
         description: get('test-desc'),
         tag: get('test-tag'),
+        category: get('test-category') || 'para-voce',
         articleUrl: get('article-url') || undefined,
         featured: document.getElementById('featured')?.checked || false,
         curadoria: document.getElementById('curadoria')?.checked || false,
@@ -750,6 +760,7 @@
       document.getElementById('test-title').value = data.title || '';
       document.getElementById('test-desc').value = data.description || '';
       document.getElementById('test-tag').value = data.tag || '';
+      document.getElementById('test-category').value = data.category || 'para-voce';
       document.getElementById('article-url').value = data.articleUrl || '';
       document.getElementById('featured').checked = data.featured || false;
       document.getElementById('curadoria').checked = data.curadoria || false;
@@ -795,6 +806,63 @@
       status.textContent = `✅ Exportado: ${data.id}.json`;
     });
 
+    document.getElementById('btn-save-server').addEventListener('click', async () => {
+      const data = collectData();
+      
+      if (!data.id) {
+        alert('❌ Defina o ID do teste antes de salvar');
+        return;
+      }
+      if (!data.title) {
+        alert('❌ Defina o título do teste antes de salvar');
+        return;
+      }
+
+      status.textContent = '⏳ Salvando no servidor...';
+      
+      try {
+        // Try POST first (create new)
+        let response = await fetch('/api/tests', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        // If test exists, try PUT (update)
+        if (!response.ok) {
+          const error = await response.json();
+          if (error.error && error.error.includes('exists')) {
+            response = await fetch(`/api/tests/${data.id}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data)
+            });
+            if (!response.ok) {
+              const updateError = await response.json();
+              throw new Error(updateError.error || 'Erro ao atualizar teste');
+            }
+          } else {
+            throw new Error(error.error || 'Erro ao salvar teste');
+          }
+        }
+
+        const result = await response.json();
+        status.textContent = `✅ Teste salvo: ${data.id}.json`;
+        
+        // Notify parent window (admin.html) to reload tests if embedded in iframe
+        if (window.parent !== window) {
+          window.parent.postMessage({ type: 'testSaved', testId: data.id }, '*');
+        }
+      } catch (error) {
+        status.textContent = `❌ Erro ao salvar: ${error.message}`;
+        alert(`Erro ao salvar teste: ${error.message}`);
+      }
+    });
+
     document.getElementById('btn-preview').addEventListener('click', () => {
       const data = collectData();
       previewContent.textContent = JSON.stringify(data, null, 2);
@@ -829,6 +897,7 @@
       title: 'titulo do teste -GAD',
       description: 'Descricao aqui',
       tag: 'Ansiedade',
+      category: 'para-voce',
       articleUrl: 'https://www.google.com.br',
       featured: false,
       curadoria: false,

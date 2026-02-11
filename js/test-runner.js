@@ -7,7 +7,7 @@
   let answers = [];
 
   function loadTest() {
-    fetch(`../tests/${testId}.json`)
+    fetch(`tests/${testId}.json`)
       .then(r => r.json())
       .then(data => {
         testData = data;

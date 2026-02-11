@@ -5,8 +5,8 @@ function createVideoCard() {
   const card = document.createElement('div');
   card.className = 'video-card';
   card.innerHTML = `
-    <div class="video-container">
-      <iframe src="https://www.youtube.com/embed/-vnDvcjRgKI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <div class="video-container video-container--wistia">
+      <wistia-player media-id="r9ja6ay4hi" aspect="1.7777777777777777" playButton="false"></wistia-player>
     </div>
     <p class="video-caption">Apresentação da proposta, por Dr. Luis Anunciação.</p>
   `;
@@ -34,7 +34,7 @@ function attachClicks(scope) {
     card.addEventListener("click", e => {
       if (e.target.closest(".badge")) return;
       if (testId) {
-        window.location.href = `html_tests/test.html?id=${testId}`;
+        window.location.href = `test.html?id=${testId}`;
         return;
       }
       if (inline) {
@@ -48,6 +48,7 @@ function createCard(test) {
   const card = document.createElement('div');
   card.className = 'test-card';
   card.setAttribute('data-test-id', test.id);
+  card.setAttribute('data-category', test.category || 'para-voce');
   if (test.featured) card.setAttribute('data-destaque', 'true');
 
   const ribbon = test.curadoria ? '<span class="ribbon">Curadoria Anova</span>' : '';
@@ -78,11 +79,38 @@ function loadHighlightsFromJson() {
       picks.forEach(t => highlightContainer.appendChild(createCard(t)));
       attachClicks(highlightContainer);
       if (window.ProgressDashboard) window.ProgressDashboard.refresh();
+      
+      // Setup filtering on homepage
+      setupCategoryFilters(highlightContainer);
     })
     .catch(err => {
       console.error(err);
       if (window.location.protocol === "file:") renderFallback();
     });
+}
+
+function setupCategoryFilters(container) {
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  if (filterBtns.length === 0) return;
+  
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('filter-btn--active'));
+      btn.classList.add('filter-btn--active');
+      
+      const selectedCategory = btn.dataset.category;
+      const cards = container.querySelectorAll('.test-card');
+      
+      cards.forEach(card => {
+        if (selectedCategory === 'all') {
+          card.style.display = '';
+        } else {
+          const cardCategory = card.getAttribute('data-category') || 'para-voce';
+          card.style.display = cardCategory === selectedCategory ? '' : 'none';
+        }
+      });
+    });
+  });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
