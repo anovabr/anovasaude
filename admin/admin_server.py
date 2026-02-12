@@ -4,9 +4,12 @@ Unified Server - Serves both user site and admin panel
 Located in /admin folder
 """
 
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, session, redirect, url_for, render_template_string
 import json
 from pathlib import Path
+from functools import wraps
+import os
+import secrets
 
 # Paths - ADMIN_DIR is where this script is located
 ADMIN_DIR = Path(__file__).parent.absolute()
@@ -21,9 +24,25 @@ TESTS_DIR.mkdir(exist_ok=True)
 
 app = Flask(__name__)
 
+# Session configuration
+app.secret_key = os.environ.get('FLASK_SECRET_KEY', secrets.token_hex(32))
+
+# Admin password from environment variable or default (CHANGE THIS!)
+ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'anova2024')
+
+# Authentication decorator
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('logged_in'):
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
 # ===== MAIN SITE ROUTES =====
 
 @app.route('/')
+@app.route('/index.html')
 def index():
     """Serve main homepage"""
     return send_from_directory(ROOT_DIR, 'index.html')
@@ -80,14 +99,42 @@ def serve_test_json(test_id):
 
 # ===== ADMIN PANEL ROUTES =====
 
+@app.route('/admin/login', methods=['GET', 'POST'])
+def login():
+    """Admin login page"""
+    if request.method == 'POST':
+        password = request.form.get('password', '')
+        if password == ADMIN_PASSWORD:
+            session['logged_in'] = True
+            return redirect(url_for('admin'))
+        else:
+            # Read login template
+            with open(ADMIN_DIR / 'login.html', 'r', encoding='utf-8') as f:
+                template = f.read()
+            return render_template_string(template, error='Senha incorreta. Tente novamente.')
+    
+    # GET request - show login form
+    if session.get('logged_in'):
+        return redirect(url_for('admin'))
+    
+    return send_from_directory(ADMIN_DIR, 'login.html')
+
+@app.route('/admin/logout')
+def logout():
+    """Logout"""
+    session.pop('logged_in', None)
+    return redirect(url_for('login'))
+
 @app.route('/admin')
 @app.route('/admin/')
+@login_required
 def admin():
     """Serve admin panel"""
     return send_from_directory(ADMIN_DIR, 'admin.html')
 
 @app.route('/admin/test-builder')
 @app.route('/admin/test-builder/')
+@login_required
 def test_builder():
     """Serve test builder"""
     return send_from_directory(ADMIN_DIR, 'test-builder.html')
@@ -95,6 +142,7 @@ def test_builder():
 # ===== API ROUTES =====
 
 @app.route('/api/tests', methods=['GET'])
+@login_required
 def get_tests():
     """Get all tests"""
     try:
@@ -108,6 +156,7 @@ def get_tests():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/api/tests/<test_id>', methods=['GET'])
+@login_required
 def get_single_test(test_id):
     """Get single test"""
     try:
@@ -120,6 +169,7 @@ def get_single_test(test_id):
         return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/api/tests', methods=['POST'])
+@login_required
 def create_test():
     """Create test"""
     try:
@@ -140,6 +190,7 @@ def create_test():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/api/tests/<test_id>', methods=['PUT'])
+@login_required
 def update_test(test_id):
     """Update test"""
     try:
@@ -155,6 +206,7 @@ def update_test(test_id):
         return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/api/tests/<test_id>', methods=['DELETE'])
+@login_required
 def delete_test(test_id):
     """Delete test"""
     try:
@@ -168,6 +220,7 @@ def delete_test(test_id):
         return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/api/stats', methods=['GET'])
+@login_required
 def get_stats():
     """Get stats"""
     try:
@@ -213,8 +266,17 @@ if __name__ == '__main__':
     print(f"\nURLs:")
     print(f"  Homepage:     http://localhost:8000")
     print(f"  Catalog:      http://localhost:8000/catalogo.html")
-    print(f"  Admin:        http://localhost:8000/admin")
+    print(f"  Admin Login:  http://localhost:8000/admin/login")
+    print(f"  Admin Panel:  http://localhost:8000/admin")
     print(f"  Builder:      http://localhost:8000/admin/test-builder")
+    
+    if ADMIN_PASSWORD == 'anova2024':
+        print("\n⚠️  WARNING: Using default password!")
+        print("   Set ADMIN_PASSWORD environment variable for security")
+        print(f"   Current default: {ADMIN_PASSWORD}")
+    else:
+        print("\n✓  Using custom admin password from environment variable")
+    
     print("\nPress Ctrl+C to stop\n" + "="*60 + "\n")
     
     app.run(debug=True, port=8000, host='localhost')

@@ -25,9 +25,25 @@ function renderFallback() {
   if (window.ProgressDashboard) window.ProgressDashboard.refresh();
 }
 
+// Check if user has completed this test
+function checkIfTestCompleted(testId) {
+  try {
+    const resultsIndex = JSON.parse(localStorage.getItem('results_index') || '[]');
+    return resultsIndex.some(result => result.testId === testId);
+  } catch (e) {
+    return false;
+  }
+}
+
 function attachClicks(scope) {
   scope.querySelectorAll(".test-card").forEach(card => {
     const testId = card.getAttribute("data-test-id");
+    
+    // Check if test is completed and mark it
+    if (testId && checkIfTestCompleted(testId)) {
+      card.classList.add('test-card--taken');
+    }
+    
     const inline = card.getAttribute("onclick");
     card.style.cursor = "pointer";
     card.removeAttribute("onclick");
@@ -47,12 +63,20 @@ function attachClicks(scope) {
 function createCard(test) {
   const card = document.createElement('div');
   card.className = 'test-card';
+  
+  // Check if test is completed
+  const isCompleted = checkIfTestCompleted(test.id);
+  if (isCompleted) {
+    card.classList.add('test-card--taken');
+  }
+  
   card.setAttribute('data-test-id', test.id);
   card.setAttribute('data-category', test.category || 'para-voce');
   if (test.featured) card.setAttribute('data-destaque', 'true');
 
   const ribbon = test.curadoria ? '<span class="ribbon">Curadoria Anova</span>' : '';
   const article = test.articleUrl ? `<a class="badge badge--article" href="${test.articleUrl}" target="_blank" rel="noopener">Artigo</a>` : '';
+  const video = test.videoUrl ? `<button class="badge badge--article video-badge-btn" data-video-url="${test.videoUrl}">Vídeo</button>` : '';
 
   card.innerHTML = `
     ${ribbon}
@@ -62,6 +86,7 @@ function createCard(test) {
     <div class="test-meta"><span>⏱️ ${test.estimatedTime || ''}</span><span>📊 ${test.questionCount || ''} questões</span></div>
     <div class="test-actions">
       ${article}
+      ${video}
     </div>
   `;
 

@@ -2,11 +2,29 @@
 (function(){
   const params = new URLSearchParams(window.location.search);
   const testId = params.get('id') || 'demo-test';
+  const isPreview = params.get('preview') === 'true';
 
   let testData = null;
   let answers = [];
 
   function loadTest() {
+    // Preview mode: load from sessionStorage instead of fetching
+    if (isPreview) {
+      const previewData = sessionStorage.getItem('previewTestData');
+      const previewAnswers = sessionStorage.getItem('previewAnswers');
+      
+      if (!previewData || !previewAnswers) {
+        alert('Dados de pré-visualização não encontrados.');
+        return;
+      }
+      
+      testData = JSON.parse(previewData);
+      answers = JSON.parse(previewAnswers);
+      initPreview();
+      return;
+    }
+    
+    // Normal mode: fetch from server
     fetch(`tests/${testId}.json`)
       .then(r => r.json())
       .then(data => {
@@ -28,6 +46,18 @@
     answers = new Array(testData.questions.length).fill(null);
     renderQuestions();
     setupForm();
+  }
+
+  function initPreview() {
+    // Preview mode: skip questions and show results directly
+    document.getElementById('test-title').textContent = testData.title + ' (Pré-visualização)';
+    
+    // Hide the test form page
+    const testPage = document.getElementById('test-page');
+    if (testPage) testPage.style.display = 'none';
+    
+    // Compute and show results
+    submitTest();
   }
 
   function renderQuestions() {
@@ -223,6 +253,44 @@
       defaultTextEl.innerHTML = `Você realizou com sucesso o ${testData.title}. Os resultados apresentados abaixo correspondem a uma descrição sintética e informativa, baseada no artigo científico no qual este instrumento foi desenvolvido e descrito.<br>Assim, 
       eles auxiliam na compreensão inicial de características psicológicas e servem como informação complementar. 
       Caso deseje, você pode imprimir este documento e levá-lo a um psicólogo para uma avaliação clínica adequada.`;
+    }
+    
+    // Add article and video buttons if available
+    const resourcesBtns = document.getElementById('test-resources-btns');
+    if (resourcesBtns) {
+      resourcesBtns.innerHTML = '';
+      if (testData.articleUrl) {
+        const articleBtn = document.createElement('a');
+        articleBtn.href = testData.articleUrl;
+        articleBtn.target = '_blank';
+        articleBtn.rel = 'noopener';
+        articleBtn.className = 'btn btn-secondary btn-small';
+        articleBtn.innerHTML = '📄 Artigo';
+        resourcesBtns.appendChild(articleBtn);
+      }
+      if (testData.videoUrl) {
+        const videoBtn = document.createElement('button');
+        videoBtn.type = 'button';
+        videoBtn.className = 'btn btn-secondary btn-small';
+        videoBtn.innerHTML = '🎥 Vídeo';
+        videoBtn.addEventListener('click', () => {
+          // Extract Wistia video ID from URL
+          const match = testData.videoUrl.match(/medias\/([a-zA-Z0-9]+)/);
+          if (match && match[1]) {
+            const videoId = match[1];
+            const modal = document.getElementById('video-modal');
+            const iframe = document.getElementById('video-iframe');
+            if (modal && iframe) {
+              iframe.src = `https://fast.wistia.net/embed/iframe/${videoId}?videoFoam=true`;
+              modal.style.display = 'flex';
+            }
+          } else {
+            // Fallback: open in new tab if URL format is unexpected
+            window.open(testData.videoUrl, '_blank');
+          }
+        });
+        resourcesBtns.appendChild(videoBtn);
+      }
     }
     
     const scoreEl = document.getElementById('result-score');

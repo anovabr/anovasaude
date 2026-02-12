@@ -4,23 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Construtor de Testes | Anova Saúde</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>">
   <link rel="stylesheet" href="/css/style.css">
   <style>
     * { box-sizing: border-box; }
     body { background: #faf8f5; margin: 0; padding: 1rem; font-family: 'Work Sans', sans-serif; }
     
-    .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow: hidden; }
+    .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); overflow: hidden; }
     
-    .header { background: linear-gradient(135deg, #1a4d2e 0%, #2d6a4f 100%); color: white; padding: 2rem; }
-    .header h1 { margin: 0 0 0.5rem; font-size: 2rem; font-weight: 600; }
-    .header p { margin: 0; opacity: 0.9; font-size: 1.05rem; }
+    .header { background: #1a4d2e; color: white; padding: 2rem; }
+    .header h1 { margin: 0 0 0.5rem; font-size: 1.75rem; font-weight: 600; }
+    .header p { margin: 0; opacity: 0.9; font-size: 1rem; }
     
-    .toolbar { display: flex; gap: 0.75rem; padding: 1.25rem; border-bottom: 2px solid #e8e3db; flex-wrap: wrap; align-items: center; background: #faf8f5; }
+    .toolbar { padding: 1.25rem; border-bottom: 1px solid #e0e0e0; background: #f8f9fa; }
+    .toolbar-row { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+    .toolbar-row:not(:last-child) { margin-bottom: 0.75rem; }
+    .toolbar-row.center { justify-content: center; }
+    .toolbar-separator { color: #6c757d; font-weight: 300; font-size: 1.2rem; margin: 0 0.5rem; }
+    .toolbar-label { color: #5a5a5a; font-size: 0.9rem; font-weight: 500; margin-right: 0.5rem; }
     .status { margin-left: auto; color: #5a5a5a; font-size: 0.9rem; font-weight: 500; }
     
-    .btn { padding: 0.65rem 1.3rem; border: none; border-radius: 8px; cursor: pointer; font-size: 0.95rem; font-weight: 600; transition: all 0.2s; }
+    .btn { padding: 0.6rem 1.1rem; border: none; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: all 0.2s; min-width: 110px; }
     .btn-primary { background: #1a4d2e; color: white; }
     .btn-primary:hover { background: #2d6a4f; transform: translateY(-1px); }
+    .btn-success { background: #28a745; color: white; }
+    .btn-success:hover { background: #218838; transform: translateY(-1px); }
     .btn-secondary { background: #6c757d; color: white; }
     .btn-secondary:hover { background: #5a6268; }
     .btn-danger { background: #dc3545; color: white; font-size: 0.85rem; }
@@ -32,22 +40,27 @@
     
     .field { margin-bottom: 1.25rem; }
     .field label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: #2b2b2b; font-size: 0.95rem; }
-    .field input, .field textarea, .field select { width: 100%; padding: 0.75rem; border: 2px solid #e8e3db; border-radius: 8px; font-size: 0.95rem; font-family: inherit; transition: border-color 0.2s; }
+    .field input, .field textarea, .field select { width: 100%; padding: 0.75rem; border: 1px solid #d0d0d0; border-radius: 6px; font-size: 0.95rem; font-family: inherit; transition: border-color 0.2s; background: white; }
     .field input:focus, .field textarea:focus, .field select:focus { outline: none; border-color: #1a4d2e; }
     .field textarea { min-height: 110px; resize: vertical; }
     .field small { display: block; margin-top: 0.3rem; color: #6c757d; font-size: 0.85rem; }
     
     .checkbox-group { display: flex; gap: 1rem; margin-top: 0.5rem; }
-    .checkbox-label { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.6rem 1.2rem; border: 2px solid #e8e3db; border-radius: 25px; cursor: pointer; font-weight: 500; transition: all 0.2s; }
-    .checkbox-label:hover { border-color: #1a4d2e; background: #faf8f5; }
+    .checkbox-label { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.6rem 1rem; border: 2px solid #e0e0e0; border-radius: 6px; cursor: pointer; font-weight: 500; transition: all 0.2s; background: white; }
+    .checkbox-label:hover { border-color: #1a4d2e; background: #f8f9fa; }
     .checkbox-label input:checked { accent-color: #1a4d2e; }
     
     .section { margin-bottom: 3rem; }
-    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 3px solid #1a4d2e; }
-    .section-header h3 { margin: 0; color: #1a4d2e; font-size: 1.4rem; display: flex; align-items: center; gap: 0.5rem; }
-    .badge { display: inline-flex; align-items: center; justify-content: center; min-width: 28px; height: 28px; padding: 0 0.6rem; background: #1a4d2e; color: white; border-radius: 14px; font-size: 0.85rem; font-weight: 600; }
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid #d0d0d0; }
+    .section-header h3 { margin: 0; color: #2b2b2b; font-size: 1.2rem; display: flex; align-items: center; gap: 0.75rem; font-weight: 600; }
+    .section-header-left { display: flex; align-items: center; gap: 1rem; }
+    .badge { display: inline-flex; align-items: center; justify-content: center; min-width: 28px; height: 28px; padding: 0 0.6rem; background: #6c757d; color: white; border-radius: 6px; font-size: 0.85rem; font-weight: 600; }
+    .btn-collapse { background: transparent; border: none; color: #6c757d; font-size: 1.2rem; cursor: pointer; padding: 0.25rem 0.5rem; transition: color 0.2s; }
+    .btn-collapse:hover { color: #2b2b2b; }
+    .section-content { transition: max-height 0.3s ease, opacity 0.3s ease; overflow: hidden; }
+    .section-content.collapsed { max-height: 0 !important; opacity: 0; }
     
-    .card { background: #faf8f5; border: 2px solid #e8e3db; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.25rem; transition: box-shadow 0.2s; }
+    .card { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.25rem; transition: box-shadow 0.2s; }
     .card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
     .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; }
     .card-title { font-size: 1.05rem; font-weight: 600; color: #1a4d2e; margin: 0; }
@@ -55,10 +68,10 @@
     
     .option-row { display: grid; grid-template-columns: 110px 1fr auto; gap: 0.75rem; margin-bottom: 0.75rem; align-items: center; }
     
-    .question-selector { margin: 1rem 0; padding: 1.25rem; background: white; border: 2px solid #e8e3db; border-radius: 10px; }
+    .question-selector { margin: 1rem 0; padding: 1.25rem; background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; }
     .question-selector-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.75rem; color: #5a5a5a; }
     .question-chips { display: flex; flex-wrap: wrap; gap: 0.6rem; }
-    .chip { padding: 0.5rem 1rem; background: white; border: 2px solid #e8e3db; border-radius: 20px; cursor: pointer; font-size: 0.88rem; font-weight: 500; transition: all 0.2s; user-select: none; }
+    .chip { padding: 0.5rem 1rem; background: white; border: 1px solid #e0e0e0; border-radius: 6px; cursor: pointer; font-size: 0.88rem; font-weight: 500; transition: all 0.2s; user-select: none; }
     .chip:hover { border-color: #1a4d2e; transform: translateY(-1px); }
     .chip.selected { background: #1a4d2e; color: white; border-color: #1a4d2e; }
     
@@ -66,29 +79,35 @@
     .preview { background: #1e1e1e; color: #d4d4d4; padding: 1.5rem; border-radius: 10px; overflow: auto; max-height: 550px; }
     .preview pre { margin: 0; font-family: 'Courier New', monospace; font-size: 0.88rem; line-height: 1.5; white-space: pre-wrap; }
     
-    .empty-state { text-align: center; padding: 3rem; color: #6c757d; }
-    .empty-state-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; }
+    .empty-state { text-align: center; padding: 2rem; color: #6c757d; background: #f8f9fa; border-radius: 8px; }
+    .empty-state-icon { font-size: 2.5rem; margin-bottom: 0.75rem; opacity: 0.4; }
     
     input[type="file"] { display: none; }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="header">
-      <h1>🔧 Construtor de Testes</h1>
-      <p>Crie, edite e exporte testes psicológicos em formato JSON</p>
+    <div class="toolbar">
+      <div class="toolbar-row center">
+        <button class="btn btn-success" id="btn-save-server">☁️ Salvar no Servidor</button>
+      </div>
+      <div class="toolbar-row">
+        <button class="btn btn-secondary" id="btn-sample" title="Preencher exemplo rápido">Exemplo</button>
+        <span class="toolbar-separator">|</span>
+        <span class="toolbar-label">Preview:</span>
+        <select id="preview-scenario" style="padding: 0.6rem 0.8rem; border-radius: 6px; border: 1px solid #d0d0d0; font-size: 0.9rem; font-weight: 500; background: white;">
+          <option value="random">Respostas Aleatórias</option>
+          <option value="min">Pontuação Mínima</option>
+          <option value="max">Pontuação Máxima</option>
+          <option value="mid">Pontuação Média</option>
+        </select>
+        <button class="btn btn-secondary" id="btn-preview-results">Ver</button>
+        <button class="btn btn-secondary" id="btn-clear" title="Limpar tudo">Limpar</button>
+      </div>
     </div>
 
-    <div class="toolbar">
-      <button class="btn btn-primary" id="btn-new">➕ Novo Teste</button>
-      <button class="btn btn-secondary" id="btn-import">📂 Importar JSON</button>
-      <button class="btn btn-primary" id="btn-export">💾 Exportar JSON</button>
-      <button class="btn btn-success" id="btn-save-server">☁️ Salvar no Servidor</button>
-      <button class="btn btn-secondary" id="btn-preview">👁️ Ver Prévia</button>
-      <input type="file" id="file-input" accept=".json">
-      <button class="btn btn-secondary btn-small" id="btn-sample" title="Preencher exemplo rápido">Exemplo</button>
-      <button class="btn btn-secondary btn-small" id="btn-clear" title="Limpar tudo">Limpar</button>
-      <span class="status" id="status">Teste novo</span>
+    <div style="background: #e7f3ff; border-left: 4px solid #0066cc; padding: 1rem; margin: 1rem 0; border-radius: 6px;">
+      <strong>ℹ️ Este sistema apenas cria Questionários.</strong>
     </div>
 
     <div class="content">
@@ -96,13 +115,12 @@
       <div class="grid">
         <div>
           <div class="field">
-            <label for="test-id">ID do Teste <span style="color:#dc3545">*</span></label>
-            <input id="test-id" placeholder="ex: gad7, bdi-pc">
-            <small>Usado na URL e nome do arquivo (sem espaços)</small>
-          </div>
-          <div class="field">
             <label for="test-title">Título <span style="color:#dc3545">*</span></label>
             <input id="test-title" placeholder="Escala de Ansiedade Generalizada">
+          </div>
+          <div class="field">
+            <label for="test-id">ID do Teste <small style="color:#6c757d;font-weight:normal;">(gerado automaticamente)</small></label>
+            <input id="test-id" readonly style="background:#f8f9fa;cursor:not-allowed;">
           </div>
           <div class="field">
             <label for="test-tag">Categoria / Tag</label>
@@ -113,12 +131,15 @@
             <input id="article-url" type="url" placeholder="https://pubmed.ncbi.nlm.nih.gov/...">
           </div>
           <div class="field">
+            <label for="video-url">Link do Vídeo (Wistia)</label>
+            <input id="video-url" type="url" placeholder="https://luisfca.wistia.com/medias/r9ja6ay4hi">
+          </div>
+          <div class="field">
             <label for="test-category">Categoria do Teste</label>
             <select id="test-category">
               <option value="para-voce">Para você</option>
               <option value="para-seu-filho">Para seu filho</option>
             </select>
-            <small>Interno - usado para organizar testes (não exibido para usuários)</small>
           </div>
         </div>
         <div>
@@ -134,33 +155,43 @@
             <label for="est-time">Tempo Estimado</label>
             <input id="est-time" placeholder="3-5 min, 10-15 min">
           </div>
+          <div class="field">
+            <label>Configurações</label>
+            <div class="checkbox-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="featured">
+                <span>Destaque na homepage</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" id="curadoria">
+                <span>Curadoria Anova</span>
+              </label>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="field">
-        <label>Configurações</label>
-        <div class="checkbox-group">
-          <label class="checkbox-label">
-            <input type="checkbox" id="featured">
-            <span>⭐ Destaque na homepage</span>
-          </label>
-          <label class="checkbox-label">
-            <input type="checkbox" id="curadoria">
-            <span>✨ Curadoria Anova</span>
-          </label>
-        </div>
+        <label for="test-visibility">Visibilidade</label>
+        <select id="test-visibility">
+          <option value="public">Público (mostrar no catálogo)</option>
+          <option value="hidden">Oculto (não mostrar no catálogo)</option>
+        </select>
       </div>
 
       <!-- QUESTIONS -->
       <div class="section">
         <div class="section-header">
-          <h3>📝 Questões <span class="badge" id="q-count">0</span></h3>
+          <div class="section-header-left">
+            <button class="btn-collapse" id="btn-collapse-questions" title="Ocultar/Mostrar">▼</button>
+            <h3>Questões <span class="badge" id="q-count">0</span></h3>
+          </div>
           <button class="btn btn-primary" id="btn-add-question">+ Adicionar Questão</button>
         </div>
-        <div id="questions-list">
+        <div id="questions-list" class="section-content">
           <div class="empty-state">
             <div class="empty-state-icon">📝</div>
-            <p>Nenhuma questão criada ainda.<br>Clique em "Adicionar Questão" para começar.</p>
+            <p>Nenhuma questão adicionada.</p>
           </div>
         </div>
       </div>
@@ -168,13 +199,16 @@
       <!-- FACTORS -->
       <div class="section">
         <div class="section-header">
-          <h3>📊 Fatores / Domínios <span class="badge" id="f-count">0</span></h3>
+          <div class="section-header-left">
+            <button class="btn-collapse" id="btn-collapse-factors" title="Ocultar/Mostrar">▼</button>
+            <h3>Fatores / Domínios <span class="badge" id="f-count">0</span></h3>
+          </div>
           <button class="btn btn-primary" id="btn-add-factor">+ Adicionar Fator</button>
         </div>
-        <div id="factors-list">
+        <div id="factors-list" class="section-content">
           <div class="empty-state">
             <div class="empty-state-icon">📊</div>
-            <p>Nenhum fator criado.<br>Fatores são dimensões avaliadas separadamente (ex: Big 5, subescalas).</p>
+            <p>Nenhum fator definido.</p>
           </div>
         </div>
       </div>
@@ -199,15 +233,33 @@
     // ========== STATE ==========
     const state = { questions: [], factors: [] };
     let questionIdCounter = 1;
+    let existingTestIds = [];
+
+    // ========== EDIT MODE DETECTION ==========
+    const urlParams = new URLSearchParams(window.location.search);
+    const editMode = urlParams.get('mode') === 'edit';
+    const editTestId = urlParams.get('id');
 
     // ========== UI ELEMENTS ==========
     const qList = document.getElementById('questions-list');
     const fList = document.getElementById('factors-list');
     const qCount = document.getElementById('q-count');
     const fCount = document.getElementById('f-count');
-    const status = document.getElementById('status');
     const previewSection = document.getElementById('preview-section');
     const previewContent = document.getElementById('preview-content');
+    
+    // Collapse toggle functionality
+    document.getElementById('btn-collapse-questions').addEventListener('click', function() {
+      const content = document.getElementById('questions-list');
+      content.classList.toggle('collapsed');
+      this.textContent = content.classList.contains('collapsed') ? '▶' : '▼';
+    });
+    
+    document.getElementById('btn-collapse-factors').addEventListener('click', function() {
+      const content = document.getElementById('factors-list');
+      content.classList.toggle('collapsed');
+      this.textContent = content.classList.contains('collapsed') ? '▶' : '▼';
+    });
 
     // ========== HELPERS ==========
     function updateCounts() {
@@ -232,6 +284,41 @@
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-|-$/g, '');
     }
+    
+    // Auto-generate unique ID from title
+    function generateUniqueId(title) {
+      let baseId = slugify(title);
+      if (!baseId) return '';
+      
+      // If in edit mode, allow keeping the same ID
+      if (editMode && baseId === editTestId) {
+        return baseId;
+      }
+      
+      let uniqueId = baseId;
+      let counter = 2;
+      
+      // Check for duplicates and add counter if needed
+      while (existingTestIds.includes(uniqueId)) {
+        uniqueId = `${baseId}-${counter}`;
+        counter++;
+      }
+      
+      return uniqueId;
+    }
+    
+    // Fetch existing test IDs
+    async function loadExistingTestIds() {
+      try {
+        const response = await fetch('/api/tests');
+        const data = await response.json();
+        if (data.success && data.tests) {
+          existingTestIds = data.tests.map(t => t.id);
+        }
+      } catch (error) {
+        console.error('Failed to load existing test IDs:', error);
+      }
+    }
 
     function collectData() {
       const get = id => document.getElementById(id)?.value.trim() || '';
@@ -243,8 +330,12 @@
         tag: get('test-tag'),
         category: get('test-category') || 'para-voce',
         articleUrl: get('article-url') || undefined,
+        videoUrl: get('video-url') || undefined,
         featured: document.getElementById('featured')?.checked || false,
         curadoria: document.getElementById('curadoria')?.checked || false,
+        testType: 'questionnaire',
+        visibility: get('test-visibility') || 'public',
+        isPremium: false,
         instructions: get('test-instr'),
         estimatedTime: get('est-time') || undefined,
         questionCount: state.questions.length,
@@ -720,33 +811,7 @@
     }
 
     // ========== ACTIONS ==========
-    document.getElementById('btn-new').addEventListener('click', () => {
-      if (confirm('Criar novo teste? Mudanças não salvas serão perdidas.')) {
-        location.reload();
-      }
-    });
-
-    document.getElementById('btn-import').addEventListener('click', () => {
-      document.getElementById('file-input').click();
-    });
-
-    document.getElementById('file-input').addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        try {
-          const data = JSON.parse(ev.target.result);
-          loadTest(data);
-          status.textContent = `✅ Importado: ${data.title || data.id}`;
-        } catch (err) {
-          alert('Erro ao importar JSON: ' + err.message);
-        }
-      };
-      reader.readAsText(file);
-      e.target.value = '';
-    });
+    // Removed btn-new, btn-import, file-input event listeners
 
     function loadTest(data) {
       // Clear existing
@@ -755,17 +820,31 @@
       qList.innerHTML = '';
       fList.innerHTML = '';
 
-      // Load basic info
-      document.getElementById('test-id').value = data.id || '';
+      // Load basic info (temporarily enable ID field to set value)
+      const idField = document.getElementById('test-id');
+      idField.removeAttribute('readonly');
+      idField.style.background = '';
+      idField.style.cursor = '';
+      
+      idField.value = data.id || '';
       document.getElementById('test-title').value = data.title || '';
       document.getElementById('test-desc').value = data.description || '';
       document.getElementById('test-tag').value = data.tag || '';
       document.getElementById('test-category').value = data.category || 'para-voce';
       document.getElementById('article-url').value = data.articleUrl || '';
+      document.getElementById('video-url').value = data.videoUrl || '';
       document.getElementById('featured').checked = data.featured || false;
       document.getElementById('curadoria').checked = data.curadoria || false;
+      document.getElementById('test-visibility').value = data.visibility || 'public';
       document.getElementById('test-instr').value = data.instructions || '';
       document.getElementById('est-time').value = data.estimatedTime || '';
+      
+      // Restore readonly state after a brief delay
+      setTimeout(() => {
+        idField.setAttribute('readonly', 'readonly');
+        idField.style.background = '#f8f9fa';
+        idField.style.cursor = 'not-allowed';
+      }, 100);
 
       // Reset counter
       questionIdCounter = 1;
@@ -782,93 +861,117 @@
       updateCounts();
     }
 
-    document.getElementById('btn-export').addEventListener('click', () => {
-      const data = collectData();
-      
-      if (!data.id) {
-        alert('❌ Defina o ID do teste antes de exportar');
-        return;
+    // Load test from server (for edit mode)
+    async function loadTestFromServer(testId) {
+      try {
+        const response = await fetch(`/api/tests/${testId}`);
+        
+        if (!response.ok) {
+          throw new Error('Teste não encontrado');
+        }
+        
+        const result = await response.json();
+        
+        if (!result.success || !result.test) {
+          throw new Error('Erro ao carregar teste');
+        }
+        
+        const testData = result.test;
+        loadTest(testData);
+        
+        // Update save button text
+        const saveBtn = document.getElementById('btn-save-server');
+        if (saveBtn) saveBtn.textContent = '💾 Atualizar Teste';
+      } catch (error) {
+        alert(`Não foi possível carregar o teste: ${error.message}`);
       }
-      if (!data.title) {
-        alert('❌ Defina o título do teste antes de exportar');
-        return;
+    }
+
+    // Initialize edit mode on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      if (editMode && editTestId) {
+        loadTestFromServer(editTestId);
       }
-
-      const json = JSON.stringify(data, null, 2);
-      const blob = new Blob([json], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${data.id}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
-
-      status.textContent = `✅ Exportado: ${data.id}.json`;
     });
+
+    // Removed btn-export event listener
 
     document.getElementById('btn-save-server').addEventListener('click', async () => {
       const data = collectData();
       
-      if (!data.id) {
-        alert('❌ Defina o ID do teste antes de salvar');
-        return;
-      }
       if (!data.title) {
         alert('❌ Defina o título do teste antes de salvar');
         return;
       }
-
-      status.textContent = '⏳ Salvando no servidor...';
+      
+      if (!data.id) {
+        alert('❌ Erro: ID do teste não foi gerado corretamente');
+        return;
+      }
       
       try {
-        // Try POST first (create new)
-        let response = await fetch('/api/tests', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
-        });
+        let response;
+        
+        if (editMode && editTestId) {
+          // Edit mode: Use PUT directly
+          response = await fetch(`/api/tests/${editTestId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+          });
+        } else {
+          // Create mode: Try POST first, fallback to PUT if exists
+          response = await fetch('/api/tests', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+          });
 
-        // If test exists, try PUT (update)
-        if (!response.ok) {
-          const error = await response.json();
-          if (error.error && error.error.includes('exists')) {
-            response = await fetch(`/api/tests/${data.id}`, {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(data)
-            });
-            if (!response.ok) {
-              const updateError = await response.json();
-              throw new Error(updateError.error || 'Erro ao atualizar teste');
+          // If test exists, try PUT (update)
+          if (!response.ok) {
+            const error = await response.json();
+            if (error.error && error.error.includes('exists')) {
+              response = await fetch(`/api/tests/${data.id}`, {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+              });
             }
-          } else {
-            throw new Error(error.error || 'Erro ao salvar teste');
           }
         }
 
-        const result = await response.json();
-        status.textContent = `✅ Teste salvo: ${data.id}.json`;
-        
-        // Notify parent window (admin.html) to reload tests if embedded in iframe
-        if (window.parent !== window) {
-          window.parent.postMessage({ type: 'testSaved', testId: data.id }, '*');
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.error || 'Erro ao salvar teste');
         }
+
+        const result = await response.json();
+        
+        // Show success popup
+        alert(editMode ? `✅ Teste "${data.title}" atualizado com sucesso!` : `✅ Teste "${data.title}" criado com sucesso!`);
+        
+        // Redirect to admin dashboard
+        if (window.parent !== window) {
+          // If in iframe, redirect parent window
+          window.parent.postMessage({ type: 'testSaved', testId: data.id }, '*');
+          window.parent.location.href = '/admin';
+        } else {
+          // If standalone, redirect this window
+          window.location.href = '/admin';
+        }
+        
       } catch (error) {
-        status.textContent = `❌ Erro ao salvar: ${error.message}`;
         alert(`Erro ao salvar teste: ${error.message}`);
       }
     });
 
-    document.getElementById('btn-preview').addEventListener('click', () => {
-      const data = collectData();
-      previewContent.textContent = JSON.stringify(data, null, 2);
-      previewSection.style.display = 'block';
-      previewSection.scrollIntoView({ behavior: 'smooth' });
-    });
+    // Removed btn-preview event listener
 
     const copyBtn = document.getElementById('btn-copy');
     copyBtn.addEventListener('click', async () => {
@@ -888,6 +991,16 @@
       previewSection.style.display = 'none';
     });
 
+    // Auto-generate ID from title
+    document.getElementById('test-title').addEventListener('input', (e) => {
+      const title = e.target.value.trim();
+      const idField = document.getElementById('test-id');
+      
+      if (!editMode || !idField.value) {
+        idField.value = generateUniqueId(title);
+      }
+    });
+    
     document.getElementById('btn-add-question').addEventListener('click', () => addQuestion());
     document.getElementById('btn-add-factor').addEventListener('click', () => addFactor());
 
@@ -898,9 +1011,13 @@
       description: 'Descricao aqui',
       tag: 'Ansiedade',
       category: 'para-voce',
+      videoUrl: 'https://luisfca.wistia.com/medias/r9ja6ay4hi',
       articleUrl: 'https://www.google.com.br',
       featured: false,
       curadoria: false,
+      testType: 'questionnaire',
+      visibility: 'public',
+      isPremium: false,
       instructions: 'Instrucoes aqui',
       estimatedTime: '10 minutos',
       questions: [
@@ -968,7 +1085,6 @@
 
     document.getElementById('btn-sample').addEventListener('click', () => {
       loadTest(sampleData);
-      status.textContent = '✅ Exemplo carregado';
     });
 
     document.getElementById('btn-clear').addEventListener('click', () => {
@@ -977,21 +1093,112 @@
       state.factors = [];
       qList.innerHTML = '';
       fList.innerHTML = '';
-      document.getElementById('test-id').value = '';
+      
+      // Clear ID field (temporarily enable to clear)
+      const idField = document.getElementById('test-id');
+      idField.removeAttribute('readonly');
+      idField.value = '';
+      idField.setAttribute('readonly', 'readonly');
+      
       document.getElementById('test-title').value = '';
       document.getElementById('test-desc').value = '';
       document.getElementById('test-tag').value = '';
+      document.getElementById('video-url').value = '';
       document.getElementById('article-url').value = '';
       document.getElementById('featured').checked = false;
       document.getElementById('curadoria').checked = false;
+      document.getElementById('test-visibility').value = 'public';
       document.getElementById('test-instr').value = '';
       document.getElementById('est-time').value = '';
-      status.textContent = 'Teste novo';
       updateCounts();
     });
 
+    // Preview Results
+    document.getElementById('btn-preview-results').addEventListener('click', () => {
+      // Collect current test data
+      const testData = collectData();
+      
+      // Validate basic requirements
+      if (!testData.id || !testData.title || testData.questions.length === 0) {
+        alert('Por favor, preencha pelo menos ID, Título e adicione questões antes de pré-visualizar.');
+        return;
+      }
+      
+      // Get selected scenario
+      const scenario = document.getElementById('preview-scenario').value;
+      
+      // Generate fake answers based on scenario
+      const answers = generateFakeAnswers(testData, scenario);
+      
+      // Store in sessionStorage
+      sessionStorage.setItem('previewTestData', JSON.stringify(testData));
+      sessionStorage.setItem('previewAnswers', JSON.stringify(answers));
+      
+      // Open preview in new tab
+      window.open('../test.html?preview=true', '_blank');
+    });
+    
+    // Generate fake answers based on scenario
+    function generateFakeAnswers(testData, scenario) {
+      return testData.questions.map((q, idx) => {
+        if (q.type === 'scale') {
+          const min = q.min ?? 0;
+          const max = q.max ?? 10;
+          let value;
+          
+          if (scenario === 'min') {
+            value = min;
+          } else if (scenario === 'max') {
+            value = max;
+          } else if (scenario === 'mid') {
+            value = Math.floor((min + max) / 2);
+          } else { // random
+            value = Math.floor(Math.random() * (max - min + 1)) + min;
+          }
+          
+          return { value, label: `Escala: ${value}` };
+          
+        } else if (q.type === 'text') {
+          return { value: 0, label: 'Resposta de texto simulada' };
+          
+        } else { // single, likert, yesno - multiple choice with options
+          const options = q.options || [];
+          if (options.length === 0) {
+            return { value: 0, label: 'Sem opção' };
+          }
+          
+          let selectedOption;
+          
+          if (scenario === 'min') {
+            // Select option with minimum value
+            selectedOption = options.reduce((min, opt) => 
+              (Number(opt.value) < Number(min.value)) ? opt : min
+            );
+          } else if (scenario === 'max') {
+            // Select option with maximum value
+            selectedOption = options.reduce((max, opt) => 
+              (Number(opt.value) > Number(max.value)) ? opt : max
+            );
+          } else if (scenario === 'mid') {
+            // Select middle option
+            const midIndex = Math.floor(options.length / 2);
+            selectedOption = options[midIndex];
+          } else { // random
+            const randomIndex = Math.floor(Math.random() * options.length);
+            selectedOption = options[randomIndex];
+          }
+          
+          return { 
+            value: Number(selectedOption.value) || 0, 
+            label: selectedOption.text 
+          };
+        }
+      });
+    }
+
     // Initialize
     updateCounts();
+    loadExistingTestIds();
 
     // Floating back-to-top
     document.addEventListener('DOMContentLoaded', () => {

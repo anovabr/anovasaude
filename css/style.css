@@ -392,8 +392,9 @@ body {
 }
 
 .test-card--taken {
-    opacity: 0.65;
-    cursor: default;
+    opacity: 0.6;
+    filter: grayscale(40%);
+    cursor: not-allowed;
     pointer-events: none;
 }
 
@@ -524,6 +525,15 @@ body {
     border: 1px solid rgba(26, 77, 46, 0.25);
 }
 
+.video-badge-btn {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.video-badge-btn:hover {
+    opacity: 0.8;
+}
+
 .badge--group {
     display: none;
 }
@@ -540,6 +550,7 @@ body {
     border-radius: 6px 6px 6px 0;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     transform: rotate(3deg);
+    z-index: 3;
 }
 
 /* ===== TEAM SECTION ===== */
@@ -1189,6 +1200,11 @@ body {
     transform: translateY(-2px);
 }
 
+.btn-small {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.85rem;
+}
+
 .btn-success:disabled {
     background: #6c757d;
     cursor: not-allowed;
@@ -1203,8 +1219,8 @@ body {
 .test-navigation {
     display: flex;
     gap: 1.5rem;
-    justify-content: flex-start;
-    flex-wrap: nowrap;
+    justify-content: center;
+    flex-wrap: wrap;
     margin-top: 2rem;
     padding-top: 2rem;
     border-top: 1px solid var(--border);

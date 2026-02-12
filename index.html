@@ -271,5 +271,64 @@
         });
     })();
     </script>
+
+    <!-- VIDEO MODAL -->
+    <div id="video-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:9999;align-items:center;justify-content:center;">
+      <div style="position:relative;width:90%;max-width:900px;background:#000;border-radius:12px;overflow:hidden;">
+        <button id="close-video-modal" style="position:absolute;top:10px;right:10px;z-index:10000;background:rgba(255,255,255,0.9);border:none;border-radius:50%;width:40px;height:40px;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#333;">✕</button>
+        <div id="video-container" style="position:relative;padding-top:56.25%;background:#000;">
+          <iframe id="video-iframe" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+
+    <script>
+    // Video modal handlers
+    (function(){
+      const videoModal = document.getElementById('video-modal');
+      const closeVideoBtn = document.getElementById('close-video-modal');
+      const videoIframe = document.getElementById('video-iframe');
+      
+      // Handle video badge clicks
+      document.addEventListener('click', (e) => {
+        const videoBtn = e.target.closest('.video-badge-btn');
+        if (videoBtn) {
+          const videoUrl = videoBtn.dataset.videoUrl;
+          if (videoUrl) {
+            const match = videoUrl.match(/medias\/([a-zA-Z0-9]+)/);
+            if (match && match[1]) {
+              const videoId = match[1];
+              videoIframe.src = `https://fast.wistia.net/embed/iframe/${videoId}?videoFoam=true`;
+              videoModal.style.display = 'flex';
+            } else {
+              window.open(videoUrl, '_blank');
+            }
+          }
+        }
+      });
+      
+      // Close modal
+      if (closeVideoBtn && videoModal && videoIframe) {
+        closeVideoBtn.addEventListener('click', () => {
+          videoModal.style.display = 'none';
+          videoIframe.src = '';
+        });
+        
+        videoModal.addEventListener('click', (e) => {
+          if (e.target === videoModal) {
+            videoModal.style.display = 'none';
+            videoIframe.src = '';
+          }
+        });
+        
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && videoModal.style.display === 'flex') {
+            videoModal.style.display = 'none';
+            videoIframe.src = '';
+          }
+        });
+      }
+    })();
+    </script>
 </body>
 </html>

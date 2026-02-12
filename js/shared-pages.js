@@ -58,9 +58,10 @@ function injectSharedPages() {
       </div>
 
       <div class="test-navigation">
-        <button type="button" id="download-pdf-btn" class="btn btn-secondary">Baixar PDF</button>
-        <button type="button" id="results-back-btn" class="btn btn-secondary">Voltar</button>
-        <button id="interpretation-btn" class="btn btn-primary">Quero Interpretação Humana</button>
+        <div id="test-resources-btns" style="display:flex;gap:0.75rem;flex-wrap:wrap;"></div>
+        <button type="button" id="download-pdf-btn" class="btn btn-secondary btn-small">Baixar PDF</button>
+        <button type="button" id="results-back-btn" class="btn btn-secondary btn-small">Voltar</button>
+        <button id="interpretation-btn" class="btn btn-primary btn-small">Quero Interpretação Humana</button>
       </div>
     </div>
 
@@ -231,6 +232,16 @@ function injectSharedPages() {
         </div>
       </form>
     </div>
+
+    <!-- VIDEO MODAL -->
+    <div id="video-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:9999;align-items:center;justify-content:center;">
+      <div style="position:relative;width:90%;max-width:900px;background:#000;border-radius:12px;overflow:hidden;">
+        <button id="close-video-modal" style="position:absolute;top:10px;right:10px;z-index:10000;background:rgba(255,255,255,0.9);border:none;border-radius:50%;width:40px;height:40px;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#333;">✕</button>
+        <div id="video-container" style="position:relative;padding-top:56.25%;background:#000;">
+          <iframe id="video-iframe" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
   `;
 
   testContainer.insertAdjacentHTML("beforeend", sharedPagesHTML);
@@ -258,6 +269,34 @@ function injectSharedPages() {
       }
     }
   });
+
+  // Video modal handlers
+  const videoModal = document.getElementById('video-modal');
+  const closeVideoBtn = document.getElementById('close-video-modal');
+  const videoIframe = document.getElementById('video-iframe');
+  
+  if (closeVideoBtn && videoModal && videoIframe) {
+    closeVideoBtn.addEventListener('click', () => {
+      videoModal.style.display = 'none';
+      videoIframe.src = ''; // Stop video playback
+    });
+    
+    // Close on background click
+    videoModal.addEventListener('click', (e) => {
+      if (e.target === videoModal) {
+        videoModal.style.display = 'none';
+        videoIframe.src = '';
+      }
+    });
+    
+    // Close on ESC key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && videoModal.style.display === 'flex') {
+        videoModal.style.display = 'none';
+        videoIframe.src = '';
+      }
+    });
+  }
 
   const toggleBtn = document.getElementById('toggle-answers-btn');
   const answersWrapper = document.getElementById('answers-wrapper');
