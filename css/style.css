@@ -240,6 +240,8 @@ body {
 .features {
     padding: 4rem 0;
     background: var(--bg-white);
+    position: relative;
+    z-index: 10;
 }
 
 .section-title {
@@ -333,6 +335,8 @@ body {
 .tests-section {
     padding: 3rem 0;
     background: var(--bg-cream);
+    position: relative;
+    z-index: 10;
 }
 
 .tests-dashboard {
@@ -559,6 +563,8 @@ body {
     background: radial-gradient(circle at 20% 20%, rgba(212, 165, 116, 0.18), transparent 36%), 
                 radial-gradient(circle at 80% 10%, rgba(26, 77, 46, 0.12), transparent 32%),
                 linear-gradient(180deg, #f6f3ec 0%, #f2f7f3 45%, #eef6f1 100%);
+    position: relative;
+    z-index: 10;
 }
 
 .team-grid {
@@ -811,6 +817,8 @@ body {
     background: var(--text-dark);
     color: white;
     padding: 3rem 0 1.5rem;
+    position: relative;
+    z-index: 10;
 }
 
 .footer-content {

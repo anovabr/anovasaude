@@ -60,6 +60,18 @@ function attachClicks(scope) {
   });
 }
 
+// Format markdown text
+function formatMarkdown(text) {
+  if (!text) return '';
+  // Convert **text** to <strong>text</strong>
+  text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  // Convert *text* to <em>text</em> (but not already processed **)
+  text = text.replace(/(?<!\*)\*([^*]+?)\*(?!\*)/g, '<em>$1</em>');
+  // Convert line breaks to <br>
+  text = text.replace(/\n/g, '<br>');
+  return text;
+}
+
 function createCard(test) {
   const card = document.createElement('div');
   card.className = 'test-card';
@@ -82,7 +94,7 @@ function createCard(test) {
     ${ribbon}
     <span class="test-tag">${test.tag || 'Teste'}</span>
     <h4>${test.title}</h4>
-    <p>${test.description || ''}</p>
+    <p>${formatMarkdown(test.description)}</p>
     <div class="test-meta"><span>⏱️ ${test.estimatedTime || ''}</span><span>📊 ${test.questionCount || ''} questões</span></div>
     <div class="test-actions">
       ${article}
@@ -98,7 +110,7 @@ function loadHighlightsFromJson() {
     .then(r => r.json())
     .then(tests => {
       const featured = tests.filter(t => t.featured);
-      const picks = (featured.length ? featured : tests).slice(0, 3);
+      const picks = (featured.length ? featured : tests).slice(0, 5);
       highlightContainer.innerHTML = "";
       highlightContainer.appendChild(createVideoCard());
       picks.forEach(t => highlightContainer.appendChild(createCard(t)));

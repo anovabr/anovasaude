@@ -1,5 +1,17 @@
 ﻿// Universal test runner - loads from /tests/<id>.json
 (function(){
+  // Format markdown text
+  function formatMarkdown(text) {
+    if (!text) return '';
+    // Convert **text** to <strong>text</strong>
+    text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    // Convert *text* to <em>text</em> (but not already processed **)
+    text = text.replace(/(?<!\*)\*([^*]+?)\*(?!\*)/g, '<em>$1</em>');
+    // Convert line breaks to <br>
+    text = text.replace(/\n/g, '<br>');
+    return text;
+  }
+  
   const params = new URLSearchParams(window.location.search);
   const testId = params.get('id') || 'demo-test';
   const isPreview = params.get('preview') === 'true';
@@ -39,9 +51,9 @@
 
   function init() {
     document.getElementById('test-title').textContent = testData.title;
-    document.getElementById('test-description').textContent = testData.description || '';
+    document.getElementById('test-description').innerHTML = formatMarkdown(testData.description) || '';
     const instr = document.getElementById('test-instructions');
-    if (instr) instr.innerHTML = testData.instructions || '';
+    if (instr) instr.innerHTML = formatMarkdown(testData.instructions) || '';
 
     answers = new Array(testData.questions.length).fill(null);
     renderQuestions();
@@ -71,7 +83,7 @@
       card.id = `question-${idx}`;
       card.innerHTML = `
         <div class="question-number">Questão ${idx + 1} de ${testData.questions.length}</div>
-        <div class="question-text">${q.title}</div>
+        <div class="question-text">${formatMarkdown(q.title)}</div>
       `;
 
       const opts = document.createElement('div');
@@ -220,8 +232,26 @@
     return factors.map(f => {
       const scores = f.questionIds.map(id => {
         const idx = testData.questions.findIndex(q => q.id === id);
-        return idx >= 0 && answers[idx] ? answers[idx].value || 0 : 0;
+        if (idx < 0 || !answers[idx]) return 0;
+        
+        const question = testData.questions[idx];
+        let value = answers[idx].value || 0;
+        
+        // Apply reverse scoring if needed
+        if (question.reverse) {
+          const options = question.options || [];
+          if (options.length > 0) {
+            const min = Math.min(...options.map(o => Number(o.value)));
+            const max = Math.max(...options.map(o => Number(o.value)));
+            value = (max + min) - value;
+          }
+        }
+        
+        // Apply weight multiplier
+        const weight = question.weight || 1;
+        return value * weight;
       });
+      
       const score = scores.reduce((s, v) => s + v, 0);
       const maxScore = f.questionIds.reduce((s, id) => s + questionMax(id), 0);
       const interp = Scoring.getInterpretation(score, f.ranges || []);
@@ -240,9 +270,17 @@
   function questionMax(qid) {
     const q = testData.questions.find(q => q.id === qid);
     if (!q) return 0;
-    if (q.type === 'scale') return q.max ?? 0;
-    if (Array.isArray(q.options)) return Math.max(...q.options.map(o => Number(o.value) || 0));
-    return 0;
+    
+    const weight = q.weight || 1;
+    let maxVal = 0;
+    
+    if (q.type === 'scale') {
+      maxVal = q.max ?? 0;
+    } else if (Array.isArray(q.options)) {
+      maxVal = Math.max(...q.options.map(o => Number(o.value) || 0));
+    }
+    
+    return maxVal * weight;
   }
 
   function showResults(results) {
@@ -300,7 +338,7 @@
     const levelEl = document.getElementById('result-level');
     if (levelEl) levelEl.textContent = results.interpretation.level;
     const descEl = document.getElementById('result-description');
-    if (descEl) descEl.textContent = results.interpretation.description;
+    if (descEl) descEl.innerHTML = formatMarkdown(results.interpretation.description);
 
     // Show factors breakdown
     if (results.factors && results.factors.length > 0) {

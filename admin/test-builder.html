@@ -8,9 +8,17 @@
   <link rel="stylesheet" href="/css/style.css">
   <style>
     * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body { background: #faf8f5; margin: 0; padding: 1rem; font-family: 'Work Sans', sans-serif; }
     
-    .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); overflow: hidden; }
+    /* Custom scrollbar for better visibility */
+    ::-webkit-scrollbar { width: 12px; }
+    ::-webkit-scrollbar-track { background: #e8e8e8; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb { background: #1a4d2e; border-radius: 10px; border: 2px solid #e8e8e8; }
+    ::-webkit-scrollbar-thumb:hover { background: #2d6a4f; }
+    * { scrollbar-width: thin; scrollbar-color: #1a4d2e #e8e8e8; }
+    
+    .container { max-width: 1600px; margin: 0 auto; background: white; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); overflow: hidden; }
     
     .header { background: #1a4d2e; color: white; padding: 2rem; }
     .header h1 { margin: 0 0 0.5rem; font-size: 1.75rem; font-weight: 600; }
@@ -43,7 +51,13 @@
     .field input, .field textarea, .field select { width: 100%; padding: 0.75rem; border: 1px solid #d0d0d0; border-radius: 6px; font-size: 0.95rem; font-family: inherit; transition: border-color 0.2s; background: white; }
     .field input:focus, .field textarea:focus, .field select:focus { outline: none; border-color: #1a4d2e; }
     .field textarea { min-height: 110px; resize: vertical; }
+    .field textarea.tall { min-height: 150px; }
     .field small { display: block; margin-top: 0.3rem; color: #6c757d; font-size: 0.85rem; }
+    
+    .formatting-toolbar { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; }
+    .btn-format { padding: 0.4rem 0.7rem; background: #f0f0f0; border: 1px solid #d0d0d0; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.2s; }
+    .btn-format:hover { background: #e0e0e0; border-color: #b0b0b0; }
+    .btn-format:active { background: #d0d0d0; }
     
     .checkbox-group { display: flex; gap: 1rem; margin-top: 0.5rem; }
     .checkbox-label { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.6rem 1rem; border: 2px solid #e0e0e0; border-radius: 6px; cursor: pointer; font-weight: 500; transition: all 0.2s; background: white; }
@@ -83,15 +97,33 @@
     .empty-state-icon { font-size: 2.5rem; margin-bottom: 0.75rem; opacity: 0.4; }
     
     input[type="file"] { display: none; }
+    
+    /* Import Modal */
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 1000; overflow-y: auto; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: white; border-radius: 12px; max-width: 1400px; width: 95%; max-height: 90vh; overflow-y: auto; box-shadow: 0 8px 32px rgba(0,0,0,0.3); margin: 2rem auto; }
+    .modal-header { padding: 1.5rem 2rem; border-bottom: 1px solid #e0e0e0; background: #1a4d2e; color: white; border-radius: 12px 12px 0 0; }
+    .modal-header h2 { margin: 0; font-size: 1.5rem; }
+    .modal-body { padding: 2rem; }
+    .modal-footer { padding: 1rem 2rem; border-top: 1px solid #e0e0e0; display: flex; gap: 1rem; justify-content: flex-end; background: #f8f9fa; }
+    .import-textarea { width: 100%; min-height: 200px; padding: 1rem; border: 2px dashed #d0d0d0; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 0.9rem; resize: vertical; }
+    .import-preview { margin-top: 1.5rem; max-height: 300px; overflow-y: auto; }
+    .import-preview table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    .import-preview th { background: #1a4d2e; color: white; padding: 0.75rem; text-align: left; position: sticky; top: 0; }
+    .import-preview td { padding: 0.75rem; border-bottom: 1px solid #e0e0e0; }
+    .import-preview tr:hover { background: #f8f9fa; }
+    .import-stats { background: #e8f5e9; border: 1px solid #1a4d2e; border-radius: 8px; padding: 1rem; margin: 1rem 0; }
+    .import-stats-item { margin: 0.5rem 0; color: #1a4d2e; font-weight: 500; }
+    .help-text { background: #fff3cd; border: 1px solid #ffc107; border-radius: 6px; padding: 1rem; margin: 1rem 0; font-size: 0.9rem; }
+    .help-text strong { display: block; margin-bottom: 0.5rem; color: #856404; }
+    .help-text code { background: #fff; padding: 0.2rem 0.4rem; border-radius: 3px; font-family: 'Courier New', monospace; font-size: 0.85rem; color: #d63384; }
   </style>
 </head>
-<body>
+<body style="scroll-behavior: smooth;">
   <div class="container">
     <div class="toolbar">
-      <div class="toolbar-row center">
-        <button class="btn btn-success" id="btn-save-server">☁️ Salvar no Servidor</button>
-      </div>
       <div class="toolbar-row">
+        <button class="btn btn-success" id="btn-save-server">☁️ Salvar</button>
         <button class="btn btn-secondary" id="btn-sample" title="Preencher exemplo rápido">Exemplo</button>
         <span class="toolbar-separator">|</span>
         <span class="toolbar-label">Preview:</span>
@@ -104,10 +136,6 @@
         <button class="btn btn-secondary" id="btn-preview-results">Ver</button>
         <button class="btn btn-secondary" id="btn-clear" title="Limpar tudo">Limpar</button>
       </div>
-    </div>
-
-    <div style="background: #e7f3ff; border-left: 4px solid #0066cc; padding: 1rem; margin: 1rem 0; border-radius: 6px;">
-      <strong>ℹ️ Este sistema apenas cria Questionários.</strong>
     </div>
 
     <div class="content">
@@ -145,11 +173,19 @@
         <div>
           <div class="field">
             <label for="test-desc">Descrição <span style="color:#dc3545">*</span></label>
-            <textarea id="test-desc" placeholder="Descrição breve que aparece no catálogo de testes"></textarea>
+            <div class="formatting-toolbar">
+              <button type="button" class="btn-format" onclick="insertFormatting('test-desc', '**', '**')" title="Negrito"><strong>B</strong></button>
+              <button type="button" class="btn-format" onclick="insertFormatting('test-desc', '*', '*')" title="Itálico"><em>I</em></button>
+            </div>
+            <textarea id="test-desc" class="tall" placeholder="Descrição breve que aparece no catálogo de testes"></textarea>
           </div>
           <div class="field">
             <label for="test-instr">Instruções para o Usuário <span style="color:#dc3545">*</span></label>
-            <textarea id="test-instr" placeholder="Instruções que aparecem antes do usuário começar o teste"></textarea>
+            <div class="formatting-toolbar">
+              <button type="button" class="btn-format" onclick="insertFormatting('test-instr', '**', '**')" title="Negrito"><strong>B</strong></button>
+              <button type="button" class="btn-format" onclick="insertFormatting('test-instr', '*', '*')" title="Itálico"><em>I</em></button>
+            </div>
+            <textarea id="test-instr" class="tall" placeholder="Instruções que aparecem antes do usuário começar o teste"></textarea>
           </div>
           <div class="field">
             <label for="est-time">Tempo Estimado</label>
@@ -160,11 +196,11 @@
             <div class="checkbox-group">
               <label class="checkbox-label">
                 <input type="checkbox" id="featured">
-                <span>Destaque na homepage</span>
+                <span>⭐ Destaque na homepage</span>
               </label>
               <label class="checkbox-label">
                 <input type="checkbox" id="curadoria">
-                <span>Curadoria Anova</span>
+                <span>✓ Curadoria Anova</span>
               </label>
             </div>
           </div>
@@ -186,7 +222,10 @@
             <button class="btn-collapse" id="btn-collapse-questions" title="Ocultar/Mostrar">▼</button>
             <h3>Questões <span class="badge" id="q-count">0</span></h3>
           </div>
-          <button class="btn btn-primary" id="btn-add-question">+ Adicionar Questão</button>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-success" id="btn-import-questions">📥 Importar Questões</button>
+            <button class="btn btn-primary" id="btn-add-question">+ Adicionar Questão</button>
+          </div>
         </div>
         <div id="questions-list" class="section-content">
           <div class="empty-state">
@@ -203,7 +242,16 @@
             <button class="btn-collapse" id="btn-collapse-factors" title="Ocultar/Mostrar">▼</button>
             <h3>Fatores / Domínios <span class="badge" id="f-count">0</span></h3>
           </div>
-          <button class="btn btn-primary" id="btn-add-factor">+ Adicionar Fator</button>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-success" id="btn-auto-quartile" title="Gerar fator geral com quartis automaticamente">📊 Usar Fator Geral e Quartis</button>
+            <button class="btn btn-primary" id="btn-add-factor">+ Adicionar Fator</button>
+          </div>
+        </div>
+        <div id="import-info" style="background: #e3f2fd; border: 1px solid #2196f3; border-radius: 6px; padding: 1rem; margin-bottom: 1.5rem; font-size: 0.9rem; color: #1565c0; display: none;">
+          ℹ️ As interpretações foram calculadas com base em quartis. Caso haja interpretações específicas, <a href="#" id="clear-factors-link" style="color: #1565c0; font-weight: 600; text-decoration: underline; cursor: pointer;">clique aqui</a> e adicione manualmente.
+        </div>
+        <div id="manual-quartile-info" style="background: #e8f5e9; border: 1px solid #1a4d2e; border-radius: 6px; padding: 1rem; margin-bottom: 1.5rem; font-size: 0.9rem; color: #1a4d2e; display: none;">
+          ✅ Fator Geral criado automaticamente com base em quartis. Para testes não normatizados, essa é uma forma rápida de obter interpretações.
         </div>
         <div id="factors-list" class="section-content">
           <div class="empty-state">
@@ -229,11 +277,820 @@
     </div>
   </div>
 
+  <!-- Import Modal -->
+  <div class="modal-overlay" id="import-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>📥 Importar Questões do Excel</h2>
+      </div>
+      <div class="modal-body">
+        <div class="help-text">
+          <strong>📋 Como usar:</strong>
+          1. No Excel, inclua a linha de cabeçalho: <code>item | pergunta | resposta | peso | reversa | fator_geral | fator_especifico</code><br>
+          2. Preencha suas questões (a primeira linha será ignorada automaticamente)<br>
+          3. Na coluna "resposta", use formato: <code>1 Texto; 2 Texto; 3 Texto...</code><br>
+          4. Selecione tudo (incluindo cabeçalho) e copie com Ctrl+C<br>
+          5. Cole aqui com Ctrl+V<br>
+          6. Revise a pré-visualização e clique em "Importar"
+        </div>
+
+        <div class="field">
+          <label>Cole os dados do Excel aqui:</label>
+          <textarea id="import-data" class="import-textarea" placeholder="Cole aqui (Ctrl+V)..."></textarea>
+        </div>
+
+        <div id="import-preview" class="import-preview" style="display:none;"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btn-cancel-import">Cancelar</button>
+        <button class="btn btn-success" id="btn-confirm-import" disabled>Importar</button>
+      </div>
+    </div>
+  </div>
+
   <script>
+    // ========== FORMATTING HELPER ==========
+    function insertFormatting(textareaId, openTag, closeTag) {
+      const textarea = document.getElementById(textareaId);
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const text = textarea.value;
+      const selectedText = text.substring(start, end);
+      
+      // Insert formatting tags around selection
+      const before = text.substring(0, start);
+      const after = text.substring(end);
+      const newText = before + openTag + selectedText + closeTag + after;
+      
+      textarea.value = newText;
+      
+      // Set cursor position after the inserted text
+      const newCursorPos = selectedText ? end + openTag.length + closeTag.length : start + openTag.length;
+      textarea.setSelectionRange(newCursorPos, newCursorPos);
+      textarea.focus();
+    }
+    
+    // ========== BULK IMPORT SYSTEM ==========
+    let parsedImportData = null;
+
+    function openImportModal() {
+      document.getElementById('import-modal').classList.add('active');
+      document.getElementById('import-data').value = '';
+      document.getElementById('import-preview').style.display = 'none';
+      
+      // Reset button to "Importar"
+      const confirmBtn = document.getElementById('btn-confirm-import');
+      confirmBtn.textContent = 'Importar';
+      confirmBtn.disabled = true;
+      confirmBtn.onclick = executeImport;
+      
+      parsedImportData = null;
+    }
+
+    function closeImportModal() {
+      document.getElementById('import-modal').classList.remove('active');
+    }
+
+    function parseImportData(rawData) {
+      const lines = rawData.trim().split('\n');
+      const questions = [];
+      const factorGeneralItems = [];
+      const factorSpecificMap = new Map();
+      let reverseCount = 0;
+      let weightedCount = 0;
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        if (!line.trim()) continue;
+        
+        // Skip first line (header)
+        if (i === 0) continue;
+        
+        // Split by tab
+        const cols = line.split('\t').map(c => c.trim());
+        
+        if (cols.length < 3) continue; // Need at least item, question, and response
+        
+        const item = parseInt(cols[0]) || questions.length + 1;
+        const questionText = cols[1] || '';
+        const responseOptions = cols[2] || '';
+        const weight = parseInt(cols[3]) || 1;
+        const isReverse = (cols[4] || '').toUpperCase() === 'R';
+        const inGeneralFactor = (cols[5] || '').toUpperCase() === 'S';
+        const specificFactor = (cols[6] || '').trim();
+
+        if (!questionText || !responseOptions) continue;
+
+        // Parse response options (format: "1 Text; 2 Text; 3 Text")
+        const options = [];
+        const optionParts = responseOptions.split(';').map(o => o.trim());
+        
+        for (const part of optionParts) {
+          if (!part) continue;
+          // Extract value (first number) and text (everything after first space)
+          const match = part.match(/^(\d+)\s+(.+)$/);
+          if (match) {
+            options.push({
+              value: parseInt(match[1]),
+              text: match[2].trim()
+            });
+          }
+        }
+
+        if (options.length === 0) continue; // Skip if no valid options
+
+        if (weight > 1) weightedCount++;
+        if (isReverse) reverseCount++;
+
+        const question = {
+          id: item,
+          title: questionText,
+          options: options,
+          weight: weight,
+          reverse: isReverse,
+          inGeneralFactor: inGeneralFactor,
+          specificFactor: specificFactor
+        };
+
+        questions.push(question);
+
+        // Track factors
+        if (inGeneralFactor) {
+          factorGeneralItems.push(item);
+        }
+        if (specificFactor) {
+          if (!factorSpecificMap.has(specificFactor)) {
+            factorSpecificMap.set(specificFactor, []);
+          }
+          factorSpecificMap.get(specificFactor).push(item);
+        }
+      }
+
+      return {
+        questions,
+        factorGeneralItems,
+        factorSpecificMap,
+        reverseCount,
+        weightedCount,
+        stats: {
+          totalQuestions: questions.length,
+          hasGeneralFactor: factorGeneralItems.length > 0,
+          specificFactors: Array.from(factorSpecificMap.keys())
+        }
+      };
+    }
+
+    function previewImportData() {
+      const rawData = document.getElementById('import-data').value;
+      if (!rawData.trim()) {
+        document.getElementById('import-preview').style.display = 'none';
+        document.getElementById('btn-confirm-import').disabled = true;
+        return;
+      }
+
+      try {
+        parsedImportData = parseImportData(rawData);
+        
+        if (parsedImportData.questions.length === 0) {
+          throw new Error('Nenhuma questão válida encontrada');
+        }
+
+        // Show stats
+        let html = '<div class="import-stats">';
+        html += `<div class="import-stats-item">✅ ${parsedImportData.stats.totalQuestions} questões detectadas</div>`;
+        if (parsedImportData.reverseCount > 0) {
+          html += `<div class="import-stats-item">✅ ${parsedImportData.reverseCount} questões com pontuação reversa</div>`;
+        }
+        if (parsedImportData.weightedCount > 0) {
+          html += `<div class="import-stats-item">✅ ${parsedImportData.weightedCount} questões com peso diferenciado</div>`;
+        }
+        if (parsedImportData.stats.hasGeneralFactor) {
+          html += `<div class="import-stats-item">✅ Fator Geral: ${parsedImportData.factorGeneralItems.length} questões</div>`;
+        }
+        if (parsedImportData.stats.specificFactors.length > 0) {
+          html += `<div class="import-stats-item">✅ ${parsedImportData.stats.specificFactors.length} fatores específicos encontrados:</div>`;
+          parsedImportData.stats.specificFactors.forEach(name => {
+            const count = parsedImportData.factorSpecificMap.get(name).length;
+            html += `<div class="import-stats-item" style="margin-left: 2rem;">• ${name} (${count} questões)</div>`;
+          });
+        }
+        html += '</div>';
+
+        // Show table preview
+        html += '<table><thead><tr>';
+        html += '<th>#</th><th>Pergunta</th><th>Opções</th><th>Peso</th><th>Rev</th><th>Geral</th><th>Específico</th>';
+        html += '</tr></thead><tbody>';
+        
+        parsedImportData.questions.slice(0, 10).forEach(q => {
+          const reverseStyle = q.reverse ? 'background: #ffe0e0; color: #ff6b6b; font-weight: 700;' : '';
+          const weightStyle = q.weight > 1 ? 'background: #e0f2ff; color: #4dabf7; font-weight: 700;' : '';
+          
+          html += `<tr style="${reverseStyle}">`;
+          html += `<td>${q.id}</td>`;
+          html += `<td>${q.title.substring(0, 40)}${q.title.length > 40 ? '...' : ''}</td>`;
+          html += `<td>${q.options.length} opções (${Math.min(...q.options.map(o => o.value))}-${Math.max(...q.options.map(o => o.value))})</td>`;
+          html += `<td style="${weightStyle}">${q.weight}${q.weight > 1 ? 'x' : ''}</td>`;
+          html += `<td style="font-size: 1.2rem;">${q.reverse ? '↩' : ''}</td>`;
+          html += `<td>${q.inGeneralFactor ? 'S' : 'N'}</td>`;
+          html += `<td>${q.specificFactor || '-'}</td>`;
+          html += '</tr>';
+        });
+        
+        if (parsedImportData.questions.length > 10) {
+          html += `<tr><td colspan="6" style="text-align:center; color:#6c757d; font-style:italic;">... e mais ${parsedImportData.questions.length - 10} questões</td></tr>`;
+        }
+        
+        html += '</tbody></table>';
+
+        document.getElementById('import-preview').innerHTML = html;
+        document.getElementById('import-preview').style.display = 'block';
+        document.getElementById('btn-confirm-import').disabled = false;
+
+      } catch (error) {
+        alert('Erro ao processar dados: ' + error.message);
+        document.getElementById('import-preview').style.display = 'none';
+        document.getElementById('btn-confirm-import').disabled = true;
+      }
+    }
+
+    function calculateQuartiles(min, max) {
+      const range = max - min;
+      const q1 = Math.floor(min + range * 0.25);
+      const q2 = Math.floor(min + range * 0.50);
+      const q3 = Math.floor(min + range * 0.75);
+      
+      return [
+        { min: min, max: q1, level: 'Baixo', description: 'Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **baixo**.' },
+        { min: q1 + 1, max: q2, level: 'Médio', description: 'Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **médio**.' },
+        { min: q2 + 1, max: q3, level: 'Alto', description: 'Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **alto**.' },
+        { min: q3 + 1, max: max, level: 'Muito Alto', description: 'Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **muito alto**.' }
+      ];
+    }
+
+    function executeImport() {
+      if (!parsedImportData) return;
+
+      // Clear existing questions and factors
+      state.questions = [];
+      state.factors = [];
+      qList.innerHTML = '';
+      fList.innerHTML = '';
+
+      // Create questions
+      parsedImportData.questions.forEach(qData => {
+        // Create question programmatically
+        const qId = qData.id;
+        
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        const header = document.createElement('div');
+        header.className = 'card-header';
+        
+        const title = document.createElement('div');
+        title.className = 'card-title';
+        title.textContent = `Questão ${qId}`;
+        
+        // Add reverse indicator if needed
+        if (qData.reverse) {
+          const reverseTag = document.createElement('span');
+          reverseTag.style.cssText = 'margin-left: 0.5rem; padding: 0.2rem 0.5rem; background: #ff6b6b; color: white; font-size: 0.75rem; border-radius: 4px; font-weight: 600;';
+          reverseTag.textContent = 'REVERSA';
+          title.appendChild(reverseTag);
+        }
+        
+        // Add weight indicator if > 1
+        if (qData.weight && qData.weight > 1) {
+          const weightTag = document.createElement('span');
+          weightTag.style.cssText = 'margin-left: 0.5rem; padding: 0.2rem 0.5rem; background: #4dabf7; color: white; font-size: 0.75rem; border-radius: 4px; font-weight: 600;';
+          weightTag.textContent = `PESO ${qData.weight}x`;
+          title.appendChild(weightTag);
+        }
+        
+        const actions = document.createElement('div');
+        actions.className = 'card-actions';
+        
+        header.appendChild(title);
+        header.appendChild(actions);
+
+        // Create entry object first
+        const entry = {
+          id: qId,
+          options: []
+        };
+
+        // Title input
+        const titleField = document.createElement('div');
+        titleField.className = 'field';
+        titleField.innerHTML = '<label>Título da Questão</label>';
+        const titleInput = document.createElement('input');
+        titleInput.value = qData.title;
+        titleField.appendChild(titleInput);
+
+        // Peso and Reversa fields
+        const metaGrid = document.createElement('div');
+        metaGrid.style.cssText = 'display: grid; grid-template-columns: 150px 150px; gap: 1rem; margin-bottom: 1rem;';
+        
+        const pesoField = document.createElement('div');
+        pesoField.className = 'field';
+        pesoField.style.marginBottom = '0';
+        pesoField.innerHTML = '<label>Peso</label>';
+        const pesoInput = document.createElement('input');
+        pesoInput.type = 'number';
+        pesoInput.min = '1';
+        pesoInput.value = qData.weight || 1;
+        pesoInput.style.width = '100%';
+        pesoField.appendChild(pesoInput);
+        
+        const reversaField = document.createElement('div');
+        reversaField.className = 'field';
+        reversaField.style.marginBottom = '0';
+        reversaField.innerHTML = '<label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;"><input type="checkbox" id="rev-${qId}" style="width: auto; cursor: pointer;"> Reversa</label>';
+        const reversaCheckbox = reversaField.querySelector('input');
+        reversaCheckbox.checked = qData.reverse || false;
+        
+        metaGrid.appendChild(pesoField);
+        metaGrid.appendChild(reversaField);
+        
+        // Update badges when peso/reversa change
+        function updateBadges() {
+          // Remove existing badges
+          title.querySelectorAll('span').forEach(s => s.remove());
+          
+          // Add reverse badge if checked
+          if (reversaCheckbox.checked) {
+            const reverseTag = document.createElement('span');
+            reverseTag.style.cssText = 'margin-left: 0.5rem; padding: 0.2rem 0.5rem; background: #ff6b6b; color: white; font-size: 0.75rem; border-radius: 4px; font-weight: 600;';
+            reverseTag.textContent = 'REVERSA';
+            title.appendChild(reverseTag);
+          }
+          
+          // Add weight badge if > 1
+          const peso = Number(pesoInput.value) || 1;
+          if (peso > 1) {
+            const weightTag = document.createElement('span');
+            weightTag.style.cssText = 'margin-left: 0.5rem; padding: 0.2rem 0.5rem; background: #4dabf7; color: white; font-size: 0.75rem; border-radius: 4px; font-weight: 600;';
+            weightTag.textContent = `PESO ${peso}x`;
+            title.appendChild(weightTag);
+          }
+        }
+        
+        pesoInput.addEventListener('input', updateBadges);
+        reversaCheckbox.addEventListener('change', updateBadges);
+        
+        // Call once to set initial state
+        updateBadges();
+        
+        // Store references
+        entry.pesoInput = pesoInput;
+        entry.reversaCheckbox = reversaCheckbox;
+
+        // Type select
+        const typeField = document.createElement('div');
+        typeField.className = 'field';
+        typeField.innerHTML = '<label>Tipo de Resposta</label>';
+        const typeSelect = document.createElement('select');
+        typeSelect.innerHTML = `
+          <option value="single">Escolha Única</option>
+          <option value="likert" selected>Likert</option>
+          <option value="yesno">Sim/Não</option>
+          <option value="scale">Escala Numérica</option>
+        `;
+        typeSelect.value = 'likert';
+        typeField.appendChild(typeSelect);
+
+        // Options container
+        const optionsContainer = document.createElement('div');
+        optionsContainer.className = 'field';
+        optionsContainer.innerHTML = '<label>Opções de Resposta</label>';
+        optionsContainer.style.display = 'block';
+
+        // Scale container (hidden for likert)
+        const scaleContainer = document.createElement('div');
+        scaleContainer.style.display = 'none';
+
+        const btnAddOption = document.createElement('button');
+        btnAddOption.className = 'btn btn-secondary btn-small';
+        btnAddOption.textContent = '+ Adicionar Opção';
+        btnAddOption.type = 'button';
+        btnAddOption.style.display = 'block';
+
+        // Complete entry object
+        entry.titleInput = titleInput;
+        entry.typeSelect = typeSelect;
+        entry.optionsContainer = optionsContainer;
+        entry.scaleContainer = scaleContainer;
+        entry.card = card;
+        entry.weight = qData.weight || 1;
+        entry.reverse = qData.reverse || false;
+
+        state.questions.push(entry);
+
+        // Add options from parsed data
+        qData.options.forEach(opt => {
+          const row = document.createElement('div');
+          row.className = 'option-row';
+
+          const valueInput = document.createElement('input');
+          valueInput.type = 'number';
+          valueInput.value = opt.value;
+          valueInput.placeholder = 'Valor';
+
+          const textInput = document.createElement('input');
+          textInput.type = 'text';
+          textInput.value = opt.text;
+          textInput.placeholder = 'Texto da opção';
+
+          const btnRemove = document.createElement('button');
+          btnRemove.className = 'btn btn-danger btn-small';
+          btnRemove.textContent = '✕';
+          btnRemove.type = 'button';
+          btnRemove.addEventListener('click', () => {
+            entry.options = entry.options.filter(o => o.row !== row);
+            row.remove();
+          });
+
+          row.appendChild(valueInput);
+          row.appendChild(textInput);
+          row.appendChild(btnRemove);
+
+          optionsContainer.appendChild(row);
+
+          entry.options.push({ valueInput, textInput, row });
+        });
+
+        btnAddOption.addEventListener('click', () => {
+          const row = document.createElement('div');
+          row.className = 'option-row';
+
+          const valueInput = document.createElement('input');
+          valueInput.type = 'number';
+          valueInput.placeholder = 'Valor';
+
+          const textInput = document.createElement('input');
+          textInput.type = 'text';
+          textInput.placeholder = 'Texto da opção';
+
+          const btnRemove = document.createElement('button');
+          btnRemove.className = 'btn btn-danger btn-small';
+          btnRemove.textContent = '✕';
+          btnRemove.type = 'button';
+          btnRemove.addEventListener('click', () => {
+            entry.options = entry.options.filter(o => o.row !== row);
+            row.remove();
+          });
+
+          row.appendChild(valueInput);
+          row.appendChild(textInput);
+          row.appendChild(btnRemove);
+
+          optionsContainer.appendChild(row);
+          entry.options.push({ valueInput, textInput, row });
+        });
+
+        // Duplicate button
+        const btnDuplicate = document.createElement('button');
+        btnDuplicate.className = 'btn btn-secondary btn-small';
+        btnDuplicate.textContent = '📋';
+        btnDuplicate.title = 'Duplicar questão';
+        btnDuplicate.addEventListener('click', () => {
+          addQuestion({
+            title: titleInput.value,
+            type: 'likert',
+            options: entry.options.map(o => ({ 
+              value: o.valueInput.value, 
+              text: o.textInput.value 
+            }))
+          });
+        });
+
+        // Remove button
+        const btnRemove = document.createElement('button');
+        btnRemove.className = 'btn btn-danger btn-small';
+        btnRemove.textContent = '🗑️';
+        btnRemove.title = 'Remover questão';
+        btnRemove.addEventListener('click', () => {
+          if (confirm('Remover esta questão?')) {
+            state.questions = state.questions.filter(q => q !== entry);
+            card.remove();
+            updateCounts();
+            updateFactorSelectors();
+          }
+        });
+
+        actions.appendChild(btnDuplicate);
+        actions.appendChild(btnRemove);
+
+        // Assemble card
+        card.appendChild(header);
+        card.appendChild(titleField);
+        card.appendChild(metaGrid);
+        card.appendChild(typeField);
+        card.appendChild(optionsContainer);
+        card.appendChild(scaleContainer);
+        card.appendChild(btnAddOption);
+
+        qList.appendChild(card);
+      });
+
+      // Create factors
+      // 1. General Factor (if any)
+      if (parsedImportData.stats.hasGeneralFactor) {
+        let minVal = 0;
+        let maxVal = 0;
+        
+        parsedImportData.factorGeneralItems.forEach(qId => {
+          const q = parsedImportData.questions.find(q => q.id === qId);
+          if (q && q.options.length > 0) {
+            const weight = q.weight || 1;
+            const qMin = Math.min(...q.options.map(o => o.value)) * weight;
+            const qMax = Math.max(...q.options.map(o => o.value)) * weight;
+            minVal += qMin;
+            maxVal += qMax;
+          }
+        });
+        
+        const quartiles = calculateQuartiles(minVal, maxVal);
+        
+        addFactorProgrammatically('fator-geral', 'Fator Geral', parsedImportData.factorGeneralItems, quartiles);
+      }
+
+      // 2. Specific Factors
+      parsedImportData.stats.specificFactors.forEach(factorName => {
+        const questionIds = parsedImportData.factorSpecificMap.get(factorName);
+        let minVal = 0;
+        let maxVal = 0;
+        
+        questionIds.forEach(qId => {
+          const q = parsedImportData.questions.find(q => q.id === qId);
+          if (q && q.options.length > 0) {
+            const weight = q.weight || 1;
+            const qMin = Math.min(...q.options.map(o => o.value)) * weight;
+            const qMax = Math.max(...q.options.map(o => o.value)) * weight;
+            minVal += qMin;
+            maxVal += qMax;
+          }
+        });
+        
+        const quartiles = calculateQuartiles(minVal, maxVal);
+        
+        const factorId = factorName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+        addFactorProgrammatically(factorId, factorName, questionIds, quartiles);
+      });
+
+      updateCounts();
+      updateFactorSelectors();
+      
+      // Update question ID counter
+      if (parsedImportData.questions.length > 0) {
+        questionIdCounter = Math.max(...parsedImportData.questions.map(q => q.id)) + 1;
+      }
+      
+      // Close modal immediately
+      closeImportModal();
+      
+      // Collapse questions section
+      const questionsList = document.getElementById('questions-list');
+      const btnCollapseQuestions = document.getElementById('btn-collapse-questions');
+      questionsList.classList.add('collapsed');
+      btnCollapseQuestions.textContent = '▶';
+      
+      // Collapse factors section
+      const factorsList = document.getElementById('factors-list');
+      const btnCollapseFactors = document.getElementById('btn-collapse-factors');
+      factorsList.classList.add('collapsed');
+      btnCollapseFactors.textContent = '▶';
+      
+      // Show import info message
+      document.getElementById('import-info').style.display = 'block';
+    }
+
+    function addFactorProgrammatically(id, name, questionIds, ranges) {
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      const header = document.createElement('div');
+      header.className = 'card-header';
+      
+      const title = document.createElement('div');
+      title.className = 'card-title';
+      title.textContent = name;
+      
+      const actions = document.createElement('div');
+      actions.className = 'card-actions';
+      
+      header.appendChild(title);
+      header.appendChild(actions);
+
+      // ID field
+      const idField = document.createElement('div');
+      idField.className = 'field';
+      idField.innerHTML = '<label>ID do Fator (único, sem espaços)</label>';
+      const idInput = document.createElement('input');
+      idInput.value = id;
+      idInput.placeholder = 'ex: fator-ansiedade';
+      idField.appendChild(idInput);
+
+      // Name field
+      const nameField = document.createElement('div');
+      nameField.className = 'field';
+      nameField.innerHTML = '<label>Nome do Fator</label>';
+      const nameInput = document.createElement('input');
+      nameInput.value = name;
+      nameInput.placeholder = 'ex: Ansiedade Geral';
+      nameField.appendChild(nameInput);
+
+      // Question selector
+      const selector = document.createElement('div');
+      selector.className = 'question-selector';
+      selector.innerHTML = '<div class="question-selector-title">Questões incluídas:</div>';
+      const chips = document.createElement('div');
+      chips.className = 'question-chips';
+      chips.setAttribute('data-chips', '');
+      selector.appendChild(chips);
+
+      // Ranges
+      const rangesLabel = document.createElement('div');
+      rangesLabel.className = 'field';
+      rangesLabel.innerHTML = '<label>Faixas de Pontuação</label>';
+      
+      const rangesContainer = document.createElement('div');
+      
+      const btnAddRange = document.createElement('button');
+      btnAddRange.className = 'btn btn-secondary btn-small';
+      btnAddRange.textContent = '+ Adicionar Faixa';
+      btnAddRange.type = 'button';
+
+      const entry = {
+        idInput,
+        nameInput,
+        questionSelector: selector,
+        selectedQuestions: questionIds || [],
+        ranges: [],
+        rangesContainer,
+        card
+      };
+
+      state.factors.push(entry);
+
+      // Add ranges
+      ranges.forEach(r => {
+        addRangeProgrammatically(entry, r.min, r.max, r.level, r.description);
+      });
+
+      btnAddRange.addEventListener('click', () => {
+        addRangeProgrammatically(entry, 0, 10, 'Nível', 'Descrição do resultado');
+      });
+
+      // Remove button
+      const btnRemove = document.createElement('button');
+      btnRemove.className = 'btn btn-danger btn-small';
+      btnRemove.textContent = '🗑️';
+      btnRemove.title = 'Remover fator';
+      btnRemove.addEventListener('click', () => {
+        if (confirm('Remover este fator?')) {
+          state.factors = state.factors.filter(f => f !== entry);
+          card.remove();
+          updateCounts();
+        }
+      });
+
+      actions.appendChild(btnRemove);
+
+      card.appendChild(header);
+      card.appendChild(idField);
+      card.appendChild(nameField);
+      card.appendChild(selector);
+      card.appendChild(rangesLabel);
+      card.appendChild(rangesContainer);
+      card.appendChild(btnAddRange);
+
+      fList.appendChild(card);
+      
+      updateFactorSelectors();
+    }
+
+    // ========== AUTO QUARTILE GENERATION (FOR MANUAL TESTS) ==========
+    function generateAutoQuartileFactor() {
+      // Check if there are questions
+      if (state.questions.length === 0) {
+        alert('Adicione questões primeiro antes de gerar o fator geral.');
+        return;
+      }
+      
+      // Check if factor already exists
+      if (state.factors.length > 0) {
+        if (!confirm('Já existem fatores configurados. Deseja substituí-los pelo Fator Geral automático?')) {
+          return;
+        }
+        // Clear existing factors
+        state.factors = [];
+        fList.innerHTML = '';
+      }
+      
+      // Calculate min and max scores
+      let minVal = 0;
+      let maxVal = 0;
+      const allQuestionIds = [];
+      
+      state.questions.forEach(q => {
+        allQuestionIds.push(q.id);
+        
+        if (q.options && q.options.length > 0) {
+          const weight = q.pesoInput ? Number(q.pesoInput.value) || 1 : 1;
+          const values = q.options.map(o => Number(o.valueInput.value) || 0);
+          const qMin = Math.min(...values) * weight;
+          const qMax = Math.max(...values) * weight;
+          minVal += qMin;
+          maxVal += qMax;
+        } else if (q.minInput && q.maxInput) {
+          // For scale type questions
+          const weight = q.pesoInput ? Number(q.pesoInput.value) || 1 : 1;
+          minVal += Number(q.minInput.value) * weight;
+          maxVal += Number(q.maxInput.value) * weight;
+        }
+      });
+      
+      // Calculate quartiles
+      const quartiles = calculateQuartiles(minVal, maxVal);
+      
+      // Create the general factor
+      addFactorProgrammatically('fator-geral', 'Fator Geral', allQuestionIds, quartiles);
+      
+      // Show info message
+      document.getElementById('manual-quartile-info').style.display = 'block';
+      document.getElementById('import-info').style.display = 'none';
+      
+      // Collapse the factors section to keep it clean
+      const factorsList = document.getElementById('factors-list');
+      const btnCollapseFactors = document.getElementById('btn-collapse-factors');
+      factorsList.classList.add('collapsed');
+      btnCollapseFactors.textContent = '▶';
+      
+      updateCounts();
+      
+      alert(`Fator Geral criado!\n\nPontuação: ${minVal} - ${maxVal}\nInterpretação: 4 níveis (Baixo, Médio, Alto, Muito Alto)\nQuestões incluídas: ${allQuestionIds.length}`);
+    }
+    
+    function addRangeProgrammatically(factorEntry, min, max, level, desc) {
+      const row = document.createElement('div');
+      row.className = 'card';
+      row.style.background = '#f8f9fa';
+      row.style.padding = '1rem';
+      row.style.marginBottom = '0.75rem';
+
+      const grid = document.createElement('div');
+      grid.style.display = 'grid';
+      grid.style.gridTemplateColumns = '100px 100px 150px 1fr auto';
+      grid.style.gap = '0.75rem';
+      grid.style.alignItems = 'start';
+
+      const minInput = document.createElement('input');
+      minInput.type = 'number';
+      minInput.value = min;
+      minInput.placeholder = 'Mín';
+
+      const maxInput = document.createElement('input');
+      maxInput.type = 'number';
+      maxInput.value = max;
+      maxInput.placeholder = 'Máx';
+
+      const levelInput = document.createElement('input');
+      levelInput.type = 'text';
+      levelInput.value = level;
+      levelInput.placeholder = 'Nível';
+
+      const descInput = document.createElement('textarea');
+      descInput.value = desc;
+      descInput.placeholder = 'Descrição / interpretação';
+      descInput.style.minHeight = '60px';
+
+      const btnRemove = document.createElement('button');
+      btnRemove.className = 'btn btn-danger btn-small';
+      btnRemove.textContent = '✕';
+      btnRemove.type = 'button';
+      btnRemove.addEventListener('click', () => {
+        factorEntry.ranges = factorEntry.ranges.filter(r => r.row !== row);
+        row.remove();
+      });
+
+      grid.appendChild(minInput);
+      grid.appendChild(maxInput);
+      grid.appendChild(levelInput);
+      grid.appendChild(descInput);
+      grid.appendChild(btnRemove);
+
+      row.appendChild(grid);
+      factorEntry.rangesContainer.appendChild(row);
+
+      factorEntry.ranges.push({ minInput, maxInput, levelInput, descInput, row });
+    }
+    
     // ========== STATE ==========
     const state = { questions: [], factors: [] };
     let questionIdCounter = 1;
     let existingTestIds = [];
+    let existingCreatedAt = null; // Store createdAt for edit mode
 
     // ========== EDIT MODE DETECTION ==========
     const urlParams = new URLSearchParams(window.location.search);
@@ -260,6 +1117,9 @@
       content.classList.toggle('collapsed');
       this.textContent = content.classList.contains('collapsed') ? '▶' : '▼';
     });
+    
+    // Auto quartile button
+    document.getElementById('btn-auto-quartile').addEventListener('click', generateAutoQuartileFactor);
 
     // ========== HELPERS ==========
     function updateCounts() {
@@ -339,6 +1199,7 @@
         instructions: get('test-instr'),
         estimatedTime: get('est-time') || undefined,
         questionCount: state.questions.length,
+        createdAt: existingCreatedAt || new Date().toISOString(), // Preserve existing or create new timestamp
         questions: state.questions.map(q => ({
           id: q.id,
           title: q.titleInput.value.trim(),
@@ -349,13 +1210,16 @@
           })),
           min: q.minInput?.value ? Number(q.minInput.value) : undefined,
           max: q.maxInput?.value ? Number(q.maxInput.value) : undefined,
-          step: q.stepInput?.value ? Number(q.stepInput.value) : undefined
+          step: q.stepInput?.value ? Number(q.stepInput.value) : undefined,
+          weight: q.pesoInput ? Number(q.pesoInput.value) || 1 : 1,
+          reverse: q.reversaCheckbox ? q.reversaCheckbox.checked : false
         })),
         scoring: {
           min: 0,
           max: state.questions.reduce((sum, q) => {
             const qMax = Math.max(...(q.options || []).map(o => Number(o.valueInput?.value || 0)), 0);
-            return sum + qMax;
+            const weight = q.pesoInput ? Number(q.pesoInput.value) || 1 : 1;
+            return sum + (qMax * weight);
           }, 0),
           factors: state.factors.map(f => ({
             id: f.idInput.value.trim() || slugify(f.nameInput.value),
@@ -401,6 +1265,60 @@
       titleInput.placeholder = 'Ex: Como você tem se sentido nas últimas 2 semanas?';
       titleInput.value = data?.title || '';
       titleField.appendChild(titleInput);
+
+      // Peso and Reversa fields
+      const metaGrid = document.createElement('div');
+      metaGrid.style.cssText = 'display: grid; grid-template-columns: 150px 150px; gap: 1rem; margin-bottom: 1rem;';
+      
+      const pesoField = document.createElement('div');
+      pesoField.className = 'field';
+      pesoField.style.marginBottom = '0';
+      pesoField.innerHTML = '<label>Peso</label>';
+      const pesoInput = document.createElement('input');
+      pesoInput.type = 'number';
+      pesoInput.min = '1';
+      pesoInput.value = data?.weight || 1;
+      pesoInput.style.width = '100%';
+      pesoField.appendChild(pesoInput);
+      
+      const reversaField = document.createElement('div');
+      reversaField.className = 'field';
+      reversaField.style.marginBottom = '0';
+      reversaField.innerHTML = `<label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;"><input type="checkbox" id="rev-${qId}" style="width: auto; cursor: pointer;"> Reversa</label>`;
+      const reversaCheckbox = reversaField.querySelector('input');
+      reversaCheckbox.checked = data?.reverse || false;
+      
+      metaGrid.appendChild(pesoField);
+      metaGrid.appendChild(reversaField);
+      
+      // Update badges when peso/reversa change
+      function updateBadges() {
+        // Remove existing badges
+        title.querySelectorAll('span').forEach(s => s.remove());
+        
+        // Add reverse badge if checked
+        if (reversaCheckbox.checked) {
+          const reverseTag = document.createElement('span');
+          reverseTag.style.cssText = 'margin-left: 0.5rem; padding: 0.2rem 0.5rem; background: #ff6b6b; color: white; font-size: 0.75rem; border-radius: 4px; font-weight: 600;';
+          reverseTag.textContent = 'REVERSA';
+          title.appendChild(reverseTag);
+        }
+        
+        // Add weight badge if > 1
+        const peso = Number(pesoInput.value) || 1;
+        if (peso > 1) {
+          const weightTag = document.createElement('span');
+          weightTag.style.cssText = 'margin-left: 0.5rem; padding: 0.2rem 0.5rem; background: #4dabf7; color: white; font-size: 0.75rem; border-radius: 4px; font-weight: 600;';
+          weightTag.textContent = `PESO ${peso}x`;
+          title.appendChild(weightTag);
+        }
+      }
+      
+      pesoInput.addEventListener('input', updateBadges);
+      reversaCheckbox.addEventListener('change', updateBadges);
+      
+      // Call once to set initial state
+      updateBadges();
 
       // Type select
       const typeField = document.createElement('div');
@@ -465,6 +1383,8 @@
         minInput,
         maxInput,
         stepInput,
+        pesoInput,
+        reversaCheckbox,
         card
       };
 
@@ -506,7 +1426,9 @@
           })),
           min: minInput?.value,
           max: maxInput?.value,
-          step: stepInput?.value
+          step: stepInput?.value,
+          weight: pesoInput?.value,
+          reverse: reversaCheckbox?.checked
         });
       });
 
@@ -530,6 +1452,7 @@
       // Assemble card
       card.appendChild(header);
       card.appendChild(titleField);
+      card.appendChild(metaGrid);
       card.appendChild(typeField);
       card.appendChild(optionsContainer);
       card.appendChild(scaleContainer);
@@ -820,6 +1743,9 @@
       qList.innerHTML = '';
       fList.innerHTML = '';
 
+      // Store existing createdAt timestamp
+      existingCreatedAt = data.createdAt || null;
+
       // Load basic info (temporarily enable ID field to set value)
       const idField = document.getElementById('test-id');
       idField.removeAttribute('readonly');
@@ -1004,79 +1930,111 @@
     document.getElementById('btn-add-question').addEventListener('click', () => addQuestion());
     document.getElementById('btn-add-factor').addEventListener('click', () => addFactor());
 
+    // Clear factors link (after import)
+    document.getElementById('clear-factors-link').addEventListener('click', (e) => {
+      e.preventDefault();
+      if (confirm('Tem certeza que deseja limpar todos os fatores gerados automaticamente?')) {
+        state.factors = [];
+        fList.innerHTML = '<div class=\"empty-state\"><div class=\"empty-state-icon\">📊</div><p>Nenhum fator adicionado.</p></div>';
+        document.getElementById('import-info').style.display = 'none';
+        updateCounts();
+      }
+    });
+
+    // Import button
+    document.getElementById('btn-import-questions').addEventListener('click', openImportModal);
+    document.getElementById('btn-cancel-import').addEventListener('click', closeImportModal);
+    
+    // Import data textarea listener
+    document.getElementById('import-data').addEventListener('input', previewImportData);
+    
+    // Close modal on overlay click
+    document.getElementById('import-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'import-modal') {
+        closeImportModal();
+      }
+    });
+
     // Exemplo rápido
     const sampleData = {
-      id: 'gad_123',
-      title: 'titulo do teste -GAD',
-      description: 'Descricao aqui',
+      id: 'oci_exemplo',
+      title: 'Inventário Obsessivo-Compulsivo - OCI',
+      description: 'Avalia sintomas obsessivo-compulsivos em diferentes dimensões',
       tag: 'Ansiedade',
       category: 'para-voce',
-      videoUrl: 'https://luisfca.wistia.com/medias/r9ja6ay4hi',
-      articleUrl: 'https://www.google.com.br',
+      videoUrl: '',
+      articleUrl: '',
       featured: false,
       curadoria: false,
       testType: 'questionnaire',
       visibility: 'public',
       isPremium: false,
-      instructions: 'Instrucoes aqui',
-      estimatedTime: '10 minutos',
+      instructions: 'Leia cada afirmação e indique o quanto ela se aplica a você.',
+      estimatedTime: '5-10 minutos',
       questions: [
-        {
-          id: 1,
-          title: 'Eu tenho acumulado tantas coisas que elas já estão me atrapalhando',
-          type: 'likert',
-          options: [
-            { value: 0, text: '0 nem um pouco' },
-            { value: 1, text: '1 Um pouco' },
-            { value: 2, text: '2 Moderadamente' },
-            { value: 3, text: '3 Muito' },
-            { value: 4, text: '4 Extremamente' }
-          ]
-        },
-        {
-          id: 2,
-          title: 'Eu verifico coisas mais vezes do que é necessário',
-          type: 'likert',
-          options: [
-            { value: 0, text: '0 nem um pouco' },
-            { value: 1, text: '1 Um pouco' },
-            { value: 2, text: '2 Moderadamente' },
-            { value: 3, text: '3 Muito' },
-            { value: 4, text: '4 Extremamente' }
-          ]
-        },
-        {
-          id: 3,
-          title: 'Eu fico chateado se os objetos não estão arrumados corretamente',
-          type: 'likert',
-          options: [
-            { value: 0, text: '0 nem um pouco' },
-            { value: 1, text: '1 Um pouco' },
-            { value: 2, text: '2 Moderadamente' },
-            { value: 3, text: '3 Muito' },
-            { value: 4, text: '4 Extremamente' }
-          ]
-        }
+        { id: 1, title: 'Eu tenho acumulado tantas coisas que elas já estão me atrapalhando.', type: 'likert', weight: 1, reverse: false, options: [{ value: 1, text: 'Discordo totalmente' }, { value: 2, text: 'Discordo parcialmente' }, { value: 3, text: 'Nem concordo nem discordo' }, { value: 4, text: 'Concordo parcialmente' }, { value: 5, text: 'Concordo totalmente' }] },
+        { id: 2, title: 'Eu verifico coisas mais vezes do que é necessário.', type: 'likert', weight: 1, reverse: false, options: [{ value: 1, text: 'Discordo totalmente' }, { value: 2, text: 'Discordo parcialmente' }, { value: 3, text: 'Nem concordo nem discordo' }, { value: 4, text: 'Concordo parcialmente' }, { value: 5, text: 'Concordo totalmente' }] },
+        { id: 3, title: 'Eu fico chateado se os objetos não estão arrumados corretamente.', type: 'likert', weight: 1, reverse: true, options: [{ value: 1, text: 'Discordo totalmente' }, { value: 2, text: 'Discordo parcialmente' }, { value: 3, text: 'Nem concordo nem discordo' }, { value: 4, text: 'Concordo parcialmente' }, { value: 5, text: 'Concordo totalmente' }] },
+        { id: 4, title: 'Eu sinto vontade de contar enquanto estou fazendo coisas.', type: 'likert', weight: 1, reverse: false, options: [{ value: 1, text: 'Discordo totalmente' }, { value: 2, text: 'Discordo parcialmente' }, { value: 3, text: 'Nem concordo nem discordo' }, { value: 4, text: 'Concordo parcialmente' }, { value: 5, text: 'Concordo totalmente' }] },
+        { id: 5, title: 'Eu sinto dificuldade em tocar um objeto se sei que este já foi tocado por estranhos ou por certas pessoas.', type: 'likert', weight: 1, reverse: false, options: [{ value: 1, text: 'Discordo totalmente' }, { value: 2, text: 'Discordo parcialmente' }, { value: 3, text: 'Nem concordo nem discordo' }, { value: 4, text: 'Concordo parcialmente' }, { value: 5, text: 'Concordo totalmente' }] },
+        { id: 6, title: 'Eu tenho dificuldades em controlar meus próprios pensamentos.', type: 'likert', weight: 1, reverse: false, options: [{ value: 1, text: 'Discordo totalmente' }, { value: 2, text: 'Discordo parcialmente' }, { value: 3, text: 'Nem concordo nem discordo' }, { value: 4, text: 'Concordo parcialmente' }, { value: 5, text: 'Concordo totalmente' }] },
+        { id: 7, title: 'Eu coleciono coisas de que não preciso.', type: 'likert', weight: 1, reverse: false, options: [{ value: 1, text: 'Discordo totalmente' }, { value: 2, text: 'Discordo parcialmente' }, { value: 3, text: 'Nem concordo nem discordo' }, { value: 4, text: 'Concordo parcialmente' }, { value: 5, text: 'Concordo totalmente' }] },
+        { id: 8, title: 'Eu verifico repetidamente as portas, janelas, gavetas, etc.', type: 'likert', weight: 1, reverse: false, options: [{ value: 1, text: 'Discordo totalmente' }, { value: 2, text: 'Discordo parcialmente' }, { value: 3, text: 'Nem concordo nem discordo' }, { value: 4, text: 'Concordo parcialmente' }, { value: 5, text: 'Concordo totalmente' }] },
+        { id: 9, title: 'Eu fico chateado se outras pessoas mudam as coisas que arrumei.', type: 'likert', weight: 1, reverse: false, options: [{ value: 1, text: 'Discordo totalmente' }, { value: 2, text: 'Discordo parcialmente' }, { value: 3, text: 'Nem concordo nem discordo' }, { value: 4, text: 'Concordo parcialmente' }, { value: 5, text: 'Concordo totalmente' }] },
+        { id: 10, title: 'Eu sinto necessidade de repetir certos números.', type: 'likert', weight: 1, reverse: false, options: [{ value: 1, text: 'Discordo totalmente' }, { value: 2, text: 'Discordo parcialmente' }, { value: 3, text: 'Nem concordo nem discordo' }, { value: 4, text: 'Concordo parcialmente' }, { value: 5, text: 'Concordo totalmente' }] },
+        { id: 11, title: 'Às vezes tenho que me lavar simplesmente porque me sinto contaminado.', type: 'likert', weight: 1, reverse: false, options: [{ value: 1, text: 'Discordo totalmente' }, { value: 2, text: 'Discordo parcialmente' }, { value: 3, text: 'Nem concordo nem discordo' }, { value: 4, text: 'Concordo parcialmente' }, { value: 5, text: 'Concordo totalmente' }] },
+        { id: 12, title: 'Pensamentos desagradáveis que invadem minha mente contra a minha vontade me deixam chateado.', type: 'likert', weight: 1, reverse: false, options: [{ value: 1, text: 'Discordo totalmente' }, { value: 2, text: 'Discordo parcialmente' }, { value: 3, text: 'Nem concordo nem discordo' }, { value: 4, text: 'Concordo parcialmente' }, { value: 5, text: 'Concordo totalmente' }] },
+        { id: 13, title: 'Evito jogar coisas fora, pois tenho medo de precisar delas em outro momento.', type: 'likert', weight: 1, reverse: false, options: [{ value: 1, text: 'Discordo totalmente' }, { value: 2, text: 'Discordo parcialmente' }, { value: 3, text: 'Nem concordo nem discordo' }, { value: 4, text: 'Concordo parcialmente' }, { value: 5, text: 'Concordo totalmente' }] },
+        { id: 14, title: 'Eu verifico repetidamente o gás, as torneiras e os interruptores de luz após desligá-los.', type: 'likert', weight: 1, reverse: false, options: [{ value: 1, text: 'Discordo totalmente' }, { value: 2, text: 'Discordo parcialmente' }, { value: 3, text: 'Nem concordo nem discordo' }, { value: 4, text: 'Concordo parcialmente' }, { value: 5, text: 'Concordo totalmente' }] },
+        { id: 15, title: 'Eu necessito que as coisas estejam arrumadas em uma determinada ordem.', type: 'likert', weight: 1, reverse: false, options: [{ value: 1, text: 'Discordo totalmente' }, { value: 2, text: 'Discordo parcialmente' }, { value: 3, text: 'Nem concordo nem discordo' }, { value: 4, text: 'Concordo parcialmente' }, { value: 5, text: 'Concordo totalmente' }] },
+        { id: 16, title: 'Eu acredito que há números bons e ruins.', type: 'likert', weight: 1, reverse: false, options: [{ value: 1, text: 'Discordo totalmente' }, { value: 2, text: 'Discordo parcialmente' }, { value: 3, text: 'Nem concordo nem discordo' }, { value: 4, text: 'Concordo parcialmente' }, { value: 5, text: 'Concordo totalmente' }] },
+        { id: 17, title: 'Eu lavo as minhas mãos mais vezes que o necessário.', type: 'likert', weight: 1, reverse: false, options: [{ value: 1, text: 'Discordo totalmente' }, { value: 2, text: 'Discordo parcialmente' }, { value: 3, text: 'Nem concordo nem discordo' }, { value: 4, text: 'Concordo parcialmente' }, { value: 5, text: 'Concordo totalmente' }] },
+        { id: 18, title: 'Eu tenho pensamentos impróprios com frequência e tenho dificuldade em me livrar deles.', type: 'likert', weight: 1, reverse: false, options: [{ value: 1, text: 'Discordo totalmente' }, { value: 2, text: 'Discordo parcialmente' }, { value: 3, text: 'Nem concordo nem discordo' }, { value: 4, text: 'Concordo parcialmente' }, { value: 5, text: 'Concordo totalmente' }] }
       ],
       scoring: {
         factors: [
           {
             id: 'fator-geral',
-            name: 'Fator Geral de Ansiedade',
-            questionIds: [1, 2, 3],
+            name: 'Fator Geral',
+            questionIds: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
             ranges: [
-              { min: 0, max: 10, level: 'Baixo', description: 'Este é um nível baixo' },
-              { min: 11, max: 12, level: 'Alto', description: 'Este é um nível alto' }
+              { min: 18, max: 31, level: 'Baixo', description: 'Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **baixo**.' },
+              { min: 32, max: 45, level: 'Médio', description: 'Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **médio**.' },
+              { min: 46, max: 59, level: 'Alto', description: 'Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **alto**.' },
+              { min: 60, max: 100, level: 'Muito Alto', description: 'Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **muito alto**.' }
             ]
           },
           {
             id: 'ansiedade-reativa',
             name: 'Ansiedade Reativa',
-            questionIds: [1, 2],
+            questionIds: [1, 7, 8, 9, 10, 16, 17, 18],
             ranges: [
-              { min: 0, max: 1, level: 'Baixo', description: 'Este é um nível baixo' },
-              { min: 2, max: 3, level: 'Alto', description: 'Este é um nível alto' },
-              { min: 4, max: 4, level: 'Muito Alto', description: 'Este é um nível bem alto' }
+              { min: 8, max: 14, level: 'Baixo', description: 'Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **baixo**.' },
+              { min: 15, max: 21, level: 'Médio', description: 'Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **médio**.' },
+              { min: 22, max: 28, level: 'Alto', description: 'Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **alto**.' },
+              { min: 29, max: 40, level: 'Muito Alto', description: 'Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **muito alto**.' }
+            ]
+          },
+          {
+            id: 'ansiedade-saudavel',
+            name: 'Ansiedade Saudável',
+            questionIds: [2, 3, 4, 5, 6],
+            ranges: [
+              { min: 5, max: 9, level: 'Baixo', description: 'Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **baixo**.' },
+              { min: 10, max: 14, level: 'Médio', description: 'Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **médio**.' },
+              { min: 15, max: 19, level: 'Alto', description: 'Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **alto**.' },
+              { min: 20, max: 35, level: 'Muito Alto', description: 'Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **muito alto**.' }
+            ]
+          },
+          {
+            id: 'ansiedade-cumulativa',
+            name: 'Ansiedade Cumulativa',
+            questionIds: [11, 12, 13, 14, 15],
+            ranges: [
+              { min: 5, max: 9, level: 'Baixo', description: 'Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **baixo**.' },
+              { min: 10, max: 14, level: 'Médio', description: 'Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **médio**.' },
+              { min: 15, max: 19, level: 'Alto', description: 'Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **alto**.' },
+              { min: 20, max: 25, level: 'Muito Alto', description: 'Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **muito alto**.' }
             ]
           }
         ]
@@ -1146,9 +2104,20 @@
           const max = q.max ?? 10;
           let value;
           
-          if (scenario === 'min') {
+          // Account for reverse scoring
+          const isReversed = q.reverse === true;
+          let effectiveScenario = scenario;
+          
+          // Invert scenario for reversed questions
+          if (isReversed && scenario === 'min') {
+            effectiveScenario = 'max';
+          } else if (isReversed && scenario === 'max') {
+            effectiveScenario = 'min';
+          }
+          
+          if (effectiveScenario === 'min') {
             value = min;
-          } else if (scenario === 'max') {
+          } else if (effectiveScenario === 'max') {
             value = max;
           } else if (scenario === 'mid') {
             value = Math.floor((min + max) / 2);
@@ -1169,12 +2138,23 @@
           
           let selectedOption;
           
-          if (scenario === 'min') {
+          // Account for reverse scoring
+          const isReversed = q.reverse === true;
+          let effectiveScenario = scenario;
+          
+          // Invert scenario for reversed questions
+          if (isReversed && scenario === 'min') {
+            effectiveScenario = 'max';
+          } else if (isReversed && scenario === 'max') {
+            effectiveScenario = 'min';
+          }
+          
+          if (effectiveScenario === 'min') {
             // Select option with minimum value
             selectedOption = options.reduce((min, opt) => 
               (Number(opt.value) < Number(min.value)) ? opt : min
             );
-          } else if (scenario === 'max') {
+          } else if (effectiveScenario === 'max') {
             // Select option with maximum value
             selectedOption = options.reduce((max, opt) => 
               (Number(opt.value) > Number(max.value)) ? opt : max
