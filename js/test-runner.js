@@ -364,6 +364,7 @@
               </div>
               <span class="factor-max">${maxScore}</span>
             </div>
+            ${f.description ? `<div class="factor-interpretation">${formatMarkdown(f.description)}</div>` : ''}
           `;
           factorsList.appendChild(item);
           requestAnimationFrame(() => {

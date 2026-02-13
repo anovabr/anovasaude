@@ -17,24 +17,20 @@ function injectSharedPages() {
 
       <!-- FACTORS BAR CHART -->
       <div id="factors-chart" style="display:none; margin-bottom:2rem;">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
-          <h3 style="margin-bottom:0;">Fatores Avaliados</h3>
-          <div>
-            <button type="button" class="btn btn-secondary btn-small chart-toggle active" data-view="bars">Barras</button>
-            <button type="button" class="btn btn-secondary btn-small chart-toggle" data-view="radar">Radar</button>
-          </div>
+        <h3 style="margin-bottom:1rem;">Fatores Avaliados</h3>
+        <div style="max-width:900px;margin:0 auto;">
+          <canvas id="factors-canvas-bars" style="max-height:400px;width:100%;"></canvas>
         </div>
-        <canvas id="factors-canvas-bars" style="max-height:300px; margin-top:1rem;"></canvas>
-        <canvas id="factors-canvas-radar" style="max-height:340px; margin-top:1rem; display:none;"></canvas>
         <div id="chart-tooltip" class="chart-tooltip" style="display:none;"></div>
       </div>
 
       <!-- FACTORS BREAKDOWN (if multiple) -->
       <div id="factors-breakdown" class="result-answers" style="display:none;">
         <h3>Detalhamento por Fator</h3>
-        <p class="factor-note">Estes resultados indicam os pontos brutos obtidos e sua relação com os valores mínimo e máximo 
+        <p class="factor-note">Estes resultados indicam seus pontos brutos obtidos e a relação deles com os valores mínimo e máximo 
         possíveis. Eles não possuem transformações psicométricas padronizadas, como pontos ponderados, Z-scores, T-scores ou percentis.
-        Assim, a única interpretação possível é descritiva, sendo útil para transparência dos resultados, comparação intra-instrumento e acompanhamento longitudinal, não devendo ser interpretada como medida normativa ou diagnóstica.</p>
+        Assim, a única interpretação possível é descritiva, sendo útil para transparência dos resultados, comparação intra-instrumento e 
+        acompanhamento longitudinal. Estes resultados não devem ser interpretados como diagnóstico em nenhum caso.</p>
         <div id="factors-list"></div>
       </div>
 
@@ -51,16 +47,16 @@ function injectSharedPages() {
         <p><span class="result-symbol" aria-hidden="true">❖</span>Este material <span class="highlight-marker">não possui valor jurídico</span> e não constitui documento psicológico, não se enquadrando entre aqueles previstos na Resolução CFP nº 06/2019.
         <br><span class="result-symbol" aria-hidden="true">❖</span>É possível que <span class="highlight-marker">um psicólogo da equipe</span> tenha acesso aos 
         seus resultados e faça um relatório técnico sobre eles, explicando de maneira mais detalhada e precisa.  
-        <br><span class="result-symbol" aria-hidden="true">❖</span>Caso você tenha esse interesse <button class="interpretation-link highlight-marker" style="border:none;text-decoration:none;cursor:pointer;padding:0;font:inherit;background:transparent;font-weight:bold;">clique em "Quero interpretação humana"</button>. 
+        <br><span class="result-symbol" aria-hidden="true">❖</span>Caso você tenha esse interesse, clique em <button class="interpretation-link highlight-marker" style="border:none;text-decoration:none;cursor:pointer;padding:0;font:inherit;background:transparent;font-weight:bold;">"Quero interpretação humana"</button>. 
         Você irá deverá preenher algumas informações extras, poderá fazer novos testes e irá pagar uma taxa de serviço. 
         Após 2 dias úteis, um documento técnico será enviado para você via e-mail ou whatsapp por um acesso seguro.</p>
 
       </div>
 
       <div class="test-navigation">
-        <div id="test-resources-btns" style="display:flex;gap:0.75rem;flex-wrap:wrap;"></div>
-        <button type="button" id="download-pdf-btn" class="btn btn-secondary btn-small">Baixar PDF</button>
         <button type="button" id="results-back-btn" class="btn btn-secondary btn-small">Voltar</button>
+        <div id="test-resources-btns" style="display:contents;"></div>
+        <button type="button" id="download-pdf-btn" class="btn btn-secondary btn-small">Baixar PDF</button>
         <button id="interpretation-btn" class="btn btn-primary btn-small">Quero Interpretação Humana</button>
       </div>
     </div>
@@ -453,7 +449,6 @@ function injectSharedPages() {
 }
 
 // Render bar chart for factors
-let currentChartView = 'bars';
 let barHitboxes = [];
 
 window.renderFactorsChart = function(factors) {
@@ -464,14 +459,6 @@ window.renderFactorsChart = function(factors) {
   chartDiv.style.display = 'block';
 
   renderBarsChart(factors);
-  renderRadarChart(factors);
-
-  const barsCanvas = document.getElementById('factors-canvas-bars');
-  const radarCanvas = document.getElementById('factors-canvas-radar');
-  if (barsCanvas && radarCanvas) {
-    barsCanvas.style.display = currentChartView === 'bars' ? 'block' : 'none';
-    radarCanvas.style.display = currentChartView === 'radar' ? 'block' : 'none';
-  }
 };
 
 function renderBarsChart(factors) {
@@ -485,13 +472,14 @@ function renderBarsChart(factors) {
 
   const rect = canvas.getBoundingClientRect();
   canvas.width = Math.max(520, Math.floor(rect.width || 800));
-  canvas.height = 360;
+  canvas.height = 400;
 
   const width = canvas.width;
   const height = canvas.height;
   const padding = 60;
+  const bottomPadding = 90; // Extra space for multi-line labels
   const barSpacing = 20;
-  const chartHeight = height - padding * 2;
+  const chartHeight = height - padding - bottomPadding;
   const chartWidth = width - padding * 2;
   const barWidth = (width - padding * 2 - barSpacing * (factors.length - 1)) / factors.length;
 
@@ -528,11 +516,31 @@ function renderBarsChart(factors) {
   ctx.lineTo(padding + chartWidth, padding + chartHeight);
   ctx.stroke();
 
+  // Helper function to wrap text
+  function wrapText(text, maxWidth) {
+    const words = text.split(' ');
+    const lines = [];
+    let currentLine = words[0];
+
+    for (let i = 1; i < words.length; i++) {
+      const testLine = currentLine + ' ' + words[i];
+      const metrics = ctx.measureText(testLine);
+      if (metrics.width > maxWidth) {
+        lines.push(currentLine);
+        currentLine = words[i];
+      } else {
+        currentLine = testLine;
+      }
+    }
+    lines.push(currentLine);
+    return lines;
+  }
+
   factors.forEach((f, i) => {
     const x = padding + i * (barWidth + barSpacing);
     const pct = (f.score || 0) / maxScore;
     const barHeight = pct * chartHeight;
-    const y = height - padding - barHeight;
+    const y = padding + chartHeight - barHeight;
 
     if (theme === 'bw') {
       ctx.fillStyle = '#1a4d2e';
@@ -549,10 +557,16 @@ function renderBarsChart(factors) {
     ctx.textAlign = 'center';
     ctx.fillText(`${f.score || 0}/${f.maxScore || maxScore}`, x + barWidth / 2, y - 8);
 
+    // Draw wrapped label below chart
     ctx.fillStyle = labelColor;
-    ctx.font = '600 12px sans-serif';
-    const label = labels[i].length > 12 ? labels[i].slice(0, 12) + '...' : labels[i];
-    ctx.fillText(label, x + barWidth / 2, height - padding + 20);
+    ctx.font = '600 11px sans-serif';
+    ctx.textAlign = 'center';
+    const labelLines = wrapText(labels[i], barWidth - 4);
+    const lineHeight = 14;
+    const startY = padding + chartHeight + 20;
+    labelLines.forEach((line, lineIdx) => {
+      ctx.fillText(line, x + barWidth / 2, startY + lineIdx * lineHeight);
+    });
 
     barHitboxes.push({
       x,
@@ -593,104 +607,6 @@ function renderBarsChart(factors) {
     };
   }
 }
-
-function renderRadarChart(factors) {
-  const canvas = document.getElementById('factors-canvas-radar');
-  if (!canvas) return;
-
-  const ctx = canvas.getContext('2d');
-  canvas.width = Math.max(360, Math.floor(canvas.getBoundingClientRect().width || 420));
-  canvas.height = 360;
-
-  const width = canvas.width;
-  const height = canvas.height;
-  const centerX = width / 2;
-  const centerY = height / 2;
-  const radius = Math.min(width, height) / 2 - 60;
-  const angleStep = (Math.PI * 2) / factors.length;
-
-  ctx.clearRect(0, 0, width, height);
-
-  const theme = 'bw';
-  const gridColor = theme === 'bw' ? '#d9d9d9' : '#dcd2c7';
-  const lineColor = theme === 'bw' ? '#2b2b2b' : '#154427';
-  const fillColor = theme === 'bw' ? 'rgba(26, 77, 46, 0.18)' : 'rgba(26, 77, 46, 0.3)';
-  const labelColor = theme === 'bw' ? '#2b2b2b' : '#1f1f1f';
-  const subLabelColor = theme === 'bw' ? '#5a5a5a' : '#3f3f3f';
-
-  ctx.strokeStyle = gridColor;
-  ctx.lineWidth = 1;
-  [0.25, 0.5, 0.75, 1].forEach(r => {
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, radius * r, 0, Math.PI * 2);
-    ctx.stroke();
-  });
-
-  ctx.strokeStyle = gridColor;
-  factors.forEach((f, i) => {
-    const angle = i * angleStep - Math.PI / 2;
-    const x = centerX + Math.cos(angle) * radius;
-    const y = centerY + Math.sin(angle) * radius;
-    ctx.beginPath();
-    ctx.moveTo(centerX, centerY);
-    ctx.lineTo(x, y);
-    ctx.stroke();
-  });
-
-  ctx.beginPath();
-  ctx.fillStyle = fillColor;
-  ctx.strokeStyle = lineColor;
-  ctx.lineWidth = 2.5;
-
-  factors.forEach((f, i) => {
-    const angle = i * angleStep - Math.PI / 2;
-    const pct = (f.score || 0) / (f.maxScore || 1);
-    const r = radius * pct;
-    const x = centerX + Math.cos(angle) * r;
-    const y = centerY + Math.sin(angle) * r;
-
-    if (i === 0) ctx.moveTo(x, y);
-    else ctx.lineTo(x, y);
-  });
-  ctx.closePath();
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.fillStyle = labelColor;
-  ctx.font = '600 11.5px sans-serif';
-  ctx.textAlign = 'center';
-
-  factors.forEach((f, i) => {
-    const angle = i * angleStep - Math.PI / 2;
-    const labelRadius = radius + 30;
-    const x = centerX + Math.cos(angle) * labelRadius;
-    const y = centerY + Math.sin(angle) * labelRadius;
-
-    const label = (f.name || f.id || '').length > 10 ? (f.name || f.id || '').slice(0, 10) + '...' : (f.name || f.id || '');
-    ctx.fillText(label, x, y);
-    ctx.font = '600 10px sans-serif';
-    ctx.fillStyle = subLabelColor;
-    ctx.fillText(`${f.score || 0}/${f.maxScore || 0}`, x, y + 12);
-    ctx.font = 'bold 11px sans-serif';
-    ctx.fillStyle = labelColor;
-  });
-}
-
-document.addEventListener('click', (e) => {
-  const btn = e.target.closest('.chart-toggle');
-  if (!btn) return;
-  const view = btn.dataset.view;
-  currentChartView = view;
-  document.querySelectorAll('.chart-toggle').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  const barsCanvas = document.getElementById('factors-canvas-bars');
-  const radarCanvas = document.getElementById('factors-canvas-radar');
-  if (barsCanvas && radarCanvas) {
-    barsCanvas.style.display = view === 'bars' ? 'block' : 'none';
-    radarCanvas.style.display = view === 'radar' ? 'block' : 'none';
-  }
-});
-
 
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", injectSharedPages);

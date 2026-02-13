@@ -4,6 +4,8 @@
   "description": "",
   "tag": "",
   "category": "para-seu-filho",
+  "articleUrl": "www.google.com",
+  "videoUrl": "https://www.youtube.com/watch?v=FZ651tNXp0Y&list=RDl3MeP4t4qHE&index=27",
   "featured": true,
   "curadoria": false,
   "testType": "questionnaire",
@@ -39,6 +41,9 @@
           "text": "Concordo totalmente"
         }
       ],
+      "min": 0,
+      "max": 10,
+      "step": 1,
       "weight": 1,
       "reverse": false
     },
@@ -68,6 +73,9 @@
           "text": "Concordo totalmente"
         }
       ],
+      "min": 0,
+      "max": 10,
+      "step": 1,
       "weight": 1,
       "reverse": false
     },
@@ -97,6 +105,9 @@
           "text": "Concordo totalmente"
         }
       ],
+      "min": 0,
+      "max": 10,
+      "step": 1,
       "weight": 1,
       "reverse": true
     },
@@ -126,6 +137,9 @@
           "text": "Concordo totalmente"
         }
       ],
+      "min": 0,
+      "max": 10,
+      "step": 1,
       "weight": 1,
       "reverse": false
     },
@@ -155,6 +169,9 @@
           "text": "Concordo totalmente"
         }
       ],
+      "min": 0,
+      "max": 10,
+      "step": 1,
       "weight": 1,
       "reverse": false
     },
@@ -184,6 +201,9 @@
           "text": "Concordo totalmente"
         }
       ],
+      "min": 0,
+      "max": 10,
+      "step": 1,
       "weight": 1,
       "reverse": false
     },
@@ -213,6 +233,9 @@
           "text": "Concordo totalmente"
         }
       ],
+      "min": 0,
+      "max": 10,
+      "step": 1,
       "weight": 1,
       "reverse": false
     },
@@ -242,6 +265,9 @@
           "text": "Concordo totalmente"
         }
       ],
+      "min": 0,
+      "max": 10,
+      "step": 1,
       "weight": 1,
       "reverse": false
     },
@@ -271,6 +297,9 @@
           "text": "Concordo totalmente"
         }
       ],
+      "min": 0,
+      "max": 10,
+      "step": 1,
       "weight": 1,
       "reverse": false
     },
@@ -300,6 +329,9 @@
           "text": "Concordo totalmente"
         }
       ],
+      "min": 0,
+      "max": 10,
+      "step": 1,
       "weight": 1,
       "reverse": false
     },
@@ -329,6 +361,9 @@
           "text": "Concordo totalmente"
         }
       ],
+      "min": 0,
+      "max": 10,
+      "step": 1,
       "weight": 1,
       "reverse": false
     },
@@ -358,6 +393,9 @@
           "text": "Concordo totalmente"
         }
       ],
+      "min": 0,
+      "max": 10,
+      "step": 1,
       "weight": 1,
       "reverse": false
     },
@@ -387,6 +425,9 @@
           "text": "Concordo totalmente"
         }
       ],
+      "min": 0,
+      "max": 10,
+      "step": 1,
       "weight": 1,
       "reverse": false
     },
@@ -416,6 +457,9 @@
           "text": "Concordo totalmente"
         }
       ],
+      "min": 0,
+      "max": 10,
+      "step": 1,
       "weight": 1,
       "reverse": false
     },
@@ -445,6 +489,9 @@
           "text": "Concordo totalmente"
         }
       ],
+      "min": 0,
+      "max": 10,
+      "step": 1,
       "weight": 1,
       "reverse": false
     },
@@ -474,6 +521,9 @@
           "text": "Concordo totalmente"
         }
       ],
+      "min": 0,
+      "max": 10,
+      "step": 1,
       "weight": 1,
       "reverse": false
     },
@@ -503,6 +553,9 @@
           "text": "Concordo totalmente"
         }
       ],
+      "min": 0,
+      "max": 10,
+      "step": 1,
       "weight": 1,
       "reverse": false
     },
@@ -532,6 +585,9 @@
           "text": "Concordo totalmente"
         }
       ],
+      "min": 0,
+      "max": 10,
+      "step": 1,
       "weight": 1,
       "reverse": false
     }

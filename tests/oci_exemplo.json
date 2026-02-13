@@ -4,6 +4,8 @@
   "description": "Avalia sintomas obsessivo-compulsivos em diferentes dimensões",
   "tag": "Ansiedade",
   "category": "para-voce",
+  "articleUrl": "http://google.com/",
+  "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   "featured": false,
   "curadoria": false,
   "testType": "questionnaire",
