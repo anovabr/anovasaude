@@ -379,6 +379,26 @@ function injectSharedPages() {
         return;
       }
 
+      const emailEl = document.getElementById('email');
+      const emailValue = (emailEl?.value || '').trim();
+      if (!emailValue) {
+        if (emailEl) {
+          emailEl.style.backgroundColor = '#ffeeba';
+          setTimeout(() => { emailEl.style.backgroundColor = ''; }, 700);
+          emailEl.focus();
+        }
+        return;
+      }
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(emailValue)) {
+        if (emailEl) {
+          emailEl.style.backgroundColor = '#ffeeba';
+          setTimeout(() => { emailEl.style.backgroundColor = ''; }, 700);
+          emailEl.focus();
+        }
+        return;
+      }
+
       const testId = (window.location.pathname.split('/').pop() || '').replace('.html','');
       let answers = [];
       if (typeof Storage !== 'undefined') {
