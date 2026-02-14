@@ -577,6 +577,55 @@
             transition: all 0.3s ease;
         }
 
+        .response-card--sent {
+            background: #f7f7f7;
+            border-color: #d0d0d0;
+        }
+
+        .response-card--sent .response-card-title h4 {
+            text-decoration: line-through;
+            color: #666;
+        }
+
+        /* Financeiro table */
+        .finance-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 13px;
+        }
+
+        .finance-table th {
+            background: #f0f0f0;
+            padding: 10px;
+            text-align: left;
+            font-weight: 600;
+            color: #666;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .finance-table td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .finance-row--paid {
+            background: #f7f7f7;
+        }
+
+        .finance-payment {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        .finance-date {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+
         .response-card:hover {
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             transform: translateY(-1px);
@@ -875,8 +924,9 @@
                 <button class="sidebar-btn active" data-section="dashboard">◫ Dashboard</button>
                 <button class="sidebar-btn" data-section="tests">☰ Meus Testes</button>
                 <button class="sidebar-btn" data-section="create">⊕ Novo Teste</button>
+                <button class="sidebar-btn" data-section="analytics">◈ Avaliados</button>
                 <button class="sidebar-btn" data-section="financeiro">＄ Financeiro</button>
-                <button class="sidebar-btn" data-section="analytics">◈ Análises</button>
+                
             </div>
 
             <!-- Content Area -->
@@ -1033,6 +1083,17 @@
                     </div>
                     <button type="button" class="btn btn-primary" id="finance-save-btn">Salvar</button>
                     <p id="finance-status" style="margin-top:10px;color:#1a4d2e;display:none;"></p>
+                    <div style="margin-top: 20px;">
+                        <h3>Usuarios</h3>
+                        <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin:10px 0;">
+                            <div class="form-group" style="margin:0;max-width:200px;">
+                                <label for="finance-row-limit">Limite de linhas</label>
+                                <input type="number" id="finance-row-limit" min="0" placeholder="0 = todas">
+                            </div>
+                            <button type="button" class="btn btn-secondary" id="finance-apply-limit">Aplicar</button>
+                        </div>
+                        <div id="finance-users-table"></div>
+                    </div>
                 </div>
 
             </div>
@@ -1084,6 +1145,7 @@
         let currentTests = [];
         let currentEditId = null;
         let analyticsData = [];
+        let financeRowLimit = 0;
 
         // Google Sheets API Configuration
         const GOOGLE_SHEETS_API_BASE = 'https://script.google.com/macros/s/AKfycbw7do5dNnHkuD0HEedMMplOqC_6jnRL2tP3kiEMCeRxDRO4tI6iuuvPsN1GvoG85Gld/exec';
@@ -1139,6 +1201,14 @@
                     loadAnalytics();
                 }
 
+                if (section === 'financeiro') {
+                    if (analyticsData.length === 0) {
+                        loadAnalytics();
+                    } else {
+                        renderFinanceTable();
+                    }
+                }
+
                 // Reset iframe to create mode when clicking "+ Novo Teste"
                 if (section === 'create') {
                     const iframe = document.getElementById('test-builder-iframe');
@@ -1148,6 +1218,16 @@
                 }
             });
         });
+
+        const financeApplyBtn = document.getElementById('finance-apply-limit');
+        if (financeApplyBtn) {
+            financeApplyBtn.addEventListener('click', () => {
+                const input = document.getElementById('finance-row-limit');
+                const raw = input ? Number(input.value) : 0;
+                financeRowLimit = Number.isFinite(raw) && raw > 0 ? Math.floor(raw) : 0;
+                renderFinanceTable();
+            });
+        }
 
         // Edit form submission
         document.getElementById('edit-test-form').addEventListener('submit', async function (e) {
@@ -1379,6 +1459,9 @@
 
                 progressEl.textContent = 'Preparando visualização...';
                 renderAnalytics();
+                if (document.getElementById('section-financeiro')?.classList.contains('active')) {
+                    renderFinanceTable();
+                }
 
                 loadingEl.style.display = 'none';
                 contentEl.style.display = 'block';
@@ -1478,6 +1561,7 @@
                 const timestamp = response.timestamp ? new Date(response.timestamp).toLocaleString('pt-BR') : 'Sem data';
                 const testTitle = response.testTitle || response.testId || 'Teste não identificado';
                 const nome = response.nome || 'Anônimo';
+                const reportSent = (response.relatorio_enviado || "").toString().toLowerCase() === "sim";
                 
                 // Financial status
                 const usuarioStatus = response.usuario_status || 'novo';
@@ -1561,7 +1645,7 @@
                 `;
 
                 return `
-                    <div class="response-card">
+                    <div class="response-card${reportSent ? ' response-card--sent' : ''}">
                         <div class="response-card-header" onclick="toggleResponse(${idx})">
                             <div class="response-card-title">
                                 <h4>${testTitle} - ${nome} <span class="status-badge ${usuarioStatus}">${usuarioStatus === 'novo' ? '🆕 Novo' : '👥 Recorrente'}</span></h4>
@@ -1581,6 +1665,64 @@
                     </div>
                 `;
             }).join('');
+        }
+
+        function renderFinanceTable() {
+            const host = document.getElementById('finance-users-table');
+            if (!host) return;
+
+            if (!analyticsData || analyticsData.length === 0) {
+                host.innerHTML = '<p>Sem dados.</p>';
+                return;
+            }
+
+            const sorted = [...analyticsData].sort((a, b) =>
+                new Date(b.timestamp || 0) - new Date(a.timestamp || 0)
+            );
+
+            const rows = sorted.map((response, idx) => ({ response, idx }));
+            const limit = financeRowLimit > 0 ? Math.min(financeRowLimit, rows.length) : rows.length;
+            const limitedRows = rows.slice(0, limit);
+            if (!limitedRows.length) {
+                host.innerHTML = '<p>Sem dados.</p>';
+                return;
+            }
+
+            const tbody = limitedRows.map(({ response, idx }) => {
+                const name = response.nome || response.email || 'Anonimo';
+                const date = response.timestamp ? new Date(response.timestamp).toLocaleDateString('pt-BR') : 'Sem data';
+                const paid = (response.pagamento || '').toString().toLowerCase() === 'sim';
+                const paidDate = response.data_pagamento ? new Date(response.data_pagamento).toLocaleDateString('pt-BR') : '';
+
+                return `
+                    <tr class="${paid ? 'finance-row--paid' : ''}">
+                        <td>${name}</td>
+                        <td>${date}</td>
+                        <td>
+                            <label class="finance-payment">
+                                <input type="checkbox" ${paid ? 'checked' : ''} onchange="updateFinancial(${idx}, 'pagamento', this.checked)">
+                                <span>Pagamento</span>
+                            </label>
+                            ${paidDate ? `<div class="finance-date">${paidDate}</div>` : ''}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            host.innerHTML = `
+                <table class="finance-table">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Data da resposta</th>
+                            <th>Pagamento</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${tbody}
+                    </tbody>
+                </table>
+            `;
         }
 
         function toggleResponse(idx) {
@@ -1810,10 +1952,12 @@
                 
                 if (result.success) {
                     // Update UI
-                    if (checked) {
-                        finEl.classList.add('checked');
-                    } else {
-                        finEl.classList.remove('checked');
+                    if (finEl) {
+                        if (checked) {
+                            finEl.classList.add('checked');
+                        } else {
+                            finEl.classList.remove('checked');
+                        }
                     }
                     
                     // Update local data
@@ -1823,6 +1967,9 @@
                     
                     // Re-render to show date
                     renderResponseCards();
+                    if (typeof renderFinanceTable === 'function') {
+                        renderFinanceTable();
+                    }
                 } else {
                     alert('Erro ao salvar: ' + result.error);
                 }

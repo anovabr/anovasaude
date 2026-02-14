@@ -47,6 +47,7 @@
 
     <!-- Catálogo em Destaque -->
     <section id="testes" class="tests-section" style="padding-top: 2rem;">
+        <canvas class="signature-canvas" id="signature-canvas"></canvas>
         <div class="container">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 1rem;">
                 <h2 class="section-title">Catálogo de Testes</h2>
@@ -108,7 +109,7 @@
                     <div class="feature-icon">1</div>
                     <div>
                         <h3>Escolha seu Teste</h3>
-                        <p>Selecione entre diversos instrumentos validados cientificamente para avaliação de diferentes aspectos da saúde mental e personalidade.</p>
+                        <p>Selecione entre diversos instrumentos validados cientificamente para avaliação de diferentes aspectos da saúde mental.</p>
                     </div>
                 </div>
                 
@@ -116,7 +117,7 @@
                     <div class="feature-icon">2</div>
                     <div>
                         <h3>Complete a Avaliação</h3>
-                        <p>Responda às questões sem necessidade de criar login ou conta. Receba resultados automáticos imediatamente após a conclusão.</p>
+                        <p>Responda gratuitamente, sem necessidade login ou conta. Receba resultados em sua tela, com gráficos, tabelas, imediatamente após a conclusão.</p>
                     </div>
                 </div>
                 
@@ -124,7 +125,7 @@
                     <div class="feature-icon">3</div>
                     <div>
                         <h3>Interpretação Profissional</h3>
-                        <p>Caso queira, solicite uma análise detalhada elaborada pela nossa equipe, com insights personalizados e recomendações específicas.</p>
+                        <p>Caso queira, solicite uma análise detalhada elaborada por mim ou minha equipe, com recomendações específicas.</p>
                     </div>
                 </div>
             </div>
@@ -137,12 +138,15 @@
             <h2 class="section-title">Equipe</h2>
 
             <div class="team-grid">
-                <article class="team-card" data-name="Luis Anunciação" data-role="Psicólogo Clínico" data-bio="Especialista em avaliação psicológica e saúde mental comunitária. Atuação em atenção primária e pesquisa em rastreio de depressão.">
+                <article class="team-card team-card--lead" data-name="Luis Anunciação" data-role="Doutor em Psicologia (PUC-Rio)" data-bio="Especialista em avaliação psicológica e saúde mental comunitária. Atuação em atenção primária e pesquisa em rastreio de depressão.">
                     <img src="img/photo2_luis_2026.png" alt="Luis Anunciação" class="team-photo team-photo-img">
                     <div>
-                        <h3 class="team-name">Luis Anunciação</h3>
-                        <p class="team-role">Psicólogo Clínico</p>
-                        <p class="team-snippet">Avaliação psicológica, saúde pública.</p>
+                        <h3 class="team-name">Luis Anunciação <span class="team-badge">Líder</span></h3>
+                        <p class="team-role">Doutor em Psicologia</p>
+                        <p class="team-role">Mestre em Saúde Pública (UERJ)</p>
+                        <p class="team-role">Especialista em Neuropsicologia</p>
+                        <p class="team-snippet">Mais de 70 artigos publicados</p>
+                        <p class="team-snippet">Líder do Laboratório de Métodos e Medidas</p>
                     </div>
                 </article>
 
@@ -161,15 +165,6 @@
                         <h3 class="team-name">Person 3</h3>
                         <p class="team-role">Neuropsicólogo</p>
                         <p class="team-snippet">TDAH, neuropsicologia.</p>
-                    </div>
-                </article>
-
-                <article class="team-card" data-name="Person 4" data-role="Psicoterapeuta" data-bio="Especialista em terapia cognitivo-comportamental com foco em estresse e burnout.">
-                    <div class="team-photo">P4</div>
-                    <div>
-                        <h3 class="team-name">Person 4</h3>
-                        <p class="team-role">Psicoterapeuta</p>
-                        <p class="team-snippet">Estresse, burnout.</p>
                     </div>
                 </article>
             </div>
@@ -207,10 +202,24 @@
     <footer class="footer">
         <div class="container">
             <div class="footer-panels">
-                <button type="button" class="footer-panel footer-panel-link" data-title="Sobre Nós" data-body="A ANOVA Saúde é um braço da ANOVA e funciona como uma plataforma independente de triagem e educação em saúde mental, criada para oferecer acesso claro, responsável e tecnicamente fundamentado a instrumentos psicológicos padronizados. Saiba mais em <a href='https://www.anovabr.com' target='_blank' rel='noopener'>anovabr.com</a>.&#10;Este espaço foi desenvolvido principalmente para pessoas interessadas em compreender melhor seus próprios resultados psicológicos, frequentemente pacientes ou clientes, por meio de instrumentos baseados em ciência, sem promessas diagnósticas ou interpretações infundadas.&#10;Nosso objetivo é organizar informações de forma cientificamente embasada, honesta e precisa, permitindo que você compreenda melhor seus resultados, acompanhe mudanças ao longo do tempo e, se desejar, utilize esse material como apoio em uma conversa qualificada com profissionais de saúde, especialmente psicólogos e psiquiatras.&#10;A ANOVA Saúde não realiza, nem substitui, avaliação clínica, psicoterapia, consulta médica ou diagnóstico psicológico. A plataforma tem como princípio o combate à desinformação científica, oferecendo uma alternativa responsável a interpretações simplistas, automáticas ou tecnicamente inadequadas sobre saúde mental.&#10;&#10;<img class='footer-modal-photo' src='img/photo_luis_2026.jpg' alt='Professor Doutor Luis Anunciação'>&#10;A ANOVA Saúde é liderada pelo <span class='highlight-marker'>Professor Doutor Luis Anunciação</span>, professor do Departamento de Psicologia da PUC-Rio e Professor Visitante da University of Oregon. O responsável técnico possui mais de 70 artigos publicados em periódicos científicos internacionais, é o atual presidente do Instituto Brasileiro de Neuropsicologia e Comportamento, e líder do Laboratório de Métodos e Medidas. Meu currículo completo pode ser consultado <a href='http://lattes.cnpq.br/3982200733248687' target='_blank' rel='noopener'>aqui</a>.&#10;&#10;<strong>VALORES FUNDAMENTAIS</strong>&#10;<strong>Ciência em primeiro lugar.</strong>&#10;Todos os instrumentos e descrições são fundamentados em artigos científicos revisados por pares ou em manuais técnicos reconhecidos. Quando a evidência é limitada, isso é explicitado.&#10;Sem absolutamente nenhum tipo de enrolação.&#10;Não exageramos resultados, não dramatizamos interpretações e não prometemos o que os dados não sustentam. A informação é apresentada de forma direta, técnica e responsável. Você jamais vai ter um popup te vendendo produtos, pedindo e-mails ou fazendo “promoções sensacionais”. Vamos tratar você exatamente da mesma forma honesta que gostaríamos de ser tratado.&#10;<strong>Sem interesses comerciais ocultos.</strong>&#10;Não há anúncios, conteúdos patrocinados ou rankings manipulados. Quando um serviço é pago, isso é informado de forma clara. Quando é gratuito, é gratuito.&#10;<strong>Transparência acima de persuasão.</strong>&#10;Os resultados são apresentados como informação, não como diagnóstico nem como ferramenta de convencimento. Não promovemos tratamentos, produtos ou decisões.&#10;<strong>Conexão com profissionais — apenas se você quiser.</strong>&#10;A plataforma pode ser utilizada exclusivamente para entendimento pessoal. Caso deseje, os resultados podem servir como apoio para discussão com profissionais da minha equipe. Não há encaminhamento automático nem pressão. Os profissionais da ANOVA Saúde são ou foram meus alunos; todos são, no mínimo, especialistas.&#10;<strong>Respeito à autonomia.</strong>&#10;Você controla seus dados, seus resultados e o uso que faz deles. A informação é fornecida; as decisões permanecem com você. O sistema somente salvará seus dados se você autorizar.">
+                <button type="button" class="footer-panel footer-panel-link" data-title="Sobre Nós" data-body="<strong>ANOVA</strong>&#10;A ANOVA Saúde é um braço da ANOVA e é uma plataforma independente de triagem e educação em saúde mental, criada para oferecer acesso claro, responsável e tecnicamente fundamentado a instrumentos psicológicos padronizados. Saiba mais em <a href='https://www.anovabr.com' target='_blank' rel='noopener'>anovabr.com</a>.
+                    &#10;Este espaço foi desenvolvido para que pessoas interessadas em compreender melhor suas caracterultados psicológicos possam fazer isso por meio de instrumentos baseados em ciência, sem promessas diagnósticas ou interpretações infundadas.
+                    &#10;O objetivo é organizar informações de forma cientificamente embasada, honesta e precisa, permitindo que você compreenda melhor seus resultados, acompanhe mudanças ao longo do tempo e, se desejar, utilize esse material como apoio em uma conversa qualificada com profissionais de saúde, especialmente psicólogos e psiquiatras.
+                    &#10;A ANOVA Saúde não realiza, nem substitui, avaliação clínica, psicoterapia, consulta médica ou diagnóstico psicológico. 
+                    &#10;A plataforma tem como princípio o combate à desinformação científica, oferecendo uma alternativa responsável a interpretações simplistas, automáticas ou tecnicamente inadequadas sobre saúde mental.
+                    &#10;<img class='footer-modal-photo' src='img/photo_luis_2026.jpg' alt='Professor Doutor Luis Anunciação'>&#10;A ANOVA Saúde é liderada por mim, <span class='highlight-marker'>Professor Doutor Luis Anunciação</span>. Sou professor do Departamento de Psicologia da PUC-Rio e Professor Visitante da University of Oregon. Eu possuo mais de 70 artigos publicados em periódicos científicos internacionais, sou o atual presidente do Instituto Brasileiro de Neuropsicologia e Comportamento, e líder do Laboratório de Métodos e Medidas. 
+                    &#10;Meu currículo completo pode ser consultado <a href='http://lattes.cnpq.br/3982200733248687' target='_blank' rel='noopener'>aqui</a>.&#10;&#10;<strong>VALORES FUNDAMENTAIS</strong>
+                    <strong>Reciprocidade.</strong>&#10;Eu criei esse sistema com base em meu perfil, o que significa que vou tratar você da forma como gostaria de ser tratado, de forma sempre honesta, lógica e direta.&#10;<strong>Ciência em primeiro lugar.</strong>&#10;Todos os instrumentos e descrições são fundamentados em artigos científicos revisados por pares ou em manuais técnicos reconhecidos. 
+                    Quando a evidência é limitada, isso é explicitado.&#10;<strong>Sem absolutamente nenhum tipo de enrolação.</strong>&#10;Não exageramos resultados, não dramatizamos interpretações e não prometemos o que os dados não sustentam. A informação é apresentada de forma direta, técnica e responsável. Você jamais vai ter um popup te vendendo produtos, pedindo e-mails ou fazendo “promoções sensacionais”. Vamos tratar você exatamente da mesma forma honesta que gostaríamos de ser tratado.&#10;<strong>Sem interesses comerciais ocultos.</strong>&#10;Não há anúncios, conteúdos patrocinados ou rankings manipulados. Quando um serviço é pago, isso é informado de forma clara. Quando é gratuito, é gratuito.&#10;<strong>Transparência acima de persuasão.</strong>&#10;Os resultados são apresentados como informação, não como diagnóstico nem como ferramenta de convencimento. Não promovemos tratamentos, produtos ou decisões.&#10;<strong>Conexão com profissionais — apenas se você quiser.</strong>&#10;A plataforma pode ser utilizada exclusivamente para entendimento pessoal. Caso deseje, os resultados podem servir como apoio para discussão com profissionais da minha equipe. Não há encaminhamento automático nem pressão. Os profissionais da ANOVA Saúde são ou foram meus alunos; todos são, no mínimo, especialistas.&#10;<strong>Respeito à autonomia.</strong>&#10;Você controla seus dados, seus resultados e o uso que faz deles. A informação é fornecida; as decisões permanecem com você. O sistema somente salvará seus dados se você autorizar.">
                     <h5>Sobre Nós</h5>
                 </button>
-                <button type="button" class="footer-panel footer-panel-link" data-title="Como Funciona" data-body="<strong>1. Escolha do instrumento</strong>&#10;Você seleciona um instrumento disponível na plataforma e responde online. Os instrumentos com curadoria foram desenvolvidos pela nossa equipe ou resultam diretamente de nossas pesquisas. Todos os instrumentos disponíveis possuem artigos científicos revisados por pares, publicados em revistas internacionais.&#10;<strong>2. Instrumentos restritos a psicólogos ou com direitos comerciais</strong>&#10;Instrumentos restritos a profissionais de psicologia ou cujos direitos autorais pertencem a editoras técnicas (por exemplo, Pearson) não estão disponíveis na plataforma, salvo quando vinculados a projetos de pesquisa em andamento, o que é sempre claramente indicado.&#10;<strong>3. Cálculo dos escores</strong>&#10;O sistema calcula seus pontos brutos e os apresenta em relação ao mínimo e máximo possíveis do instrumento ou fator avaliado. Dependendo do instrumento, podem ser apresentados níveis ou descrições compatíveis com a literatura científica correspondente.&#10;<strong>4. Resultado informativo</strong>&#10;O resultado tem finalidade informativa e educacional, permitindo uma melhor compreensão de suas características no momento da avaliação. Esses resultados não constituem diagnóstico clínico.&#10;<strong>5. Relatório interpretativo por profissional (opcional, quando disponível)</strong>&#10;Alguns instrumentos oferecem a opção de contratação de um relatório interpretativo, elaborado por um profissional da equipe da ANOVA Saúde, sob minha supervisão. O prazo de entrega informado é necessário para análise cuidadosa dos dados e elaboração do documento técnico. Este é um serviço pago, claramente identificado no momento da contratação.&#10;<strong>6. Elaboração humana do documento</strong>&#10;Os relatórios interpretativos são produzidos integralmente por profissionais, sem o uso de ferramentas automáticas de geração de texto ou inteligência artificial para redigir o conteúdo interpretativo.&#10;<strong>7. Uso do documento</strong>&#10;O documento técnico é assinado pelo profissional responsável e tem finalidade informativa e orientativa, podendo auxiliar o próprio usuário a se compreender melhor e, se desejar, a buscar apoio profissional adequado. O documento não substitui avaliação clínica ou laudo psicológico.">
+                <button type="button" class="footer-panel footer-panel-link" data-title="Como Funciona" data-body="<strong>1. Escolha do instrumento</strong>&#10;Você seleciona um instrumento disponível na plataforma e responde online. Os instrumentos com curadoria foram desenvolvidos pela nossa equipe ou resultam diretamente de nossas pesquisas. Todos os instrumentos disponíveis possuem artigos científicos revisados por pares, publicados em revistas internacionais.&#10;<strong>2. Instrumentos restritos a psicólogos ou com direitos comerciais</strong>&#10;Instrumentos restritos a profissionais de psicologia ou cujos direitos autorais pertencem a editoras técnicas (por exemplo, Pearson) não estão disponíveis na plataforma, salvo quando vinculados a projetos de pesquisa em andamento, o que é sempre claramente indicado.
+                    &#10;<strong>3. Cálculo dos escores</strong>&#10;O sistema calcula seus escores e os apresenta em relação aos valores mínimos e máximos possíveis do instrumento ou fator avaliado. Dependendo do instrumento, podem ser apresentados níveis ou descrições compatíveis com a literatura científica correspondente.
+                    &#10;<strong>4. Resultado informativo</strong>&#10;O resultado tem finalidade informativa e educacional, permitindo uma melhor compreensão de suas características no momento da avaliação. Esses resultados não constituem diagnóstico clínico.
+                    &#10;<strong>5. Relatório interpretativo por profissional (opcional, quando disponível)</strong>&#10;Alguns instrumentos oferecem a opção de contratação de um relatório interpretativo, elaborado por um profissional da equipe da ANOVA Saúde, sob minha supervisão. O prazo informado é necessário para a análise cuidadosa dos dados e elaboração do documento técnico. Este é um serviço pago e claramente identificado no momento da contratação.
+                    &#10;<strong>6. Elaboração humana do documento</strong>&#10;Os relatórios interpretativos são produzidos integralmente por profissionais, sem o uso de ferramentas automáticas de geração de texto ou inteligência artificial para redigir o conteúdo interpretativo.
+                    &#10;<strong>7. Uso do documento</strong>&#10;O documento técnico é assinado e carimbado pelo profissional responsável e tem finalidade informativa e orientativa, podendo auxiliar o próprio usuário a se compreender melhor e, se desejar, a buscar apoio profissional adequado. O documento não substitui avaliação clínica ou laudo psicológico.
+                    &#10;<strong>8. Suas informações</strong>&#10;Suas informações não ficam armazenadas. Intencionalmente, o site não possui criação de contas. Se você fechar o navegador, seus dados são apagados imediatamente.">
                     <h5>Como Funciona</h5>
                 </button>
                 <button type="button" class="footer-panel footer-panel-link" data-title="Privacidade" data-body="A ANOVA Saúde trata dados pessoais com responsabilidade e apenas na medida necessária para o funcionamento da plataforma. O sistema foi desenvolvido com controle direto da nossa equipe (Javascript e Python), com medidas técnicas e administrativas voltadas à proteção das informações e à redução de riscos de acesso não autorizado.&#10;Quando aplicável, a coleta e o uso de dados para fins de pesquisa estão ancorados no projeto aprovado pela Plataforma Brasil: “Uma proposta interdisciplinar de inovação: o desenvolvimento de aplicativos e instrumentos psicológicos para otimizar a qualidade de vida” (CAAE: 63553522.7.0000.5279, Pesquisador Responsável: Luis Anunciação).&#10;&#10;<strong>Dados coletados</strong>&#10;• Respostas aos questionários e escores calculados.&#10;• Informações fornecidas voluntariamente (quando aplicável).&#10;• Dados técnicos básicos para segurança e funcionamento do site.&#10;&#10;<strong>Uso dos dados</strong>&#10;• Apresentação de resultados e geração de relatórios, quando aplicável.&#10;• Manutenção, segurança e melhoria da plataforma.&#10;• Quando autorizado, produção de documentos técnicos.&#10;&#10;<strong>O que não fazemos</strong>&#10;• Não vendemos dados.&#10;• Não utilizamos informações para publicidade direcionada baseada em saúde mental.&#10;&#10;<strong>Direitos do usuário</strong>&#10;O usuário pode, quando aplicável e dentro dos limites legais e técnicos, solicitar acesso, correção ou exclusão de seus dados, bem como revogar autorizações previamente concedidas.&#10;&#10;<strong>Armazenamento e segurança</strong>&#10;• Os dados são mantidos pelo tempo necessário para prestação do serviço e cumprimento de obrigações legais.&#10;• São adotadas medidas técnicas e administrativas para reduzir riscos de acesso não autorizado.">
@@ -330,5 +339,142 @@
       }
     })();
     </script>
+
+    <script>
+        // Elegant signature-like line animation
+        (function() {
+            const canvas = document.getElementById('signature-canvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const section = canvas.parentElement;
+            
+            function resizeCanvas() {
+                canvas.width = section.offsetWidth;
+                canvas.height = section.offsetHeight;
+            }
+            
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            
+            const colors = ['#d0d0d0', '#c0c0c0', '#a8c4a8', '#b8d4b8'];
+            const lines = [];
+            
+            class SignatureLine {
+                constructor() {
+                    this.reset();
+                }
+                
+                reset() {
+                    this.y = Math.random() * canvas.height * 0.6 + canvas.height * 0.2;
+                    this.x = -50;
+                    this.targetX = canvas.width + 50;
+                    this.progress = 0;
+                    this.speed = 0.001 + Math.random() * 0.001;
+                    this.waveAmplitude = 15 + Math.random() * 25;
+                    this.waveFrequency = 0.01 + Math.random() * 0.02;
+                    this.opacity = 0;
+                    this.maxOpacity = 0.4 + Math.random() * 0.3;
+                    this.color = colors[Math.floor(Math.random() * colors.length)];
+                    this.thickness = 1 + Math.random() * 2;
+                    this.points = [];
+                    this.phase = Math.random() * Math.PI * 2;
+                    this.done = false;
+                }
+                
+                update() {
+                    if (this.done) return;
+                    
+                    this.progress += this.speed;
+                    
+                    // Fade in
+                    if (this.progress < 0.1) {
+                        this.opacity = (this.progress / 0.1) * this.maxOpacity;
+                    }
+                    // Fade out at the end
+                    else if (this.progress > 0.85) {
+                        this.opacity = this.maxOpacity * (1 - (this.progress - 0.85) / 0.15);
+                    }
+                    else {
+                        this.opacity = this.maxOpacity;
+                    }
+                    
+                    if (this.progress >= 1) {
+                        this.done = true;
+                        return;
+                    }
+                    
+                    // Calculate position with elegant curves
+                    const currentX = this.x + (this.targetX - this.x) * this.progress;
+                    const wave = Math.sin(currentX * this.waveFrequency + this.phase) * this.waveAmplitude;
+                    const drift = (this.progress - 0.5) * 30; // Slight upward/downward drift
+                    const currentY = this.y + wave + drift;
+                    
+                    this.points.push({ x: currentX, y: currentY });
+                    
+                    // Keep only recent points for smooth line
+                    if (this.points.length > 100) {
+                        this.points.shift();
+                    }
+                }
+                
+                draw() {
+                    if (this.points.length < 2 || this.done) return;
+                    
+                    ctx.strokeStyle = this.color;
+                    ctx.globalAlpha = this.opacity;
+                    ctx.lineWidth = this.thickness;
+                    ctx.lineCap = 'round';
+                    ctx.lineJoin = 'round';
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(this.points[0].x, this.points[0].y);
+                    
+                    for (let i = 1; i < this.points.length; i++) {
+                        ctx.lineTo(this.points[i].x, this.points[i].y);
+                    }
+                    
+                    ctx.stroke();
+                }
+            }
+            
+            // Create initial lines with delays
+            const numLines = 4;
+            let lineIndex = 0;
+            
+            function addLine() {
+                if (lineIndex < numLines) {
+                    lines.push(new SignatureLine());
+                    lineIndex++;
+                    setTimeout(addLine, 1500 + Math.random() * 1000);
+                }
+            }
+            
+            // Start after a brief delay
+            setTimeout(addLine, 800);
+            
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Update and draw all lines
+                lines.forEach(line => {
+                    line.update();
+                    line.draw();
+                });
+                
+                // Remove completed lines
+                for (let i = lines.length - 1; i >= 0; i--) {
+                    if (lines[i].done && lines[i].opacity <= 0) {
+                        lines.splice(i, 1);
+                    }
+                }
+                
+                requestAnimationFrame(animate);
+            }
+            
+            animate();
+        })();
+    </script>
+</body>
 </body>
 </html>
