@@ -1,11 +1,9 @@
 {
   "id": "oci_exemplo",
-  "title": "Inventário Obsessivo-Compulsivo OCI",
+  "title": "Inventário Obsessivo-Compulsivo - OCI",
   "description": "Avalia sintomas obsessivo-compulsivos em diferentes dimensões",
   "tag": "Ansiedade",
   "category": "para-voce",
-  "articleUrl": "http://google.com/",
-  "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   "featured": false,
   "curadoria": false,
   "testType": "questionnaire",
@@ -14,7 +12,7 @@
   "instructions": "Leia cada afirmação e indique o quanto ela se aplica a você.",
   "estimatedTime": "5-10 minutos",
   "questionCount": 18,
-  "createdAt": "2026-02-13T04:42:32.945Z",
+  "createdAt": "2026-02-14T07:02:24.102Z",
   "questions": [
     {
       "id": 1,

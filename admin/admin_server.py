@@ -18,9 +18,38 @@ TESTS_DIR = ROOT_DIR / "tests"
 CSS_DIR = ROOT_DIR / "css"
 JS_DIR = ROOT_DIR / "js"
 IMG_DIR = ROOT_DIR / "img"
+FINANCEIRO_FILE = ROOT_DIR / "financeiro.json"
 
 # Ensure tests directory exists
 TESTS_DIR.mkdir(exist_ok=True)
+
+def load_financeiro():
+    """Load financeiro settings from disk."""
+    if not FINANCEIRO_FILE.exists():
+        default_data = {
+            "preco_um_teste": 79.00,
+            "preco_ate_tres": 213.30
+        }
+        FINANCEIRO_FILE.write_text(json.dumps(default_data, indent=2, ensure_ascii=False), encoding='utf-8')
+        return default_data
+    try:
+        with open(FINANCEIRO_FILE, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            if not isinstance(data, dict):
+                raise ValueError("Financeiro file must be an object")
+            return data
+    except Exception:
+        # Fallback to defaults if file is corrupted
+        default_data = {
+            "preco_um_teste": 79.00,
+            "preco_ate_tres": 213.30
+        }
+        FINANCEIRO_FILE.write_text(json.dumps(default_data, indent=2, ensure_ascii=False), encoding='utf-8')
+        return default_data
+
+def save_financeiro(data):
+    """Persist financeiro settings to disk."""
+    FINANCEIRO_FILE.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding='utf-8')
 
 app = Flask(__name__)
 
@@ -96,6 +125,13 @@ def serve_index_json():
 def serve_test_json(test_id):
     """Serve individual test JSON files"""
     return send_from_directory(TESTS_DIR, f'{test_id}.json')
+
+# Public finance settings
+@app.route('/financeiro.json')
+def serve_financeiro_json():
+    """Serve financeiro settings as public JSON."""
+    data = load_financeiro()
+    return jsonify(data)
 
 # ===== ADMIN PANEL ROUTES =====
 
@@ -238,6 +274,39 @@ def get_stats():
             'curadoria': len([t for t in tests if t.get('curadoria')])
         }
         return jsonify({'success': True, 'stats': stats})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/financeiro', methods=['GET'])
+@login_required
+def get_financeiro():
+    """Get financeiro settings."""
+    try:
+        data = load_financeiro()
+        return jsonify({'success': True, 'financeiro': data})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/financeiro', methods=['PUT'])
+@login_required
+def update_financeiro():
+    """Update financeiro settings."""
+    try:
+        payload = request.json or {}
+        preco_um = payload.get('preco_um_teste')
+        preco_tres = payload.get('preco_ate_tres')
+
+        def to_number(value):
+            if value is None or value == '':
+                return None
+            return float(value)
+
+        data = {
+            "preco_um_teste": to_number(preco_um),
+            "preco_ate_tres": to_number(preco_tres)
+        }
+        save_financeiro(data)
+        return jsonify({'success': True, 'financeiro': data})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
 

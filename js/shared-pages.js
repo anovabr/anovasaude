@@ -49,7 +49,9 @@ function injectSharedPages() {
         seus resultados e faça um relatório técnico sobre eles, explicando de maneira mais detalhada e precisa.  
         <br><span class="result-symbol" aria-hidden="true">❖</span>Caso você tenha esse interesse, clique em <button class="interpretation-link highlight-marker" style="border:none;text-decoration:none;cursor:pointer;padding:0;font:inherit;background:transparent;font-weight:bold;">"Quero interpretação humana"</button>. 
         Você irá deverá preenher algumas informações extras, poderá fazer novos testes e irá pagar uma taxa de serviço. 
-        Após 2 dias úteis, um documento técnico será enviado para você via e-mail ou whatsapp por um acesso seguro.</p>
+        O valor para um teste é <span class="highlight-marker"><span id="finance-price-one">—</span></span>. O valor para até 3 testes é <span class="highlight-marker"><span id="finance-price-three">—</span></span>.
+        Após 2 dias úteis, um documento técnico será enviado para você via e-mail ou whatsapp por um acesso seguro.
+        <br><span class="result-symbol" aria-hidden="true">❖</span>Caso você tenha executado mais do que 3 testes, nossa equipe entrará em contato com outros prazos e valores.</p>
 
       </div>
 
@@ -220,6 +222,7 @@ function injectSharedPages() {
           </label>
         </div>
 
+        <div id="post-send-message" class="payment-message" style="display:none;"></div>
         <div class="test-navigation">
           <button type="button" id="back-to-results-btn" class="btn btn-secondary">Voltar</button>
           <button type="button" id="submit-results-btn" class="btn btn-primary">Enviar Resultados</button>
@@ -364,6 +367,40 @@ function injectSharedPages() {
     });
   }
 
+  function formatBRL(value) {
+    const num = Number(value);
+    if (Number.isNaN(num)) return '';
+    if (typeof Intl !== 'undefined' && Intl.NumberFormat) {
+      return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(num);
+    }
+    return `R$ ${num.toFixed(2)}`;
+  }
+
+  async function loadFinanceiro() {
+    try {
+      const response = await fetch('/financeiro.json', { cache: 'no-store' });
+      if (!response.ok) throw new Error('Falha ao carregar preços');
+      return await response.json();
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function updateFinanceInlineText(fin) {
+    const oneEl = document.getElementById('finance-price-one');
+    const threeEl = document.getElementById('finance-price-three');
+    if (!oneEl || !threeEl) return;
+    if (fin && fin.preco_um_teste != null && fin.preco_ate_tres != null) {
+      oneEl.textContent = formatBRL(fin.preco_um_teste);
+      threeEl.textContent = formatBRL(fin.preco_ate_tres);
+    } else {
+      oneEl.textContent = '—';
+      threeEl.textContent = '—';
+    }
+  }
+
+  loadFinanceiro().then(updateFinanceInlineText);
+
   if (submitBtn) {
     submitBtn.addEventListener('click', (ev) => {
       ev.preventDefault();
@@ -456,9 +493,30 @@ function injectSharedPages() {
         body: JSON.stringify(payload)
       })
       .then(r => r.text())
-      .then(() => {
+      .then(async () => {
         submitBtn.textContent = '✓ Enviado';
         document.querySelectorAll('.post-action').forEach(a => a.style.display = 'inline-flex');
+        const msgEl = document.getElementById('post-send-message');
+        if (msgEl) {
+          let count = 0;
+          if (typeof Storage !== 'undefined') {
+            try {
+              count = Storage.getResultsIndex().length || 0;
+            } catch (e) {
+              count = 0;
+            }
+          }
+          const plural = count === 1 ? 'teste' : 'testes';
+          const fin = await loadFinanceiro();
+          if (fin && fin.preco_um_teste != null && fin.preco_ate_tres != null) {
+            const precoUm = formatBRL(fin.preco_um_teste);
+            const precoTres = formatBRL(fin.preco_ate_tres);
+            msgEl.textContent = `Você realizou ${count} ${plural}. Você pode realizar novas avaliações ou fazer o pagamento da interpretação deste teste. O preço para a produção de documentos para 1 teste é de ${precoUm}. Para até 3 testes, o preço é ${precoTres}. Caso você tenha executado mais do que 3 testes, nossa equipe entrará em contato com outros prazos e valores.`;
+          } else {
+            msgEl.textContent = `Você realizou ${count} ${plural}. Você pode realizar novas avaliações ou fazer o pagamento da interpretação deste teste. Não foi possível carregar os preços no momento.`;
+          }
+          msgEl.style.display = 'block';
+        }
       })
       .catch(() => {
         submitBtn.disabled = false;

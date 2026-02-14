@@ -766,12 +766,10 @@
   },
   {
     "id": "oci_exemplo",
-    "title": "Inventário Obsessivo-Compulsivo OCI",
+    "title": "Inventário Obsessivo-Compulsivo - OCI",
     "description": "Avalia sintomas obsessivo-compulsivos em diferentes dimensões",
     "tag": "Ansiedade",
     "category": "para-voce",
-    "articleUrl": "http://google.com/",
-    "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     "featured": false,
     "curadoria": false,
     "testType": "questionnaire",
@@ -780,7 +778,7 @@
     "instructions": "Leia cada afirmação e indique o quanto ela se aplica a você.",
     "estimatedTime": "5-10 minutos",
     "questionCount": 18,
-    "createdAt": "2026-02-13T04:42:32.945Z",
+    "createdAt": "2026-02-14T07:02:24.102Z",
     "questions": [
       {
         "id": 1,
@@ -1610,127 +1608,6 @@
             {
               "min": 5,
               "max": 5,
-              "level": "Muito Alto",
-              "description": "Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **muito alto**."
-            }
-          ]
-        }
-      ]
-    }
-  },
-  {
-    "id": "ts",
-    "title": "ts",
-    "description": "",
-    "tag": "",
-    "category": "para-voce",
-    "featured": false,
-    "curadoria": false,
-    "testType": "questionnaire",
-    "visibility": "public",
-    "isPremium": false,
-    "instructions": "",
-    "questionCount": 2,
-    "createdAt": "2026-02-13T05:03:42.449Z",
-    "questions": [
-      {
-        "id": 1,
-        "title": "q1",
-        "type": "likert",
-        "options": [
-          {
-            "value": 1,
-            "text": "1"
-          },
-          {
-            "value": 2,
-            "text": "2"
-          },
-          {
-            "value": 3,
-            "text": "3"
-          },
-          {
-            "value": 4,
-            "text": "4"
-          },
-          {
-            "value": 5,
-            "text": "5"
-          }
-        ],
-        "min": 0,
-        "max": 10,
-        "step": 1,
-        "weight": 1,
-        "reverse": false
-      },
-      {
-        "id": 2,
-        "title": "q2",
-        "type": "likert",
-        "options": [
-          {
-            "value": 1,
-            "text": "1"
-          },
-          {
-            "value": 2,
-            "text": "2"
-          },
-          {
-            "value": 3,
-            "text": "3"
-          },
-          {
-            "value": 4,
-            "text": "4"
-          },
-          {
-            "value": 5,
-            "text": "5"
-          }
-        ],
-        "min": 0,
-        "max": 10,
-        "step": 1,
-        "weight": 1,
-        "reverse": false
-      }
-    ],
-    "scoring": {
-      "min": 0,
-      "max": 10,
-      "factors": [
-        {
-          "id": "fator-geral",
-          "name": "Fator Geral",
-          "questionIds": [
-            1,
-            2
-          ],
-          "ranges": [
-            {
-              "min": 2,
-              "max": 4,
-              "level": "Baixo",
-              "description": "Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **baixo**."
-            },
-            {
-              "min": 5,
-              "max": 6,
-              "level": "Médio",
-              "description": "Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **médio**."
-            },
-            {
-              "min": 7,
-              "max": 8,
-              "level": "Alto",
-              "description": "Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **alto**."
-            },
-            {
-              "min": 9,
-              "max": 10,
               "level": "Muito Alto",
               "description": "Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **muito alto**."
             }

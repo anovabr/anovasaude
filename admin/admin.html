@@ -744,6 +744,113 @@
         .response-field-value {
             color: #333;
         }
+
+        /* Financial Tracking Styles */
+        .status-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-left: 8px;
+        }
+
+        .status-badge.novo {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .status-badge.recorrente {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .financial-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .financial-item {
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            transition: all 0.2s;
+        }
+
+        .financial-item.checked {
+            background: #e8f5e9;
+            border-color: #1a4d2e;
+        }
+
+        .financial-item label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .financial-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: #1a4d2e;
+        }
+
+        .financial-date {
+            font-size: 11px;
+            color: #666;
+            margin-top: 4px;
+            padding-left: 24px;
+        }
+
+        .admin-notes {
+            margin-top: 10px;
+        }
+
+        .admin-notes textarea {
+            width: 100%;
+            min-height: 60px;
+            padding: 8px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 13px;
+            resize: vertical;
+        }
+
+        .admin-notes textarea:focus {
+            outline: none;
+            border-color: #1a4d2e;
+        }
+
+        .save-note-btn {
+            margin-top: 8px;
+            padding: 6px 14px;
+            background: #1a4d2e;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .save-note-btn:hover {
+            background: #2d7a47;
+        }
+
+        .save-status {
+            font-size: 11px;
+            color: #666;
+            margin-left: 10px;
+            font-style: italic;
+        }
     </style>
 </head>
 
@@ -768,6 +875,7 @@
                 <button class="sidebar-btn active" data-section="dashboard">◫ Dashboard</button>
                 <button class="sidebar-btn" data-section="tests">☰ Meus Testes</button>
                 <button class="sidebar-btn" data-section="create">⊕ Novo Teste</button>
+                <button class="sidebar-btn" data-section="financeiro">＄ Financeiro</button>
                 <button class="sidebar-btn" data-section="analytics">◈ Análises</button>
             </div>
 
@@ -911,6 +1019,22 @@
                         style="width: 100%; height: 120vh; border: none; border-radius: 8px; margin-top: 20px;">
                     </iframe>
                 </div>
+
+                <!-- Financeiro Section -->
+                <div class="section" id="section-financeiro">
+                    <h2>Financeiro</h2>
+                    <div class="form-group">
+                        <label for="finance-preco-um">Preco para um teste</label>
+                        <input type="number" id="finance-preco-um" step="0.01" min="0" placeholder="Ex: 79.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="finance-preco-tres">Preco para ate 3 testes</label>
+                        <input type="number" id="finance-preco-tres" step="0.01" min="0" placeholder="Ex: 213.30">
+                    </div>
+                    <button type="button" class="btn btn-primary" id="finance-save-btn">Salvar</button>
+                    <p id="finance-status" style="margin-top:10px;color:#1a4d2e;display:none;"></p>
+                </div>
+
             </div>
         </div>
     </div>
@@ -962,7 +1086,7 @@
         let analyticsData = [];
 
         // Google Sheets API Configuration
-        const GOOGLE_SHEETS_API_BASE = 'https://script.google.com/macros/s/AKfycbxsuo933JEsxii2Kme4uaVvfVOOzJSLudxxu2lIAgio3vBvUE2LafW1Mqs44Aq4aDGhmg/exec';
+        const GOOGLE_SHEETS_API_BASE = 'https://script.google.com/macros/s/AKfycbw7do5dNnHkuD0HEedMMplOqC_6jnRL2tP3kiEMCeRxDRO4tI6iuuvPsN1GvoG85Gld/exec';
         const GOOGLE_SHEETS_PASSWORD = 'Eugene2024##abc';
 
         // Load all tests on page load
@@ -1354,6 +1478,14 @@
                 const timestamp = response.timestamp ? new Date(response.timestamp).toLocaleString('pt-BR') : 'Sem data';
                 const testTitle = response.testTitle || response.testId || 'Teste não identificado';
                 const nome = response.nome || 'Anônimo';
+                
+                // Financial status
+                const usuarioStatus = response.usuario_status || 'novo';
+                const relatorioEnviado = response.relatorio_enviado === 'sim';
+                const dataRelatorio = response.data_relatorio_enviado || '';
+                const pagamento = response.pagamento === 'sim';
+                const dataPagamento = response.data_pagamento || '';
+                const comentariosLuis = response.comentarios_luis || '';
 
                 // Organize fields into sections
                 const sections = {
@@ -1361,7 +1493,7 @@
                     'Dados Demográficos': ['nome', 'nascimento', 'idade', 'estado', 'sexo', 'estado_civil', 'escolaridade', 'filhos'],
                     'Informações Clínicas': ['diagnostico_recebido', 'diagnostico_opcoes', 'diagnostico_outro', 'acompanhamento', 'acompanhamento_detalhes', 'uso_medicacao', 'medicacao_detalhes', 'alteracao_comportamento', 'alteracao_detalhes'],
                     'Contato': ['email', 'telefone'],
-                    'Comentários': ['comentarios'],
+                    'Comentários do Usuário': ['comentarios'],
                     'Questões': Object.keys(response).filter(k => k.startsWith('q'))
                 };
 
@@ -1389,12 +1521,51 @@
                     return '';
                 }).join('');
 
+                // Financial tracking section
+                const financialSection = `
+                    <div class="response-section">
+                        <div class="response-section-title">📊 Gestão & Status</div>
+                        <div class="response-field-row">
+                            <div class="response-field-label">Status</div>
+                            <div class="response-field-value">
+                                <span class="status-badge ${usuarioStatus}">${usuarioStatus === 'novo' ? '🆕 Novo' : '👥 Recorrente'}</span>
+                            </div>
+                        </div>
+                        <div class="financial-grid">
+                            <div class="financial-item ${relatorioEnviado ? 'checked' : ''}" id="fin-relatorio-${idx}">
+                                <label>
+                                    <input type="checkbox" 
+                                           ${relatorioEnviado ? 'checked' : ''}
+                                           onchange="updateFinancial(${idx}, 'relatorio_enviado', this.checked)">
+                                    Relatório Enviado
+                                </label>
+                                ${dataRelatorio ? `<div class="financial-date">📅 ${new Date(dataRelatorio).toLocaleDateString('pt-BR')}</div>` : ''}
+                            </div>
+                            <div class="financial-item ${pagamento ? 'checked' : ''}" id="fin-pagamento-${idx}">
+                                <label>
+                                    <input type="checkbox" 
+                                           ${pagamento ? 'checked' : ''}
+                                           onchange="updateFinancial(${idx}, 'pagamento', this.checked)">
+                                    Pagamento Recebido
+                                </label>
+                                ${dataPagamento ? `<div class="financial-date">💰 ${new Date(dataPagamento).toLocaleDateString('pt-BR')}</div>` : ''}
+                            </div>
+                        </div>
+                        <div class="admin-notes">
+                            <label style="font-weight: 500; font-size: 13px; display: block; margin-bottom: 6px;">📝 Notas Internas (Luis):</label>
+                            <textarea id="notes-${idx}" placeholder="Adicione suas notas sobre este usuário...">${comentariosLuis}</textarea>
+                            <button class="save-note-btn" onclick="saveNotes(${idx})">Salvar Notas</button>
+                            <span class="save-status" id="note-status-${idx}"></span>
+                        </div>
+                    </div>
+                `;
+
                 return `
                     <div class="response-card">
                         <div class="response-card-header" onclick="toggleResponse(${idx})">
                             <div class="response-card-title">
-                                <h4>${testTitle} - ${nome}</h4>
-                                <p>${timestamp}</p>
+                                <h4>${testTitle} - ${nome} <span class="status-badge ${usuarioStatus}">${usuarioStatus === 'novo' ? '🆕 Novo' : '👥 Recorrente'}</span></h4>
+                                <p>${timestamp}${relatorioEnviado ? ' | ✅' : ''}${pagamento ? ' | 💰' : ''}</p>
                             </div>
                             <div class="response-card-actions">
                                 <button class="btn btn-delete" onclick="event.stopPropagation(); deleteResponse(${idx})" type="button">
@@ -1404,6 +1575,7 @@
                             </div>
                         </div>
                         <div class="response-card-body" id="response-body-${idx}">
+                            ${financialSection}
                             ${sectionsHTML}
                         </div>
                     </div>
@@ -1607,6 +1779,105 @@
             document.getElementById('agg-diagnosis').textContent = Math.round((withDiagnosis / total) * 100) + '%';
             document.getElementById('agg-treatment').textContent = Math.round((inTreatment / total) * 100) + '%';
             document.getElementById('agg-medication').textContent = Math.round((onMedication / total) * 100) + '%';
+        }
+        
+        // Financial tracking functions
+        async function updateFinancial(idx, field, checked) {
+            const sorted = [...analyticsData].sort((a, b) =>
+                new Date(b.timestamp || 0) - new Date(a.timestamp || 0)
+            );
+            const response = sorted[idx];
+            
+            if (!response || !response.timestamp) {
+                alert('Erro: resposta não encontrada');
+                return;
+            }
+            
+            const finEl = document.getElementById(`fin-${field.replace('_enviado', '')}-${idx}`);
+            
+            try {
+                const params = new URLSearchParams({
+                    action: 'update',
+                    password: GOOGLE_SHEETS_PASSWORD,
+                    timestamp: response.timestamp,
+                    field: field,
+                    value: checked ? 'sim' : 'nao'
+                });
+                
+                const url = `${GOOGLE_SHEETS_API_BASE}?${params.toString()}`;
+                const updateResponse = await fetch(url);
+                const result = await updateResponse.json();
+                
+                if (result.success) {
+                    // Update UI
+                    if (checked) {
+                        finEl.classList.add('checked');
+                    } else {
+                        finEl.classList.remove('checked');
+                    }
+                    
+                    // Update local data
+                    response[field] = checked ? 'sim' : 'nao';
+                    const dateField = field === 'relatorio_enviado' ? 'data_relatorio_enviado' : 'data_pagamento';
+                    response[dateField] = checked ? new Date().toISOString() : '';
+                    
+                    // Re-render to show date
+                    renderResponseCards();
+                } else {
+                    alert('Erro ao salvar: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Erro: ' + error.message);
+            }
+        }
+        
+        async function saveNotes(idx) {
+            const sorted = [...analyticsData].sort((a, b) =>
+                new Date(b.timestamp || 0) - new Date(a.timestamp || 0)
+            );
+            const response = sorted[idx];
+            
+            if (!response || !response.timestamp) {
+                alert('Erro: resposta não encontrada');
+                return;
+            }
+            
+            const textarea = document.getElementById(`notes-${idx}`);
+            const statusEl = document.getElementById(`note-status-${idx}`);
+            const notes = textarea.value;
+            
+            try {
+                statusEl.textContent = 'Salvando...';
+                
+                // Escape special characters for URL
+                const notesEscaped = encodeURIComponent(notes);
+                
+                const params = new URLSearchParams({
+                    action: 'update',
+                    password: GOOGLE_SHEETS_PASSWORD,
+                    timestamp: response.timestamp,
+                    field: 'comentarios_luis',
+                    value: notes
+                });
+                
+                const url = `${GOOGLE_SHEETS_API_BASE}?${params.toString()}`;
+                const updateResponse = await fetch(url);
+                const result = await updateResponse.json();
+                
+                if (result.success) {
+                    statusEl.textContent = '✓ Salvo';
+                    response.comentarios_luis = notes;
+                    setTimeout(() => { statusEl.textContent = ''; }, 2000);
+                } else {
+                    statusEl.textContent = '✗ Erro';
+                    alert('Erro ao salvar: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                statusEl.textContent = '✗ Erro';
+                alert('Erro: ' + error.message);
+            }
         }
     </script>
 </body>
