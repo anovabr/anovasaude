@@ -66,8 +66,8 @@ function injectSharedPages() {
     <!-- PAGE 3: DEMOGRAPHICS FORM -->
     <div id="demographics-page" class="page-section" style="display: none;">
       <div class="test-header">
-        <h1>Informações Pessoais</h1>
-        <p>As perguntas abaixo são opcionais, porém, elas vão possibilitar uma melhor interpretação dos resultados. Assim, preencha todas as informações que você quiser. Se você já preencheu este formulário anteriormente, apenas indique seu nome e e-mail.</p>
+        <h1 id="demographics-title">Informações Pessoais</h1>
+        <p id="demographics-desc">As perguntas abaixo são opcionais, porém, elas vão possibilitar uma melhor interpretação dos resultados. Assim, preencha todas as informações que você quiser. Se você já preencheu este formulário anteriormente, apenas indique seu nome e e-mail.</p>
       </div>
 
       <form id="demographics-form">
@@ -223,13 +223,14 @@ function injectSharedPages() {
         </div>
 
         <div id="post-send-message" class="payment-message" style="display:none;"></div>
-        <div class="test-navigation">
-          <button type="button" id="back-to-results-btn" class="btn btn-secondary">Voltar</button>
-          <button type="button" id="submit-results-btn" class="btn btn-primary">Enviar Resultados</button>
-          <a href="../index.html#testes" class="btn btn-secondary post-action" style="display:none;">Fazer Outro Teste</a>
-          <a href="https://anovasaude.lojavirtualnuvem.com.br/produtos/relatorio-personalizado/" target="_blank" class="btn btn-primary post-action" style="display:none;">Realizar Pagamento</a>
-        </div>
       </form>
+      <div class="test-navigation">
+        <button type="button" id="back-to-results-btn" class="btn btn-secondary">Voltar</button>
+        <button type="button" id="submit-results-btn" class="btn btn-primary">Enviar Resultados</button>
+        <a href="../index.html#testes" class="btn btn-secondary post-action" style="display:none;">Fazer Outro Teste</a>
+        <div id="mp-checkout-container" style="display:none; text-align: center; padding: 10px; background: #f1fbf5; border: 1px solid #9bd0af; border-radius: 8px; box-shadow: 0 2px 8px rgba(26,77,46,0.1); width: fit-content; margin: 0 auto; zoom: 0.65;" data-preference-id-one="63317762-5eeb54d6-3242-4b6c-8bd7-3176fad46396" data-preference-id-three="63317762-195fd6d9-b3a9-47a0-a261-5cb1d63bd83e"></div>
+        <div id="mp-warning-text" style="display:none; padding: 0.6rem 0.9rem; background: #fff7ee; border: 1px solid #d4a574; border-radius: 8px; color: #6b3d14; font-weight: 600;">Nossa equipe vai entrar em contato.</div>
+      </div>
     </div>
 
     <!-- VIDEO MODAL -->
@@ -401,6 +402,36 @@ function injectSharedPages() {
 
   loadFinanceiro().then(updateFinanceInlineText);
 
+  function renderMercadoPagoButton(count) {
+    const container = document.getElementById('mp-checkout-container');
+    const warning = document.getElementById('mp-warning-text');
+    if (!container) return;
+    if (count >= 4) {
+      container.style.display = 'none';
+      container.dataset.rendered = 'false';
+      container.dataset.currentPref = '';
+      container.innerHTML = '';
+      if (warning) warning.style.display = 'inline-flex';
+      return;
+    }
+    if (warning) warning.style.display = 'none';
+    const preferenceId = count <= 1 ? container.dataset.preferenceIdOne : container.dataset.preferenceIdThree;
+    if (!preferenceId) return;
+    if (container.dataset.rendered === 'true' && container.dataset.currentPref === preferenceId) {
+      container.style.display = 'inline-flex';
+      return;
+    }
+    container.innerHTML = '';
+    container.style.display = 'inline-flex';
+    const script = document.createElement('script');
+    script.src = 'https://www.mercadopago.com.br/integrations/v1/web-payment-checkout.js';
+    script.setAttribute('data-preference-id', preferenceId);
+    script.setAttribute('data-source', 'button');
+    container.appendChild(script);
+    container.dataset.rendered = 'true';
+    container.dataset.currentPref = preferenceId;
+  }
+
   if (submitBtn) {
     submitBtn.addEventListener('click', (ev) => {
       ev.preventDefault();
@@ -495,17 +526,26 @@ function injectSharedPages() {
       .then(r => r.text())
       .then(async () => {
         submitBtn.textContent = '✓ Enviado';
+        const formEl = document.getElementById('demographics-form');
+        if (formEl) formEl.style.display = 'none';
+        const titleEl = document.getElementById('demographics-title');
+        const descEl = document.getElementById('demographics-desc');
+        if (titleEl) titleEl.textContent = 'Próximos passos';
+        if (descEl) {
+          descEl.textContent = 'Agora você pode optar por fazer outros testes ou realizar seu pagamento. Caso queira pagar, você deverá clicar no botão do Mercado Pago. Quando seu pagamento for confirmado, nossa equipe entrará em contato, preferencialmente por e-mail, seja para solicitar mais informações, seja para enviar seu relatório técnico.';
+        }
         document.querySelectorAll('.post-action').forEach(a => a.style.display = 'inline-flex');
+        let count = 0;
+        if (typeof Storage !== 'undefined') {
+          try {
+            count = Storage.getResultsIndex().length || 0;
+          } catch (e) {
+            count = 0;
+          }
+        }
+        renderMercadoPagoButton(count);
         const msgEl = document.getElementById('post-send-message');
         if (msgEl) {
-          let count = 0;
-          if (typeof Storage !== 'undefined') {
-            try {
-              count = Storage.getResultsIndex().length || 0;
-            } catch (e) {
-              count = 0;
-            }
-          }
           const plural = count === 1 ? 'teste' : 'testes';
           const fin = await loadFinanceiro();
           if (fin && fin.preco_um_teste != null && fin.preco_ate_tres != null) {
