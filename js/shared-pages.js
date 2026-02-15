@@ -246,12 +246,54 @@ function injectSharedPages() {
 
   testContainer.insertAdjacentHTML("beforeend", sharedPagesHTML);
 
+  function getCurrentTestId() {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    if (id) return id;
+    return (window.location.pathname.split('/').pop() || '').replace('.html','');
+  }
+
+  function findLatestResultIdForTest(testId) {
+    if (typeof Storage === 'undefined' || !testId) return null;
+    const index = Storage.getResultsIndex();
+    for (let i = index.length - 1; i >= 0; i--) {
+      if (index[i].testId === testId) return index[i].resultId;
+    }
+    return null;
+  }
+
+  function getCurrentResultId() {
+    const params = new URLSearchParams(window.location.search);
+    const rid = params.get('result_id');
+    if (rid) return rid;
+    if (typeof Storage === 'undefined') return null;
+    const testId = getCurrentTestId();
+    return Storage.getLatestResultId(testId) || findLatestResultIdForTest(testId);
+  }
+
+  function markFunnelEvent(eventKey) {
+    if (typeof Storage === 'undefined') return;
+    const resultId = getCurrentResultId();
+    if (resultId) {
+      Storage.setFunnelEvent(resultId, eventKey);
+    }
+  }
+
+  function openDemographicsPage() {
+    const resultsPage = document.getElementById('results-page');
+    const demographicsPage = document.getElementById('demographics-page');
+    const testPage = document.getElementById('test-page');
+    if (resultsPage) resultsPage.style.display = 'none';
+    if (testPage) testPage.style.display = 'none';
+    if (demographicsPage) demographicsPage.style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }
+
   // Navigation handlers
   document.addEventListener("click", e => {
     if (e.target.id === "interpretation-btn" || e.target.classList.contains("interpretation-link")) {
-      document.getElementById("results-page").style.display = "none";
-      document.getElementById("demographics-page").style.display = "block";
-      window.scrollTo({ top: 0, behavior: "auto" });
+      markFunnelEvent('interpretation_clicked');
+      openDemographicsPage();
     }
     if (e.target.id === "back-to-results-btn") {
       document.getElementById("demographics-page").style.display = "none";
@@ -269,6 +311,12 @@ function injectSharedPages() {
       }
     }
   });
+
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('flow') === 'interpretation') {
+    markFunnelEvent('interpretation_clicked');
+    openDemographicsPage();
+  }
 
   // Video modal handlers
   const videoModal = document.getElementById('video-modal');
@@ -467,14 +515,23 @@ function injectSharedPages() {
         return;
       }
 
-      const testId = (window.location.pathname.split('/').pop() || '').replace('.html','');
+      markFunnelEvent('submit_clicked');
+
+      const testId = getCurrentTestId();
       let answers = [];
+      let storedResult = null;
       if (typeof Storage !== 'undefined') {
-        const index = Storage.getResultsIndex();
-        const latest = index.length ? index[index.length - 1] : null;
-        const res = latest?.resultId ? Storage.getResult(latest.resultId) : null;
-        if (res && Array.isArray(res.answers)) {
-          answers = res.answers.map(ans => {
+        const resultId = getCurrentResultId();
+        if (resultId) {
+          storedResult = Storage.getResult(resultId);
+        }
+        if (!storedResult) {
+          const index = Storage.getResultsIndex();
+          const latest = index.length ? index[index.length - 1] : null;
+          storedResult = latest?.resultId ? Storage.getResult(latest.resultId) : null;
+        }
+        if (storedResult && Array.isArray(storedResult.answers)) {
+          answers = storedResult.answers.map(ans => {
             const q = (ans.questionTitle || '').toString().trim();
             const a = (ans.label || ans.value || '').toString().trim();
             return q && a ? `${q}, ${a}` : (q || a);
@@ -484,11 +541,11 @@ function injectSharedPages() {
       const payload = {
         token: SHEETS_SECRET,
         testId,
-        testTitle: document.getElementById('test-title')?.textContent || testId,
-        score: Number(document.getElementById('result-score')?.textContent) || null,
-        maxScore: Number(document.getElementById('result-max')?.textContent) || null,
-        interpretation: document.getElementById('result-level')?.textContent || '',
-        description: document.getElementById('result-description')?.textContent || '',
+        testTitle: document.getElementById('test-title')?.textContent || storedResult?.testTitle || testId,
+        score: Number(document.getElementById('result-score')?.textContent) || storedResult?.score || null,
+        maxScore: Number(document.getElementById('result-max')?.textContent) || storedResult?.maxScore || null,
+        interpretation: document.getElementById('result-level')?.textContent || storedResult?.interpretation?.level || '',
+        description: document.getElementById('result-description')?.textContent || storedResult?.interpretation?.description || '',
         answers,
         demographics: {
           fullName: document.getElementById('full-name')?.value || '',

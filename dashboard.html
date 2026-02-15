@@ -36,9 +36,35 @@
     </header>
 
     <section class="tests-section" style="padding-top:4rem;">
+        <canvas class="signature-canvas" id="signature-canvas"></canvas>
         <div class="container">
             <h2 class="section-title">Seus Resultados</h2>
-            <p class="section-subtitle">Acompanhe todos os testes que você realizou.</p>
+            <div class="dashboard-info">
+                <h2 class="section-title">Como funciona?</h2>
+                <div class="dashboard-info__row">
+                    <span class="dashboard-info__icon" aria-hidden="true">📌</span>
+                    <p><strong>Sistema:</strong> Este dashboard é apenas para consulta e visualização rápida dos resultados.</p>
+                </div>
+                <div class="dashboard-info__row">
+                    <span class="dashboard-info__icon" aria-hidden="true">🧠</span>
+                    <p><strong>Interpretação:</strong> cada teste é interpretado individualmente. Correlações entre testes só são feitas na interpretação humana.</p>
+                </div>
+                <div class="dashboard-info__row">
+                    <span class="dashboard-info__icon" aria-hidden="true">✅</span>
+                    <p><strong>Se não terminou um teste ou não pagou:</strong> você pode clicar em “Solicitar interpretação humana” para seguir.</p>
+                </div>
+                <div class="dashboard-info__row">
+                    <span class="dashboard-info__icon" aria-hidden="true">💳</span>
+                    <p><strong>Pagamento:</strong> Este sistema aqui não registra pagamentos. Todo o pagamento é feito pelo Mercado Pago. Se você já pagou, basta aguardar a confirmação.</p>
+                </div>
+                <div class="dashboard-info__row">
+                    <span class="dashboard-info__icon" aria-hidden="true">🔒</span>
+                    <p><strong>Privacidade:</strong> se você fechar esta janela, seus dados são perdidos. Isso é intencional e faz parte da política de privacidade.</p>
+                </div>
+            </div>
+            <div class="tests-stamp" aria-live="polite">
+                Você executou <strong id="tests-taken-count">0</strong> testes.
+            </div>
             <div id="results-list"></div>
         </div>
     </section>
@@ -46,5 +72,83 @@
     <script src="js/storage.js"></script>
     <script src="js/dashboard.js"></script>
     <script src="js/results-dashboard.js"></script>
+    
+    <script>
+(function () {
+  const canvas = document.getElementById('signature-canvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  const section = canvas.parentElement;
+  if (!section) return;
+
+  function resizeCanvas() {
+    canvas.width = section.offsetWidth;
+    canvas.height = section.offsetHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  const colors = ['#d0d0d0', '#c0c0c0', '#a8c4a8', '#b8d4b8'];
+
+  const curves = [
+    { color: colors[0], opacity: 0.32, base: 0.72, amp: 0.2,  sigma: 0.28, flat: 0.06, speed: 0.06, phase: 0.0, fill: 'rgba(224,255,255'},
+    { color: colors[1], opacity: 0.42, base: 0.72, amp: 0.32, sigma: 0.16, flat: 0.03, speed: 0.08, phase: 1.4, fill: 'rgba(84, 166, 116, 0.16)' },
+    { color: colors[2], opacity: 0.36, base: 0.72, amp: 0.22, sigma: 0.13, flat: 0.03, speed: 0.1,  phase: 2.6 , fill: 'rgba(230,230,250'}
+  ];
+
+  function drawCurve(c, t) {
+    const w = canvas.width;
+    const h = canvas.height;
+    const center = w * 0.5 + Math.sin(t * c.speed + c.phase) * w * 0.18;
+    const sigma = w * c.sigma;
+    const baseline = h * c.base;
+    const amp = h * c.amp * (0.9 + 0.1 * Math.sin(t * 0.7 + c.phase));
+    const step = Math.max(6, w / 140);
+
+    ctx.beginPath();
+    for (let x = 0; x <= w; x += step) {
+      const dx = Math.abs((x - center) / sigma);
+      const shoulder = Math.max(0, dx - c.flat);
+      const y = baseline - amp * Math.exp(-0.5 * shoulder * shoulder);
+      if (x === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    if (c.fill) {
+      ctx.lineTo(w, baseline);
+      ctx.lineTo(0, baseline);
+      ctx.closePath();
+      ctx.fillStyle = c.fill;
+      ctx.globalAlpha = 1;
+      ctx.fill();
+      ctx.beginPath();
+      for (let x = 0; x <= w; x += step) {
+        const dx = Math.abs((x - center) / sigma);
+        const shoulder = Math.max(0, dx - c.flat);
+        const y = baseline - amp * Math.exp(-0.5 * shoulder * shoulder);
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+    }
+    ctx.strokeStyle = c.color;
+    ctx.globalAlpha = c.opacity;
+    ctx.lineWidth = 1.6;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.stroke();
+  }
+
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function renderFrame(t) {
+    const time = t / 1000;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    curves.forEach(c => drawCurve(c, time));
+    if (!reduceMotion) requestAnimationFrame(renderFrame);
+  }
+
+  requestAnimationFrame(renderFrame);
+})();
+    </script>
 </body>
 </html>

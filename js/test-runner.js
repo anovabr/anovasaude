@@ -407,8 +407,11 @@
 
     // Save to storage
     if (typeof Storage !== 'undefined') {
-      Storage.saveResult(results.testId, results);
+      const resultId = Storage.saveResult(results.testId, results);
       Storage.recordTestTaken(results.testId, results.testTitle);
+      if (resultId) {
+        Storage.setFunnelEvent(resultId, 'results_viewed');
+      }
     }
     if (window.ProgressDashboard && typeof window.ProgressDashboard.refresh === 'function') {
       window.ProgressDashboard.refresh();

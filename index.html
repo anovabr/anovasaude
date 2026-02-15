@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,11 +8,16 @@
     <link rel="icon" type="image/x-icon" href="logo_icon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Work+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <script src="https://fast.wistia.com/player.js" async></script>
     <script src="https://fast.wistia.com/embed/r9ja6ay4hi.js" async type="module"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+
 </head>
+
 <body>
     <header class="header">
         <div class="container">
@@ -22,11 +28,14 @@
                     </a>
                     <div class="progress-chip" aria-live="polite">
                         <span class="progress-chip__label">Seu progresso</span>
-                        <span class="progress-chip__count"><strong id="tests-taken-count-header" data-count-tests>0</strong> testes</span>
+                        <span class="progress-chip__count"><strong id="tests-taken-count-header"
+                                data-count-tests>0</strong> testes</span>
                     </div>
                     <div class="progress-actions">
-                        <button type="button" class="progress-btn" id="view-results-btn" title="Ver resultados">Ver</button>
-                        <button type="button" class="progress-btn progress-btn--ghost" id="clear-results-btn" title="Limpar resultados">Limpar</button>
+                        <button type="button" class="progress-btn" id="view-results-btn"
+                            title="Ver resultados">Ver</button>
+                        <button type="button" class="progress-btn progress-btn--ghost" id="clear-results-btn"
+                            title="Limpar resultados">Limpar</button>
                     </div>
                     <button type="button" class="nav-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
                 </div>
@@ -34,9 +43,11 @@
                     <li><a href="catalogo.html">Catálogo de Testes</a></li>
                     <li><a href="mailto:contato@anovasaude.com">Contato</a></li>
                     <li>
-                        <a class="nav-icon" href="https://instagram.com/anovaneurostat" target="_blank" rel="noopener" aria-label="Instagram">
+                        <a class="nav-icon" href="https://instagram.com/anovaneurostat" target="_blank" rel="noopener"
+                            aria-label="Instagram">
                             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                                <path d="M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4zm0 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H7zm5 3a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm6.2-.7a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                                <path
+                                    d="M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4zm0 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H7zm5 3a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm6.2-.7a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
                             </svg>
                         </a>
                     </li>
@@ -49,7 +60,8 @@
     <section id="testes" class="tests-section" style="padding-top: 2rem;">
         <canvas class="signature-canvas" id="signature-canvas"></canvas>
         <div class="container">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 1rem;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 1rem;">
                 <h2 class="section-title">Catálogo de Testes</h2>
                 <div class="category-filters" style="display: flex; gap: 0.75rem;">
                     <button class="filter-btn filter-btn--active" data-category="all">Todos</button>
@@ -75,57 +87,66 @@
             <p>Um teste rápido com apenas 2 questões. Perfeito para experimentar como funciona a plataforma.</p>
             <div class="test-meta"><span>⏱️ 1 min</span><span>📊 2 questões</span></div>
             <div class="test-actions">
-                <a class="badge badge--article" href="https://example.com/artigo/demo" target="_blank" rel="noopener">Artigo</a>
+                <a class="badge badge--article" href="https://example.com/artigo/demo" target="_blank"
+                    rel="noopener">Artigo</a>
             </div>
         </div>
-        <div class="test-card" data-test-id="bdi-pc" data-test-title="Escala de Depressão para Atenção Primária (BDI-PC)">
+        <div class="test-card" data-test-id="bdi-pc"
+            data-test-title="Escala de Depressão para Atenção Primária (BDI-PC)">
             <span class="ribbon">Curadoria Anova</span>
             <span class="test-tag">Depressão</span>
             <h4>Escala de Depressão para Atenção Primária (BDI-PC)</h4>
-            <p>Instrumento de rastreamento rápido para sintomas depressivos em contextos de atenção primária à saúde.</p>
+            <p>Instrumento de rastreamento rápido para sintomas depressivos em contextos de atenção primária à saúde.
+            </p>
             <div class="test-meta"><span>⏱️ 3-5 min</span><span>📊 7 questões</span></div>
             <div class="test-actions">
-                <a class="badge badge--article" href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank" rel="noopener">Artigo</a>
+                <a class="badge badge--article" href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank"
+                    rel="noopener">Artigo</a>
             </div>
         </div>
         <div class="test-card" data-test-id="gad7" data-test-title="Escala de Ansiedade Generalizada (GAD-7)">
             <span class="test-tag">Ansiedade</span>
             <h4>Escala de Ansiedade Generalizada (GAD-7)</h4>
-            <p>Avaliação breve e eficaz de sintomas de ansiedade generalizada amplamente utilizada na prática clínica.</p>
+            <p>Avaliação breve e eficaz de sintomas de ansiedade generalizada amplamente utilizada na prática clínica.
+            </p>
             <div class="test-meta"><span>⏱️ 3-5 min</span><span>📊 7 questões</span></div>
             <div class="test-actions">
-                <a class="badge badge--article" href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank" rel="noopener">Artigo</a>
+                <a class="badge badge--article" href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank"
+                    rel="noopener">Artigo</a>
             </div>
         </div>
     </template>
-        
+
     <!-- Como Funciona Section -->
     <section id="como-funciona" class="features">
         <div class="container">
             <h2 class="section-title">Como Funciona</h2>
-     
+
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">1</div>
                     <div>
                         <h3>Escolha seu Teste</h3>
-                        <p>Selecione entre diversos instrumentos validados cientificamente para avaliação de diferentes aspectos da saúde mental.</p>
+                        <p>Selecione entre diversos instrumentos validados cientificamente para avaliação de diferentes
+                            aspectos da saúde mental.</p>
                     </div>
                 </div>
-                
+
                 <div class="feature-card">
                     <div class="feature-icon">2</div>
                     <div>
                         <h3>Complete a Avaliação</h3>
-                        <p>Responda gratuitamente, sem necessidade login ou conta. Receba resultados em sua tela, com gráficos, tabelas, imediatamente após a conclusão.</p>
+                        <p>Responda gratuitamente, sem necessidade login ou conta. Receba resultados em sua tela, com
+                            gráficos, tabelas, imediatamente após a conclusão.</p>
                     </div>
                 </div>
-                
+
                 <div class="feature-card">
                     <div class="feature-icon">3</div>
                     <div>
                         <h3>Interpretação Profissional</h3>
-                        <p>Caso queira, solicite uma análise detalhada elaborada por mim ou minha equipe, com recomendações específicas.</p>
+                        <p>Caso queira, solicite uma análise detalhada elaborada por mim ou minha equipe, com
+                            recomendações específicas.</p>
                     </div>
                 </div>
             </div>
@@ -138,7 +159,9 @@
             <h2 class="section-title">Equipe</h2>
 
             <div class="team-grid">
-                <article class="team-card team-card--lead" data-name="Luis Anunciação" data-role="Doutor em Psicologia (PUC-Rio)" data-bio="Especialista em avaliação psicológica e saúde mental comunitária. Atuação em atenção primária e pesquisa em rastreio de depressão.">
+                <article class="team-card team-card--lead" data-name="Luis Anunciação"
+                    data-role="Doutor em Psicologia (PUC-Rio)"
+                    data-bio="Especialista em avaliação psicológica e saúde mental comunitária. Atuação em atenção primária e pesquisa em rastreio de depressão.">
                     <img src="img/photo2_luis_2026.png" alt="Luis Anunciação" class="team-photo team-photo-img">
                     <div>
                         <h3 class="team-name">Luis Anunciação <span class="team-badge">Líder</span></h3>
@@ -150,7 +173,8 @@
                     </div>
                 </article>
 
-                <article class="team-card" data-name="Person 2" data-role="Psicóloga" data-bio="Focada em ansiedade e intervenção breve. Experiência em grupos terapêuticos.">
+                <article class="team-card" data-name="Person 2" data-role="Psicóloga"
+                    data-bio="Focada em ansiedade e intervenção breve. Experiência em grupos terapêuticos.">
                     <div class="team-photo">P2</div>
                     <div>
                         <h3 class="team-name">Person 2</h3>
@@ -159,7 +183,8 @@
                     </div>
                 </article>
 
-                <article class="team-card" data-name="Person 3" data-role="Neuropsicólogo" data-bio="Atuação em avaliação neuropsicológica e acompanhamento de TDAH ao longo do ciclo de vida.">
+                <article class="team-card" data-name="Person 3" data-role="Neuropsicólogo"
+                    data-bio="Atuação em avaliação neuropsicológica e acompanhamento de TDAH ao longo do ciclo de vida.">
                     <div class="team-photo">P3</div>
                     <div>
                         <h3 class="team-name">Person 3</h3>
@@ -200,10 +225,10 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <canvas class="birds-canvas" id="birds-canvas"></canvas>
         <div class="container">
             <div class="footer-panels">
-                <button type="button" class="footer-panel footer-panel-link" data-title="Sobre Nós" data-body="<strong>ANOVA</strong>&#10;A ANOVA Saúde é um braço da <a href='https://www.anovabr.com' target='_blank' rel='noopener'>anovabr.com</a>. Este espaço é uma plataforma independente de triagem e educação em saúde mental, criada para oferecer acesso claro, responsável e tecnicamente fundamentado sobre características psicológicas a partir da realização de instrumentos cientificamente embasados.
+                <button type="button" class="footer-panel footer-panel-link" data-title="Sobre Nós"
+                    data-body="<strong>ANOVA</strong>&#10;A ANOVA Saúde é um braço da <a href='https://www.anovabr.com' target='_blank' rel='noopener'>anovabr.com</a>. Este espaço é uma plataforma independente de triagem e educação em saúde mental, criada para oferecer acesso claro, responsável e tecnicamente fundamentado sobre características psicológicas a partir da realização de instrumentos cientificamente embasados.
                     &#10;Assim, este espaço foi desenvolvido para que pessoas interessadas em compreender melhor suas características psicológicas possam fazer isso por meio da realização de instrumentos cientificamente adequados, sem promessas diagnósticas ou interpretações infundadas.
                     &#10;O objetivo é organizar informações de forma embasada, honesta e precisa, permitindo que você compreenda melhor seus resultados, acompanhe mudanças ao longo do tempo e, se desejar, utilize esse material como apoio em uma conversa qualificada com profissionais de saúde, especialmente psicólogos e psiquiatras.
                     &#10;A ANOVA Saúde não realiza, nem substitui, avaliação clínica, psicoterapia, consulta médica ou diagnóstico psicológico. 
@@ -213,19 +238,23 @@
                     Quando a evidência é limitada, isso é explicitado.&#10;<strong>Sem absolutamente nenhum tipo de enrolação.</strong>&#10;Não exageramos resultados, não dramatizamos interpretações e não prometemos o que os dados não sustentam. A informação é apresentada de forma direta, técnica e responsável. Você jamais vai ter um popup te vendendo produtos, pedindo e-mails ou fazendo “promoções sensacionais”. Vamos tratar você exatamente da mesma forma honesta que gostaríamos de ser tratado.&#10;<strong>Sem interesses comerciais ocultos.</strong>&#10;Não há anúncios, conteúdos patrocinados ou rankings manipulados. Quando um serviço é pago, isso é informado de forma clara. Quando é gratuito, é gratuito.&#10;<strong>Transparência acima de persuasão.</strong>&#10;Os resultados são apresentados como informação, não como diagnóstico nem como ferramenta de convencimento. Não promovemos tratamentos, produtos ou decisões.&#10;<strong>Conexão com profissionais — apenas se você quiser.</strong>&#10;A plataforma pode ser utilizada exclusivamente para entendimento pessoal. Caso deseje, os resultados podem servir como apoio para discussão com profissionais da minha equipe. Não há encaminhamento automático nem pressão. Os profissionais da ANOVA Saúde são ou foram meus alunos; todos são, no mínimo, especialistas.&#10;<strong>Respeito à autonomia.</strong>&#10;Você controla seus dados, seus resultados e o uso que faz deles. A informação é fornecida; as decisões permanecem com você. O sistema somente salvará seus dados se você autorizar.">
                     <h5>Sobre Nós</h5>
                 </button>
-                <button type="button" class="footer-panel footer-panel-link" data-title="Como Funciona" data-body="<strong>1. Escolha do instrumento</strong>&#10;Você seleciona um instrumento disponível na plataforma e responde online. Os instrumentos com curadoria foram desenvolvidos pela nossa equipe ou resultam diretamente de nossas pesquisas. Todos os instrumentos disponíveis possuem artigos científicos revisados por pares, publicados em revistas internacionais.&#10;<strong>2. Instrumentos restritos a psicólogos ou com direitos comerciais</strong>&#10;Instrumentos restritos a profissionais de psicologia ou cujos direitos autorais pertencem a editoras técnicas (por exemplo, Pearson) não estão disponíveis na plataforma, salvo quando vinculados a projetos de pesquisa em andamento, o que é sempre claramente indicado.&#10;<strong>3. Cálculo dos escores</strong>&#10;O sistema calcula seus escores e os apresenta em relação aos valores mínimos e máximos possíveis do instrumento ou fator avaliado. Dependendo do instrumento, podem ser apresentados níveis ou descrições compatíveis com a literatura científica correspondente.&#10;<strong>4. Resultado informativo</strong>&#10;O resultado tem finalidade informativa e educacional, permitindo uma melhor compreensão de suas características no momento da avaliação. Esses resultados não constituem diagnóstico clínico.&#10;<strong>5. Relatório interpretativo por profissional (opcional, quando disponível)</strong>&#10;Alguns instrumentos oferecem a opção de contratação de um relatório interpretativo, elaborado por um profissional da equipe da ANOVA Saúde, sob minha supervisão. O prazo informado é necessário para a análise cuidadosa dos dados e elaboração do documento técnico. Este é um serviço pago e claramente identificado no momento da contratação.&#10;<strong>6. Elaboração humana do documento</strong>&#10;Os relatórios interpretativos são produzidos integralmente por profissionais, sem o uso de ferramentas automáticas de geração de texto ou inteligência artificial para redigir o conteúdo interpretativo.&#10;<strong>7. Uso do documento</strong>&#10;O documento técnico é assinado e carimbado pelo profissional responsável e tem finalidade informativa e orientativa, podendo auxiliar o próprio usuário a se compreender melhor e, se desejar, a buscar apoio profissional adequado. O documento não substitui avaliação clínica ou laudo psicológico.&#10;<strong>8. Suas informações</strong>&#10;Suas informações não ficam armazenadas. Intencionalmente, o site não possui criação de contas. Se você fechar o navegador, seus dados são apagados imediatamente.">
+                <button type="button" class="footer-panel footer-panel-link" data-title="Como Funciona"
+                    data-body="<strong>1. Escolha do instrumento</strong>&#10;Você seleciona um instrumento disponível na plataforma e responde online. Os instrumentos com curadoria foram desenvolvidos pela nossa equipe ou resultam diretamente de nossas pesquisas. Todos os instrumentos disponíveis possuem artigos científicos revisados por pares, publicados em revistas internacionais.&#10;<strong>2. Instrumentos restritos a psicólogos ou com direitos comerciais</strong>&#10;Instrumentos restritos a profissionais de psicologia ou cujos direitos autorais pertencem a editoras técnicas (por exemplo, Pearson) não estão disponíveis na plataforma, salvo quando vinculados a projetos de pesquisa em andamento, o que é sempre claramente indicado.&#10;<strong>3. Cálculo dos escores</strong>&#10;O sistema calcula seus escores e os apresenta em relação aos valores mínimos e máximos possíveis do instrumento ou fator avaliado. Dependendo do instrumento, podem ser apresentados níveis ou descrições compatíveis com a literatura científica correspondente.&#10;<strong>4. Resultado informativo</strong>&#10;O resultado tem finalidade informativa e educacional, permitindo uma melhor compreensão de suas características no momento da avaliação. Esses resultados não constituem diagnóstico clínico.&#10;<strong>5. Relatório interpretativo por profissional (opcional, quando disponível)</strong>&#10;Alguns instrumentos oferecem a opção de contratação de um relatório interpretativo, elaborado por um profissional da equipe da ANOVA Saúde, sob minha supervisão. O prazo informado é necessário para a análise cuidadosa dos dados e elaboração do documento técnico. Este é um serviço pago e claramente identificado no momento da contratação.&#10;<strong>6. Elaboração humana do documento</strong>&#10;Os relatórios interpretativos são produzidos integralmente por profissionais, sem o uso de ferramentas automáticas de geração de texto ou inteligência artificial para redigir o conteúdo interpretativo.&#10;<strong>7. Uso do documento</strong>&#10;O documento técnico é assinado e carimbado pelo profissional responsável e tem finalidade informativa e orientativa, podendo auxiliar o próprio usuário a se compreender melhor e, se desejar, a buscar apoio profissional adequado. O documento não substitui avaliação clínica ou laudo psicológico.&#10;<strong>8. Suas informações</strong>&#10;Suas informações não ficam armazenadas. Intencionalmente, o site não possui criação de contas. Se você fechar o navegador, seus dados são apagados imediatamente.">
                     <h5>Como Funciona</h5>
                 </button>
-                <button type="button" class="footer-panel footer-panel-link" data-title="Privacidade" data-body="A ANOVA Saúde trata dados pessoais com responsabilidade e apenas na medida necessária para o funcionamento da plataforma. O sistema foi desenvolvido com controle direto da nossa equipe (Javascript e Python), com medidas técnicas e administrativas voltadas à proteção das informações e à redução de riscos de acesso não autorizado.&#10;Quando aplicável, a coleta e o uso de dados para fins de pesquisa estão ancorados no projeto aprovado pela Plataforma Brasil: “Uma proposta interdisciplinar de inovação: o desenvolvimento de aplicativos e instrumentos psicológicos para otimizar a qualidade de vida” (CAAE: 63553522.7.0000.5279, Pesquisador Responsável: Luis Anunciação).&#10;&#10;<strong>Dados coletados</strong>&#10;• Respostas aos questionários e escores calculados.&#10;• Informações fornecidas voluntariamente (quando aplicável).&#10;• Dados técnicos básicos para segurança e funcionamento do site.&#10;&#10;<strong>Uso dos dados</strong>&#10;• Apresentação de resultados e geração de relatórios, quando aplicável.&#10;• Manutenção, segurança e melhoria da plataforma.&#10;• Quando autorizado, produção de documentos técnicos.&#10;&#10;<strong>O que não fazemos</strong>&#10;• Não vendemos dados.&#10;• Não utilizamos informações para publicidade direcionada baseada em saúde mental.&#10;&#10;<strong>Direitos do usuário</strong>&#10;O usuário pode, quando aplicável e dentro dos limites legais e técnicos, solicitar acesso, correção ou exclusão de seus dados, bem como revogar autorizações previamente concedidas.&#10;&#10;<strong>Armazenamento e segurança</strong>&#10;• Os dados são mantidos pelo tempo necessário para prestação do serviço e cumprimento de obrigações legais.&#10;• São adotadas medidas técnicas e administrativas para reduzir riscos de acesso não autorizado.">
+                <button type="button" class="footer-panel footer-panel-link" data-title="Privacidade"
+                    data-body="A ANOVA Saúde trata dados pessoais com responsabilidade e apenas na medida necessária para o funcionamento da plataforma. O sistema foi desenvolvido com controle direto da nossa equipe (Javascript e Python), com medidas técnicas e administrativas voltadas à proteção das informações e à redução de riscos de acesso não autorizado.&#10;Quando aplicável, a coleta e o uso de dados para fins de pesquisa estão ancorados no projeto aprovado pela Plataforma Brasil: “Uma proposta interdisciplinar de inovação: o desenvolvimento de aplicativos e instrumentos psicológicos para otimizar a qualidade de vida” (CAAE: 63553522.7.0000.5279, Pesquisador Responsável: Luis Anunciação).&#10;&#10;<strong>Dados coletados</strong>&#10;• Respostas aos questionários e escores calculados.&#10;• Informações fornecidas voluntariamente (quando aplicável).&#10;• Dados técnicos básicos para segurança e funcionamento do site.&#10;&#10;<strong>Uso dos dados</strong>&#10;• Apresentação de resultados e geração de relatórios, quando aplicável.&#10;• Manutenção, segurança e melhoria da plataforma.&#10;• Quando autorizado, produção de documentos técnicos.&#10;&#10;<strong>O que não fazemos</strong>&#10;• Não vendemos dados.&#10;• Não utilizamos informações para publicidade direcionada baseada em saúde mental.&#10;&#10;<strong>Direitos do usuário</strong>&#10;O usuário pode, quando aplicável e dentro dos limites legais e técnicos, solicitar acesso, correção ou exclusão de seus dados, bem como revogar autorizações previamente concedidas.&#10;&#10;<strong>Armazenamento e segurança</strong>&#10;• Os dados são mantidos pelo tempo necessário para prestação do serviço e cumprimento de obrigações legais.&#10;• São adotadas medidas técnicas e administrativas para reduzir riscos de acesso não autorizado.">
                     <h5>Privacidade</h5>
                 </button>
-                <button type="button" class="footer-panel footer-panel-link" data-title="Termos de Uso" data-body="Ao utilizar a ANOVA Saúde, você concorda com os termos abaixo.&#10;&#10;<strong>Natureza do serviço</strong>&#10;Os instrumentos e resultados disponibilizados têm finalidade informativa, educacional e de triagem. A plataforma não realiza diagnóstico, tratamento ou prescrição.&#10;&#10;<strong>Responsabilidade do usuário</strong>&#10;Os resultados devem ser utilizados de forma responsável. Em situações de sofrimento intenso, risco iminente ou emergência, o usuário deve buscar atendimento profissional imediato.&#10;&#10;<strong>Limitação de responsabilidade</strong>&#10;A ANOVA Saúde não se responsabiliza por decisões tomadas exclusivamente com base nos resultados apresentados na plataforma.&#10;&#10;<strong>Relatórios interpretativos (quando disponíveis)</strong>&#10;Quando oferecidos, os relatórios interpretativos constituem um serviço adicional, claramente informado no momento da contratação, e não substituem avaliação clínica formal, laudo psicológico ou parecer diagnóstico.&#10;&#10;<strong>Propriedade intelectual</strong>&#10;Conteúdos, marca, textos, layout e materiais próprios da plataforma não podem ser reproduzidos, distribuídos ou utilizados sem autorização prévia.&#10;&#10;<strong>Atualizações</strong>&#10;Estes termos e políticas podem ser atualizados para refletir mudanças na plataforma. A versão vigente será sempre a publicada no site.">
+                <button type="button" class="footer-panel footer-panel-link" data-title="Termos de Uso"
+                    data-body="Ao utilizar a ANOVA Saúde, você concorda com os termos abaixo.&#10;&#10;<strong>Natureza do serviço</strong>&#10;Os instrumentos e resultados disponibilizados têm finalidade informativa, educacional e de triagem. A plataforma não realiza diagnóstico, tratamento ou prescrição.&#10;&#10;<strong>Responsabilidade do usuário</strong>&#10;Os resultados devem ser utilizados de forma responsável. Em situações de sofrimento intenso, risco iminente ou emergência, o usuário deve buscar atendimento profissional imediato.&#10;&#10;<strong>Limitação de responsabilidade</strong>&#10;A ANOVA Saúde não se responsabiliza por decisões tomadas exclusivamente com base nos resultados apresentados na plataforma.&#10;&#10;<strong>Relatórios interpretativos (quando disponíveis)</strong>&#10;Quando oferecidos, os relatórios interpretativos constituem um serviço adicional, claramente informado no momento da contratação, e não substituem avaliação clínica formal, laudo psicológico ou parecer diagnóstico.&#10;&#10;<strong>Propriedade intelectual</strong>&#10;Conteúdos, marca, textos, layout e materiais próprios da plataforma não podem ser reproduzidos, distribuídos ou utilizados sem autorização prévia.&#10;&#10;<strong>Atualizações</strong>&#10;Estes termos e políticas podem ser atualizados para refletir mudanças na plataforma. A versão vigente será sempre a publicada no site.">
                     <h5>Termos de Uso</h5>
                 </button>
             </div>
-            
+
             <div class="footer-bottom">
-                <p><img src="img/formiga.png" alt="" class="footer-logo">© 2026 Anova Saúde. Programada integralmente por Luis Anunciação.</p>
+                <p><img src="img/formiga.png" alt="" class="footer-logo">© 2026 Anova Saúde. Programada integralmente
+                    por Luis Anunciação.</p>
             </div>
         </div>
     </footer>
@@ -234,359 +263,303 @@
     <script src="js/dashboard.js"></script>
     <script src="js/index.js"></script>
     <script>
-    // Footer modal functionality
-    (function() {
-        const footerModal = document.getElementById('footer-modal');
-        const footerBackdrop = document.getElementById('footer-modal-backdrop');
-        const footerClose = document.getElementById('footer-modal-close');
-        const footerTitle = document.getElementById('footer-modal-title');
-        const footerBody = document.getElementById('footer-modal-body');
-        
-        // Open footer modal
-        document.querySelectorAll('.footer-panel-link').forEach(panel => {
-            panel.addEventListener('click', () => {
-                const title = panel.dataset.title;
-                const body = panel.dataset.body;
-                
-                footerTitle.textContent = title;
-                footerBody.innerHTML = body.replace(/&#10;/g, '<br>');
-                
-                footerModal.classList.add('team-modal--open');
-                footerModal.setAttribute('aria-hidden', 'false');
-                document.body.style.overflow = 'hidden';
+        // Footer modal functionality
+        (function () {
+            const footerModal = document.getElementById('footer-modal');
+            const footerBackdrop = document.getElementById('footer-modal-backdrop');
+            const footerClose = document.getElementById('footer-modal-close');
+            const footerTitle = document.getElementById('footer-modal-title');
+            const footerBody = document.getElementById('footer-modal-body');
+
+            // Open footer modal
+            document.querySelectorAll('.footer-panel-link').forEach(panel => {
+                panel.addEventListener('click', () => {
+                    const title = panel.dataset.title;
+                    const body = panel.dataset.body;
+
+                    footerTitle.textContent = title;
+                    footerBody.innerHTML = body.replace(/&#10;/g, '<br>');
+
+                    footerModal.classList.add('team-modal--open');
+                    footerModal.setAttribute('aria-hidden', 'false');
+                    document.body.style.overflow = 'hidden';
+                });
             });
-        });
-        
-        // Close footer modal
-        function closeFooterModal() {
-            footerModal.classList.remove('team-modal--open');
-            footerModal.setAttribute('aria-hidden', 'true');
-            document.body.style.overflow = '';
-        }
-        
-        footerClose.addEventListener('click', closeFooterModal);
-        footerBackdrop.addEventListener('click', closeFooterModal);
-        
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && footerModal.classList.contains('team-modal--open')) {
-                closeFooterModal();
+
+            // Close footer modal
+            function closeFooterModal() {
+                footerModal.classList.remove('team-modal--open');
+                footerModal.setAttribute('aria-hidden', 'true');
+                document.body.style.overflow = '';
             }
-        });
-    })();
+
+            footerClose.addEventListener('click', closeFooterModal);
+            footerBackdrop.addEventListener('click', closeFooterModal);
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && footerModal.classList.contains('team-modal--open')) {
+                    closeFooterModal();
+                }
+            });
+        })();
     </script>
 
     <!-- VIDEO MODAL -->
-    <div id="video-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:9999;align-items:center;justify-content:center;">
-      <div style="position:relative;width:90%;max-width:900px;background:#000;border-radius:12px;overflow:hidden;">
-        <button id="close-video-modal" style="position:absolute;top:10px;right:10px;z-index:10000;background:rgba(255,255,255,0.9);border:none;border-radius:50%;width:40px;height:40px;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#333;">✕</button>
-        <div id="video-container" style="position:relative;padding-top:56.25%;background:#000;">
-          <iframe id="video-iframe" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allowfullscreen></iframe>
+    <div id="video-modal"
+        style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:9999;align-items:center;justify-content:center;">
+        <div style="position:relative;width:90%;max-width:900px;background:#000;border-radius:12px;overflow:hidden;">
+            <button id="close-video-modal"
+                style="position:absolute;top:10px;right:10px;z-index:10000;background:rgba(255,255,255,0.9);border:none;border-radius:50%;width:40px;height:40px;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#333;">✕</button>
+            <div id="video-container" style="position:relative;padding-top:56.25%;background:#000;">
+                <iframe id="video-iframe" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0"
+                    allowfullscreen></iframe>
+            </div>
         </div>
-      </div>
     </div>
 
     <script>
-    // Video modal handlers
-    (function(){
-      const videoModal = document.getElementById('video-modal');
-      const closeVideoBtn = document.getElementById('close-video-modal');
-      const videoIframe = document.getElementById('video-iframe');
-      
-      // Handle video badge clicks
-      document.addEventListener('click', (e) => {
-        const videoBtn = e.target.closest('.video-badge-btn');
-        if (videoBtn) {
-          const videoUrl = videoBtn.dataset.videoUrl;
-          if (videoUrl) {
-            const match = videoUrl.match(/medias\/([a-zA-Z0-9]+)/);
-            if (match && match[1]) {
-              const videoId = match[1];
-              videoIframe.src = `https://fast.wistia.net/embed/iframe/${videoId}?videoFoam=true`;
-              videoModal.style.display = 'flex';
-            } else {
-              window.open(videoUrl, '_blank');
+        // Video modal handlers
+        (function () {
+            const videoModal = document.getElementById('video-modal');
+            const closeVideoBtn = document.getElementById('close-video-modal');
+            const videoIframe = document.getElementById('video-iframe');
+
+            // Handle video badge clicks
+            document.addEventListener('click', (e) => {
+                const videoBtn = e.target.closest('.video-badge-btn');
+                if (videoBtn) {
+                    const videoUrl = videoBtn.dataset.videoUrl;
+                    if (videoUrl) {
+                        const match = videoUrl.match(/medias\/([a-zA-Z0-9]+)/);
+                        if (match && match[1]) {
+                            const videoId = match[1];
+                            videoIframe.src = `https://fast.wistia.net/embed/iframe/${videoId}?videoFoam=true`;
+                            videoModal.style.display = 'flex';
+                        } else {
+                            window.open(videoUrl, '_blank');
+                        }
+                    }
+                }
+            });
+
+            // Close modal
+            if (closeVideoBtn && videoModal && videoIframe) {
+                closeVideoBtn.addEventListener('click', () => {
+                    videoModal.style.display = 'none';
+                    videoIframe.src = '';
+                });
+
+                videoModal.addEventListener('click', (e) => {
+                    if (e.target === videoModal) {
+                        videoModal.style.display = 'none';
+                        videoIframe.src = '';
+                    }
+                });
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && videoModal.style.display === 'flex') {
+                        videoModal.style.display = 'none';
+                        videoIframe.src = '';
+                    }
+                });
             }
-          }
-        }
-      });
-      
-      // Close modal
-      if (closeVideoBtn && videoModal && videoIframe) {
-        closeVideoBtn.addEventListener('click', () => {
-          videoModal.style.display = 'none';
-          videoIframe.src = '';
-        });
-        
-        videoModal.addEventListener('click', (e) => {
-          if (e.target === videoModal) {
-            videoModal.style.display = 'none';
-            videoIframe.src = '';
-          }
-        });
-        
-        document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape' && videoModal.style.display === 'flex') {
-            videoModal.style.display = 'none';
-            videoIframe.src = '';
-          }
-        });
+        })();
+    </script>
+
+    <script>
+(function () {
+  const canvas = document.getElementById('signature-canvas');
+  if (!canvas) return;
+
+  // random: lines OR birds
+  if (Math.random() < 0.5) {
+    // ===== LINES =====
+    const ctx = canvas.getContext('2d');
+    const section = canvas.parentElement;
+    if (!section) return;
+
+    function resizeCanvas() {
+      canvas.width = section.offsetWidth;
+      canvas.height = section.offsetHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const colors = ['#d0d0d0', '#c0c0c0', '#a8c4a8', '#b8d4b8'];
+    const lines = [];
+
+    class SignatureLine {
+      constructor() { this.reset(); }
+      reset() {
+        this.y = Math.random() * canvas.height * 0.6 + canvas.height * 0.2;
+        this.x = -50;
+        this.targetX = canvas.width + 50;
+        this.progress = 0;
+        this.speed = 0.001 + Math.random() * 0.001;
+        this.waveAmplitude = 15 + Math.random() * 25;
+        this.waveFrequency = 0.01 + Math.random() * 0.02;
+        this.opacity = 0;
+        this.maxOpacity = 0.4 + Math.random() * 0.3;
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+        this.thickness = 1 + Math.random() * 2;
+        this.points = [];
+        this.phase = Math.random() * Math.PI * 2;
+        this.done = false;
       }
+      update() {
+        if (this.done) return;
+        this.progress += this.speed;
+
+        if (this.progress < 0.1) this.opacity = (this.progress / 0.1) * this.maxOpacity;
+        else if (this.progress > 0.85) this.opacity = this.maxOpacity * (1 - (this.progress - 0.85) / 0.15);
+        else this.opacity = this.maxOpacity;
+
+        if (this.progress >= 1) { this.done = true; return; }
+
+        const currentX = this.x + (this.targetX - this.x) * this.progress;
+        const wave = Math.sin(currentX * this.waveFrequency + this.phase) * this.waveAmplitude;
+        const drift = (this.progress - 0.5) * 30;
+        const currentY = this.y + wave + drift;
+
+        this.points.push({ x: currentX, y: currentY });
+        if (this.points.length > 100) this.points.shift();
+      }
+      draw() {
+        if (this.points.length < 2 || this.done) return;
+
+        ctx.strokeStyle = this.color;
+        ctx.globalAlpha = this.opacity;
+        ctx.lineWidth = this.thickness;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        ctx.beginPath();
+        ctx.moveTo(this.points[0].x, this.points[0].y);
+        for (let i = 1; i < this.points.length; i++) ctx.lineTo(this.points[i].x, this.points[i].y);
+        ctx.stroke();
+      }
+    }
+
+    const numLines = 4;
+    let lineIndex = 0;
+
+    function addLine() {
+      if (lineIndex < numLines) {
+        lines.push(new SignatureLine());
+        lineIndex++;
+        setTimeout(addLine, 1500 + Math.random() * 1000);
+      }
+    }
+    setTimeout(addLine, 800);
+
+    (function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      lines.forEach(l => { l.update(); l.draw(); });
+      requestAnimationFrame(animate);
     })();
-    </script>
 
-    <script>
-        // Elegant signature-like line animation
-        (function() {
-            const canvas = document.getElementById('signature-canvas');
-            if (!canvas) return;
-            
-            const ctx = canvas.getContext('2d');
-            const section = canvas.parentElement;
-            
-            function resizeCanvas() {
-                canvas.width = section.offsetWidth;
-                canvas.height = section.offsetHeight;
-            }
-            
-            resizeCanvas();
-            window.addEventListener('resize', resizeCanvas);
-            
-            const colors = ['#d0d0d0', '#c0c0c0', '#a8c4a8', '#b8d4b8'];
-            const lines = [];
-            
-            class SignatureLine {
-                constructor() {
-                    this.reset();
-                }
-                
-                reset() {
-                    this.y = Math.random() * canvas.height * 0.6 + canvas.height * 0.2;
-                    this.x = -50;
-                    this.targetX = canvas.width + 50;
-                    this.progress = 0;
-                    this.speed = 0.001 + Math.random() * 0.001;
-                    this.waveAmplitude = 15 + Math.random() * 25;
-                    this.waveFrequency = 0.01 + Math.random() * 0.02;
-                    this.opacity = 0;
-                    this.maxOpacity = 0.4 + Math.random() * 0.3;
-                    this.color = colors[Math.floor(Math.random() * colors.length)];
-                    this.thickness = 1 + Math.random() * 2;
-                    this.points = [];
-                    this.phase = Math.random() * Math.PI * 2;
-                    this.done = false;
-                }
-                
-                update() {
-                    if (this.done) return;
-                    
-                    this.progress += this.speed;
-                    
-                    // Fade in
-                    if (this.progress < 0.1) {
-                        this.opacity = (this.progress / 0.1) * this.maxOpacity;
-                    }
-                    // Fade out at the end
-                    else if (this.progress > 0.85) {
-                        this.opacity = this.maxOpacity * (1 - (this.progress - 0.85) / 0.15);
-                    }
-                    else {
-                        this.opacity = this.maxOpacity;
-                    }
-                    
-                    if (this.progress >= 1) {
-                        this.done = true;
-                        return;
-                    }
-                    
-                    // Calculate position with elegant curves
-                    const currentX = this.x + (this.targetX - this.x) * this.progress;
-                    const wave = Math.sin(currentX * this.waveFrequency + this.phase) * this.waveAmplitude;
-                    const drift = (this.progress - 0.5) * 30; // Slight upward/downward drift
-                    const currentY = this.y + wave + drift;
-                    
-                    this.points.push({ x: currentX, y: currentY });
-                    
-                    // Keep only recent points for smooth line
-                    if (this.points.length > 100) {
-                        this.points.shift();
-                    }
-                }
-                
-                draw() {
-                    if (this.points.length < 2 || this.done) return;
-                    
-                    ctx.strokeStyle = this.color;
-                    ctx.globalAlpha = this.opacity;
-                    ctx.lineWidth = this.thickness;
-                    ctx.lineCap = 'round';
-                    ctx.lineJoin = 'round';
-                    
-                    ctx.beginPath();
-                    ctx.moveTo(this.points[0].x, this.points[0].y);
-                    
-                    for (let i = 1; i < this.points.length; i++) {
-                        ctx.lineTo(this.points[i].x, this.points[i].y);
-                    }
-                    
-                    ctx.stroke();
-                }
-            }
-            
-            // Create initial lines with delays
-            const numLines = 4;
-            let lineIndex = 0;
-            
-            function addLine() {
-                if (lineIndex < numLines) {
-                    lines.push(new SignatureLine());
-                    lineIndex++;
-                    setTimeout(addLine, 1500 + Math.random() * 1000);
-                }
-            }
-            
-            // Start after a brief delay
-            setTimeout(addLine, 800);
-            
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                // Update and draw all lines
-                lines.forEach(line => {
-                    line.update();
-                    line.draw();
-                });
-                
-                // Remove completed lines
-                for (let i = lines.length - 1; i >= 0; i--) {
-                    if (lines[i].done && lines[i].opacity <= 0) {
-                        lines.splice(i, 1);
-                    }
-                }
-                
-                requestAnimationFrame(animate);
-            }
-            
-            animate();
-        })();
-    </script>
+  } else {
+    // ===== BIRDS =====
+    const section = canvas.parentElement;
+    if (!section) return;
 
-    <script>
-        // Elegant flying birds animation (footer)
-        (function() {
-            const canvas = document.getElementById('birds-canvas');
-            if (!canvas) return;
-            
-            const ctx = canvas.getContext('2d');
-            const footer = canvas.parentElement;
-            
-            function resizeCanvas() {
-                canvas.width = footer.offsetWidth;
-                canvas.height = footer.offsetHeight;
-            }
-            
-            resizeCanvas();
-            window.addEventListener('resize', resizeCanvas);
-            
-            const birds = [];
-            
-            class Bird {
-                constructor(delay = 0) {
-                    this.delay = delay;
-                    this.started = false;
-                    this.reset();
-                }
-                
-                reset() {
-                    this.x = -50;
-                    this.y = Math.random() * canvas.height * 0.5 + canvas.height * 0.2;
-                    this.targetX = canvas.width + 50;
-                    this.speed = 1.5 + Math.random() * 1.5;
-                    this.waveAmplitude = 8 + Math.random() * 12;
-                    this.waveFrequency = 0.02 + Math.random() * 0.01;
-                    this.phase = Math.random() * Math.PI * 2;
-                    this.wingCycle = 0;
-                    this.wingSpeed = 0.15 + Math.random() * 0.1;
-                    this.size = 12 + Math.random() * 8;
-                    this.opacity = 0.6 + Math.random() * 0.4;
-                    this.done = false;
-                }
-                
-                update() {
-                    if (!this.started) return;
-                    if (this.done) return;
-                    
-                    this.x += this.speed;
-                    this.wingCycle += this.wingSpeed;
-                    
-                    // Gentle wave motion
-                    const wave = Math.sin(this.x * this.waveFrequency + this.phase) * this.waveAmplitude;
-                    this.currentY = this.y + wave;
-                    
-                    if (this.x > this.targetX) {
-                        this.done = true;
-                    }
-                }
-                
-                draw() {
-                    if (!this.started || this.done) return;
-                    
-                    ctx.save();
-                    ctx.globalAlpha = this.opacity;
-                    ctx.translate(this.x, this.currentY);
-                    
-                    // Simple golden yellow
-                    ctx.strokeStyle = '#f4d03f';
-                    ctx.lineWidth = 2.5;
-                    ctx.lineCap = 'round';
-                    ctx.lineJoin = 'round';
-                    
-                    // Wing flap animation
-                    const wingFlap = Math.sin(this.wingCycle);
-                    const wingAngle = wingFlap * 15; // Degrees of flap
-                    
-                    // Simple "M" shape bird
-                    ctx.beginPath();
-                    
-                    // Left wing
-                    ctx.moveTo(-this.size, -this.size * 0.3 - wingAngle);
-                    ctx.quadraticCurveTo(-this.size * 0.5, this.size * 0.2, 0, 0);
-                    
-                    // Right wing
-                    ctx.quadraticCurveTo(this.size * 0.5, this.size * 0.2, this.size, -this.size * 0.3 - wingAngle);
-                    
-                    ctx.stroke();
-                    
-                    ctx.restore();
-                }
-                
-                start() {
-                    this.started = true;
-                }
-            }
-            
-            // Create 3 birds with delays
-            const numBirds = 3;
-            for (let i = 0; i < numBirds; i++) {
-                const bird = new Bird();
-                birds.push(bird);
-                setTimeout(() => bird.start(), 1000 + i * 2500);
-            }
-            
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                birds.forEach(bird => {
-                    bird.update();
-                    bird.draw();
-                });
-                
-                requestAnimationFrame(animate);
-            }
-            
-            animate();
-        })();
-    </script>
+    if (!section.style.position || section.style.position === 'static') section.style.position = 'relative';
+    section.style.overflow = 'hidden';
+
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+
+    const css = `
+#birds-layer{ position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:0; }
+
+.bird{
+  background-image:url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/174479/bird-cells-new.svg');
+  background-size:auto 100%;
+  width:88px; height:125px;
+  will-change: background-position;
+  animation-name: fly-cycle;
+  animation-timing-function: steps(10);
+  animation-iteration-count: infinite;
+}
+.bird-one{animation-duration:1s;animation-delay:-0.5s;}
+.bird-two{animation-duration:0.9s;animation-delay:-0.75s;}
+.bird-three{animation-duration:1.25s;animation-delay:-0.25s;}
+.bird-four{animation-duration:1.1s;animation-delay:-0.5s;}
+.bird-five{animation-duration:1.05s;animation-delay:-0.6s;}
+
+.bird-container{
+  position:absolute; top:10%; left:-3%;
+  transform: scale(0) translateX(-10vw);
+  will-change: transform;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.bird-container-one{animation-name: fly-right-one;animation-duration:15s;animation-delay:0s;}
+.bird-container-two{animation-name: fly-right-two;animation-duration:16s;animation-delay:0.9s;top:18%;}
+.bird-container-three{animation-name: fly-right-one;animation-duration:14.6s;animation-delay:1.8s;top:26%;}
+.bird-container-four{animation-name: fly-right-two;animation-duration:16s;animation-delay:2.7s;top:34%;}
+.bird-container-five{animation-name: fly-right-one;animation-duration:15.4s;animation-delay:3.6s;top:42%;}
+
+@keyframes fly-cycle { 100% { background-position: -900px 0; } }
+
+@keyframes fly-right-one{
+  0%{transform:scale(0.3) translateX(-10vw);}
+  10%{transform:translateY(2vh) translateX(10vw) scale(0.4);}
+  20%{transform:translateY(0vh) translateX(30vw) scale(0.5);}
+  30%{transform:translateY(4vh) translateX(50vw) scale(0.6);}
+  40%{transform:translateY(2vh) translateX(70vw) scale(0.6);}
+  50%{transform:translateY(0vh) translateX(90vw) scale(0.6);}
+  60%{transform:translateY(0vh) translateX(110vw) scale(0.6);}
+  100%{transform:translateY(0vh) translateX(110vw) scale(0.6);}
+}
+@keyframes fly-right-two{
+  0%{transform:translateY(-2vh) translateX(-10vw) scale(0.5);}
+  10%{transform:translateY(0vh) translateX(10vw) scale(0.4);}
+  20%{transform:translateY(-4vh) translateX(30vw) scale(0.6);}
+  30%{transform:translateY(1vh) translateX(50vw) scale(0.45);}
+  40%{transform:translateY(-2.5vh) translateX(70vw) scale(0.5);}
+  50%{transform:translateY(0vh) translateX(90vw) scale(0.45);}
+  51%{transform:translateY(0vh) translateX(110vw) scale(0.45);}
+  100%{transform:translateY(0vh) translateX(110vw) scale(0.45);}
+}
+@media (prefers-reduced-motion: reduce){ .bird,.bird-container{animation:none!important;} }`;
+
+    const styleId = 'birds-style';
+    let styleEl = document.getElementById(styleId);
+    if (!styleEl) { styleEl = document.createElement('style'); styleEl.id = styleId; document.head.appendChild(styleEl); }
+    styleEl.textContent = css;
+
+    let layer = section.querySelector('#birds-layer');
+    if (!layer) { layer = document.createElement('div'); layer.id = 'birds-layer'; section.insertBefore(layer, section.firstChild); }
+
+    const filters = [
+      "invert(34%) sepia(55%) saturate(427%) hue-rotate(141deg) brightness(93%) contrast(91%)",
+      "brightness(0) saturate(100%) invert(83%) sepia(78%) saturate(740%) hue-rotate(1deg) brightness(105%) contrast(101%)",
+      "brightness(0) saturate(100%) invert(74%) sepia(70%) saturate(720%) hue-rotate(350deg) brightness(110%) contrast(98%)"
+    ];
+
+    function bird(containerClass, birdClass){
+      const f = filters[Math.floor(Math.random()*filters.length)];
+      return `<div class="bird-container ${containerClass}"><div class="bird ${birdClass}" style="filter:${f}"></div></div>`;
+    }
+
+    layer.innerHTML =
+      bird('bird-container-one','bird-one') +
+      bird('bird-container-two','bird-two') +
+      bird('bird-container-three','bird-three') +
+      bird('bird-container-four','bird-four') +
+      bird('bird-container-five','bird-five');
+
+    const ctx = canvas.getContext('2d');
+    (function clear(){ ctx.clearRect(0,0,canvas.width,canvas.height); requestAnimationFrame(clear); })();
+  }
+})();
+</script>
+
+
+
+
 </body>
-</body>
-</body>
+
 </html>

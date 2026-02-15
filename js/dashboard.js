@@ -108,8 +108,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const viewBtn = document.getElementById('view-results-btn');
 
     const renderTakenState = () => {
-        const testsTaken = Storage.getTakenTests();
-        const takenIds = new Set(testsTaken.map(test => test.testId));
+        const resultsIndex = Storage.getResultsIndex();
+        const testsTakenCount = resultsIndex.length;
+        const takenIds = new Set(resultsIndex.map(test => test.testId));
+        const uniqueTests = [];
+        const seen = new Set();
+        resultsIndex.forEach(item => {
+            if (!item.testId || seen.has(item.testId)) return;
+            seen.add(item.testId);
+            uniqueTests.push(item);
+        });
 
         // Re-query cards fresh each time to catch dynamically created cards
         const cards = Array.from(document.querySelectorAll('.test-card[data-test-id]'));
@@ -121,19 +129,19 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        countEls.forEach(el => (el.textContent = testsTaken.length));
+        countEls.forEach(el => (el.textContent = testsTakenCount));
 
         listEls.forEach(list => {
             list.innerHTML = '';
-            if (testsTaken.length === 0) {
+            if (uniqueTests.length === 0) {
                 const emptyItem = document.createElement('li');
                 emptyItem.textContent = 'Nenhum teste realizado ainda.';
                 list.appendChild(emptyItem);
                 return;
             }
-            testsTaken.forEach(test => {
+            uniqueTests.forEach(test => {
                 const item = document.createElement('li');
-                item.textContent = test.testTitle;
+                item.textContent = test.testTitle || test.testId;
                 list.appendChild(item);
             });
         });

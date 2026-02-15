@@ -14,6 +14,7 @@ const Storage = {
         
         // Also save to results index with summary info
         this.addToResultsIndex(resultId, testId, data);
+        this.setLatestResultId(testId, resultId);
         
         return resultId;
     },
@@ -72,6 +73,10 @@ const Storage = {
         const index = this.getResultsIndex();
         index.forEach(item => {
             localStorage.removeItem(`test_result_${item.resultId}`);
+            localStorage.removeItem(`result_funnel_${item.resultId}`);
+            if (item.testId) {
+                localStorage.removeItem(`latest_result_${item.testId}`);
+            }
         });
         localStorage.removeItem('results_index');
         localStorage.removeItem('tests_taken');
@@ -98,5 +103,43 @@ const Storage = {
             completedAt: new Date().toISOString()
         });
         localStorage.setItem('tests_taken', JSON.stringify(tests));
+    },
+
+    setLatestResultId(testId, resultId) {
+        if (!testId || !resultId) return;
+        localStorage.setItem(`latest_result_${testId}`, resultId);
+    },
+
+    getLatestResultId(testId) {
+        if (!testId) return null;
+        return localStorage.getItem(`latest_result_${testId}`);
+    },
+
+    setFunnelEvent(resultId, key) {
+        if (!resultId || !key) return;
+        const storageKey = `result_funnel_${resultId}`;
+        let data = {};
+        const raw = localStorage.getItem(storageKey);
+        if (raw) {
+            try {
+                data = JSON.parse(raw) || {};
+            } catch (e) {
+                data = {};
+            }
+        }
+        data[key] = true;
+        data[`${key}_at`] = new Date().toISOString();
+        localStorage.setItem(storageKey, JSON.stringify(data));
+    },
+
+    getFunnel(resultId) {
+        if (!resultId) return null;
+        const raw = localStorage.getItem(`result_funnel_${resultId}`);
+        if (!raw) return null;
+        try {
+            return JSON.parse(raw);
+        } catch (e) {
+            return null;
+        }
     }
 };
