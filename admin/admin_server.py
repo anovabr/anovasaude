@@ -18,7 +18,7 @@ TESTS_DIR = ROOT_DIR / "tests"
 CSS_DIR = ROOT_DIR / "css"
 JS_DIR = ROOT_DIR / "js"
 IMG_DIR = ROOT_DIR / "img"
-FINANCEIRO_FILE = ROOT_DIR / "financeiro.json"
+FINANCEIRO_FILE = ADMIN_DIR / "financeiro_simple_price.json"
 
 # Ensure tests directory exists
 TESTS_DIR.mkdir(exist_ok=True)

@@ -9,6 +9,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const DASHBOARD_API = 'https://script.google.com/macros/s/AKfycby8BTh278W7IN-bYgn74kV9dNqRYmEN3qszhGGrghLEZ3pQbqo0UwplKijxCKBizgzZ/exec';
   const SHEETS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbzVZifIzJPeLNbGRQapGj0NQr-Xs6lRntuNWoEK9oUlEqHoI9Uc6nEQvn3INDurKrTs/exec';
   const SHEETS_SECRET = 'Eugene2024##abc';
+  const FINANCEIRO_PUBLIC_URL = '/financeiro.json';
+
+  const formatBRL = (value) => {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return '—';
+    return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  };
+
+  const loadDashboardPrices = async () => {
+    const priceOneEl = document.getElementById('dashboard-price-one');
+    const priceThreeEl = document.getElementById('dashboard-price-three');
+    if (!priceOneEl || !priceThreeEl) return;
+    try {
+      const res = await fetch(`${FINANCEIRO_PUBLIC_URL}?t=${Date.now()}`, { cache: 'no-store' });
+      const data = await res.json();
+      priceOneEl.textContent = formatBRL(data.preco_um_teste);
+      priceThreeEl.textContent = formatBRL(data.preco_ate_tres);
+    } catch (err) {
+      priceOneEl.textContent = '—';
+      priceThreeEl.textContent = '—';
+    }
+  };
 
   const renderMPButton = (target, preferenceId) => {
     if (!target || !preferenceId || target.dataset.rendered === 'true') return;
@@ -317,6 +339,8 @@ document.addEventListener('DOMContentLoaded', () => {
           '<p style="color: red;">Erro ao carregar dados: ' + err.message + '</p>';
       });
   }
+
+  loadDashboardPrices();
 
   const index = Storage.getResultsIndex();
   if (!index.length) {

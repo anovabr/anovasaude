@@ -19,74 +19,196 @@
 
         body {
             font-family: 'Work Sans', sans-serif;
-            background: linear-gradient(-45deg, #f5f5f5, #e8f5e9, #e0e0e0, #f1f8f4, #ffffff, #e8e8e8);
-            background-size: 600% 600%;
-            animation: gradientFlow 12s ease infinite;
+            background: #f6f8f6;
             color: #333;
             position: relative;
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        @keyframes gradientFlow {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            25% {
-                background-position: 100% 50%;
-            }
-
-            50% {
-                background-position: 100% 100%;
-            }
-
-            75% {
-                background-position: 0% 100%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        /* Smooth gradient layers with green hints */
         body::before {
-            content: '';
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(ellipse at 20% 30%, rgba(232, 245, 233, 0.4) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 70%, rgba(245, 245, 245, 0.5) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(225, 245, 230, 0.3) 0%, transparent 60%);
-            animation: gradientShift 20s ease-in-out infinite;
-            pointer-events: none;
-            z-index: 0;
+            content: none;
         }
 
         body::after {
-            content: '';
+            content: none;
+        }
+
+        #signature-canvas {
             position: fixed;
+            inset: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at 60% 40%, rgba(255, 255, 255, 0.3) 0%, transparent 40%),
-                radial-gradient(circle at 30% 80%, rgba(212, 228, 216, 0.35) 0%, transparent 45%);
-            animation: gradientShift 18s ease-in-out infinite reverse;
             pointer-events: none;
             z-index: 0;
         }
 
-        @keyframes gradientShift {
+        #birds-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
 
-            0%,
+        .bird {
+            background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/174479/bird-cells-new.svg');
+            background-size: auto 100%;
+            width: 88px;
+            height: 125px;
+            will-change: background-position;
+            animation-name: fly-cycle;
+            animation-timing-function: steps(10);
+            animation-iteration-count: infinite;
+        }
+
+        .bird-one {
+            animation-duration: 1s;
+            animation-delay: -0.5s;
+        }
+
+        .bird-two {
+            animation-duration: 0.9s;
+            animation-delay: -0.75s;
+        }
+
+        .bird-three {
+            animation-duration: 1.25s;
+            animation-delay: -0.25s;
+        }
+
+        .bird-four {
+            animation-duration: 1.1s;
+            animation-delay: -0.5s;
+        }
+
+        .bird-five {
+            animation-duration: 1.05s;
+            animation-delay: -0.6s;
+        }
+
+        .bird-container {
+            position: absolute;
+            top: 10%;
+            left: -3%;
+            transform: scale(0) translateX(-10vw);
+            will-change: transform;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+
+        .bird-container-one {
+            animation-name: fly-right-one;
+            animation-duration: 15s;
+            animation-delay: 0s;
+        }
+
+        .bird-container-two {
+            animation-name: fly-right-two;
+            animation-duration: 16s;
+            animation-delay: 0.9s;
+            top: 24%;
+        }
+
+        .bird-container-three {
+            animation-name: fly-right-one;
+            animation-duration: 14.6s;
+            animation-delay: 1.8s;
+            top: 10%;
+        }
+
+        .bird-container-four {
+            animation-name: fly-right-two;
+            animation-duration: 16s;
+            animation-delay: 2.7s;
+            top: 52%;
+        }
+
+        .bird-container-five {
+            animation-name: fly-right-one;
+            animation-duration: 15.4s;
+            animation-delay: 3.6s;
+            top: 68%;
+        }
+
+        @keyframes fly-cycle {
             100% {
-                transform: translate(0, 0) scale(1);
-                opacity: 1;
+                background-position: -900px 0;
+            }
+        }
+
+        @keyframes fly-right-one {
+            0% {
+                transform: scale(0.3) translateX(-10vw);
+            }
+
+            10% {
+                transform: translateY(-6vh) translateX(10vw) scale(0.4);
+            }
+
+            20% {
+                transform: translateY(-14vh) translateX(30vw) scale(0.5);
+            }
+
+            30% {
+                transform: translateY(-22vh) translateX(50vw) scale(0.6);
+            }
+
+            40% {
+                transform: translateY(-16vh) translateX(70vw) scale(0.6);
             }
 
             50% {
-                transform: translate(30px, -40px) scale(1.1);
-                opacity: 0.8;
+                transform: translateY(-10vh) translateX(90vw) scale(0.6);
+            }
+
+            60% {
+                transform: translateY(-6vh) translateX(110vw) scale(0.6);
+            }
+
+            100% {
+                transform: translateY(0vh) translateX(110vw) scale(0.6);
+            }
+        }
+
+        @keyframes fly-right-two {
+            0% {
+                transform: translateY(-2vh) translateX(-10vw) scale(0.5);
+            }
+
+            10% {
+                transform: translateY(6vh) translateX(10vw) scale(0.4);
+            }
+
+            20% {
+                transform: translateY(14vh) translateX(30vw) scale(0.6);
+            }
+
+            30% {
+                transform: translateY(22vh) translateX(50vw) scale(0.45);
+            }
+
+            40% {
+                transform: translateY(16vh) translateX(70vw) scale(0.5);
+            }
+
+            50% {
+                transform: translateY(10vh) translateX(90vw) scale(0.45);
+            }
+
+            51% {
+                transform: translateY(0vh) translateX(110vw) scale(0.45);
+            }
+
+            100% {
+                transform: translateY(0vh) translateX(110vw) scale(0.45);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .bird,
+            .bird-container {
+                animation: none !important;
             }
         }
 
@@ -940,6 +1062,8 @@
 </head>
 
 <body>
+    <canvas id="signature-canvas" aria-hidden="true"></canvas>
+    <div id="birds-layer" aria-hidden="true"></div>
     <!-- Header -->
     <div class="admin-header">
         <div class="admin-container">
@@ -961,7 +1085,7 @@
                 <button class="sidebar-btn" data-section="tests">☰ Meus Testes</button>
                 <button class="sidebar-btn" data-section="create">⊕ Novo Teste</button>
                 <button class="sidebar-btn" data-section="analytics">◈ Avaliados</button>
-                <button class="sidebar-btn" data-section="financeiro">ï¼„ Financeiro</button>
+                <button class="sidebar-btn" data-section="financeiro">$ Financeiro</button>
                 
             </div>
 
@@ -989,7 +1113,6 @@
                 <!-- Analytics Section -->
                 <div class="section" id="section-analytics">
                     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;"><h2 style="margin:0;">Análises</h2><button type="button" class="btn btn-secondary" id="analytics-refresh-btn">Atualizar</button></div>
-                    <div id="analytics-fetch-status" style="margin:8px 0 12px;color:#4a4a4a;font-size:13px;">Aguardando carregamento...</div>
                     <div id="analytics-loading" class="loading-spinner">
                         <div class="spinner"></div>
                         <p>Carregando dados...</p>
@@ -1034,6 +1157,7 @@
                                     <option value="paid">Pagamento</option>
                                     <option value="report">Relatório</option>
                                 </select>
+                                <div id="analytics-fetch-status" style="color:#4a4a4a;font-size:13px;margin-left:8px;">Aguardando carregamento...</div>
                             </div>
 
                             <!-- All Responses Cards -->
@@ -1137,6 +1261,13 @@
                     <div style="margin-top: 20px;">
                         <h3>Usuarios</h3>
                         <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin:10px 0;">
+                            <div class="form-group" style="margin:0;max-width:260px;">
+                                <label for="finance-order">Organizar</label>
+                                <select id="finance-order">
+                                    <option value="desc">Última linha → primeira</option>
+                                    <option value="asc">Primeira linha → última</option>
+                                </select>
+                            </div>
                             <div class="form-group" style="margin:0;max-width:200px;">
                                 <label for="finance-row-limit">Limite de linhas</label>
                                 <input type="number" id="finance-row-limit" min="0" placeholder="0 = todas">
@@ -1199,6 +1330,7 @@
         let analyticsTotalRows = 0;
         let visibleResponses = [];
         let financeRowLimit = 0;
+        let financeOrder = 'desc';
 
         // Google Sheets API Configuration
         const GOOGLE_SHEETS_API_BASE = 'https://script.google.com/macros/s/AKfycbzVZifIzJPeLNbGRQapGj0NQr-Xs6lRntuNWoEK9oUlEqHoI9Uc6nEQvn3INDurKrTs/exec';
@@ -1293,6 +1425,13 @@
                 const input = document.getElementById('finance-row-limit');
                 const raw = input ? Number(input.value) : 0;
                 financeRowLimit = Number.isFinite(raw) && raw > 0 ? Math.floor(raw) : 0;
+                renderFinanceTable();
+            });
+        }
+        const financeOrderEl = document.getElementById('finance-order');
+        if (financeOrderEl) {
+            financeOrderEl.addEventListener('change', () => {
+                financeOrder = financeOrderEl.value || 'desc';
                 renderFinanceTable();
             });
         }
@@ -1535,10 +1674,17 @@
                         });
                     }
 
-                    // Calculate idade if we have nascimento and timestamp
-                    if (parsed.nascimento && parsed.nascimento !== '' && parsed.timestamp) {
-                        parsed.idade = calculateAge(parsed.nascimento, parsed.timestamp);
+                    // Calculate idade if we have nascimento (timestamp falls back to current date)
+                    const nascimentoValue = String(parsed.nascimento || '').trim();
+                    const timestampValue = String(parsed.timestamp || '').trim();
+                    if (nascimentoValue) {
+                        parsed.idade = calculateAge(nascimentoValue, timestampValue);
                     }
+                    parsed.tempo_gasto = formatDurationForDisplay(
+                        parsed.duration_seconds,
+                        parsed.time_started,
+                        parsed.time_finished
+                    );
 
                     // Keep spreadsheet row number (1-based) for display/reference.
                     parsed._rowNumber = idx + 1;
@@ -1577,17 +1723,20 @@
 
         function calculateAge(nascimento, timestamp) {
             try {
-                // Parse nascimento - can be DD/MM/YYYY or other formats
+                const birthRaw = String(nascimento || '').trim().replace(/^["']+|["']+$/g, '');
+                const tsRaw = String(timestamp || '').trim().replace(/^["']+|["']+$/g, '');
+
+                // Parse nascimento - supports DD/MM/YYYY, DD-MM-YYYY, DD.MM.YYYY, and ISO-like formats
                 let birthDate;
 
-                if (nascimento.includes('/')) {
-                    const parts = nascimento.split('/');
-                    if (parts.length === 3) {
-                        // Assume DD/MM/YYYY format
-                        birthDate = new Date(parts[2], parts[1] - 1, parts[0]);
-                    }
-                } else if (nascimento.includes('-')) {
-                    birthDate = new Date(nascimento);
+                const dmyMatch = birthRaw.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{4})$/);
+                if (dmyMatch) {
+                    const day = Number(dmyMatch[1]);
+                    const month = Number(dmyMatch[2]);
+                    const year = Number(dmyMatch[3]);
+                    birthDate = new Date(year, month - 1, day);
+                } else if (birthRaw) {
+                    birthDate = new Date(birthRaw);
                 }
 
                 if (!birthDate || isNaN(birthDate.getTime())) {
@@ -1595,7 +1744,8 @@
                 }
 
                 // Use timestamp as reference date
-                const refDate = timestamp ? new Date(timestamp) : new Date();
+                const refDate = tsRaw ? new Date(tsRaw) : new Date();
+                if (isNaN(refDate.getTime())) return '-';
 
                 let age = refDate.getFullYear() - birthDate.getFullYear();
                 const monthDiff = refDate.getMonth() - birthDate.getMonth();
@@ -1608,6 +1758,29 @@
             } catch (e) {
                 return '-';
             }
+        }
+
+        function formatDurationForDisplay(durationSeconds, startedAt, finishedAt) {
+            const rawSeconds = Number(String(durationSeconds || '').trim());
+            let totalSeconds = Number.isFinite(rawSeconds) && rawSeconds >= 0 ? Math.round(rawSeconds) : null;
+
+            if (totalSeconds === null) {
+                const start = new Date(String(startedAt || '').trim());
+                const end = new Date(String(finishedAt || '').trim());
+                if (!Number.isNaN(start.getTime()) && !Number.isNaN(end.getTime())) {
+                    totalSeconds = Math.max(0, Math.round((end.getTime() - start.getTime()) / 1000));
+                }
+            }
+
+            if (totalSeconds === null) return '';
+
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+
+            if (hours > 0) return `${hours}h ${minutes}min ${seconds}s`;
+            if (minutes > 0) return `${minutes}min ${seconds}s`;
+            return `${seconds}s`;
         }
 
         function renderAnalytics() {
@@ -1683,6 +1856,7 @@
 
             container.innerHTML = filtered.map((response, idx) => {
                 const timestamp = response.timestamp ? new Date(response.timestamp).toLocaleString('pt-BR') : 'Sem data';
+                const testTaken = (response.testTitle || response.testId || 'Teste não informado').toString().trim();
                 const nome = getDisplayName(response);
                 const rowNumberLabel = response._rowNumber ? `[${response._rowNumber}] ` : '';
                 const rowRef = Number(response._rowNumber) || idx;
@@ -1719,7 +1893,7 @@
 
                 // Organize fields into sections
                 const sections = {
-                    'Resultados do Teste': ['score', 'maxScore', 'interpretation'],
+                    'Resultados do Teste': ['score', 'maxScore', 'interpretation', 'tempo_gasto'],
                     'Dados Demográficos': ['nome', 'nascimento', 'idade', 'estado', 'sexo', 'estado_civil', 'escolaridade', 'filhos'],
                     'Informações Clínicas': ['diagnostico_recebido', 'diagnostico_opcoes', 'diagnostico_outro', 'acompanhamento', 'acompanhamento_detalhes', 'uso_medicacao', 'medicacao_detalhes', 'alteracao_comportamento', 'alteracao_detalhes'],
                     'Contato': ['email', 'telefone'],
@@ -1795,7 +1969,7 @@
                         <div class="response-card-header" onclick="toggleResponse(${rowRef})">
                             <div class="response-card-title">
                                 <h4>${rowNumberLabel}${nome}${usuarioStatus === 'recorrente' ? ' <span class="status-badge recorrente">👥 Recorrente</span>' : ''}${sameUserBadge ? ' <span class="status-badge mesmo-usuario">🔁 Mesmo usuário</span>' : ''}</h4>
-                                <p>${timestamp} | <span class="user-status-pill ${userStatusClass}">${userStatusLabel}</span>${clickedAdvanced ? ' | <span class="user-status-pill is-advanced">Clicou análise avançada</span>' : ''}${relatorioEnviado ? ' | ✅' : ''}${pagamento ? ' | 💰' : ''}</p>
+                                <p>${timestamp} | <strong>${testTaken}</strong> | <span class="user-status-pill ${userStatusClass}">${userStatusLabel}</span>${clickedAdvanced ? ' | <span class="user-status-pill is-advanced">Clicou análise avançada</span>' : ''}${relatorioEnviado ? ' | ✅' : ''}${pagamento ? ' | 💰' : ''}</p>
                             </div>
                             <div class="response-card-actions">
                                 <button class="btn btn-delete" onclick="event.stopPropagation(); deleteResponse(${rowRef})" type="button">
@@ -1822,9 +1996,13 @@
                 return;
             }
 
-            const sorted = getUiSortedResponses();
-
-            const rows = sorted.map((response, idx) => ({ response, idx }));
+            // Always render from latest spreadsheet row to first row.
+            const sorted = getUiSortedResponses(financeOrder);
+            const rows = sorted.map((response, idx) => ({
+                response,
+                idx,
+                rowRef: Number(response._rowNumber) || idx
+            }));
             const limit = financeRowLimit > 0 ? Math.min(financeRowLimit, rows.length) : rows.length;
             const limitedRows = rows.slice(0, limit);
             if (!limitedRows.length) {
@@ -1832,19 +2010,20 @@
                 return;
             }
 
-            const tbody = limitedRows.map(({ response, idx }) => {
+            const tbody = limitedRows.map(({ response, rowRef }) => {
                 const name = getDisplayName(response);
+                const rowNumberLabel = response._rowNumber ? `[${response._rowNumber}] ` : '';
                 const date = response.timestamp ? new Date(response.timestamp).toLocaleDateString('pt-BR') : 'Sem data';
                 const paid = (response.pagamento || '').toString().toLowerCase() === 'sim';
                 const paidDate = response.data_pagamento ? new Date(response.data_pagamento).toLocaleDateString('pt-BR') : '';
 
                 return `
                     <tr class="${paid ? 'finance-row--paid' : ''}">
-                        <td>${name}</td>
+                        <td>${rowNumberLabel}${name}</td>
                         <td>${date}</td>
                         <td>
                             <label class="finance-payment">
-                                <input type="checkbox" ${paid ? 'checked' : ''} onchange="updateFinancial(${idx}, 'pagamento', this.checked)">
+                                <input type="checkbox" ${paid ? 'checked' : ''} onchange="updateFinancial(${rowRef}, 'pagamento', this.checked)">
                                 <span>Pagamento</span>
                             </label>
                             ${paidDate ? `<div class="finance-date">${paidDate}</div>` : ''}
@@ -2232,6 +2411,44 @@
             const userId = (response?._userId || '').toString().trim();
             return userId ? `${userId} (Anônimo)` : 'Anônimo';
         }
+    </script>
+    <script>
+        (function () {
+            const canvas = document.getElementById('signature-canvas');
+            const layer = document.getElementById('birds-layer');
+            if (!canvas || !layer) return;
+
+            const filters = [
+                "invert(34%) sepia(55%) saturate(427%) hue-rotate(141deg) brightness(93%) contrast(91%)",
+                "brightness(0) saturate(100%) invert(83%) sepia(78%) saturate(740%) hue-rotate(1deg) brightness(105%) contrast(101%)",
+                "brightness(0) saturate(100%) invert(74%) sepia(70%) saturate(720%) hue-rotate(350deg) brightness(110%) contrast(98%)"
+            ];
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            function bird(containerClass, birdClass) {
+                const f = filters[Math.floor(Math.random() * filters.length)];
+                return `<div class="bird-container ${containerClass}"><div class="bird ${birdClass}" style="filter:${f}"></div></div>`;
+            }
+
+            layer.innerHTML =
+                bird('bird-container-one', 'bird-one') +
+                bird('bird-container-two', 'bird-two') +
+                bird('bird-container-three', 'bird-three') +
+                bird('bird-container-four', 'bird-four') +
+                bird('bird-container-five', 'bird-five');
+
+            const ctx = canvas.getContext('2d');
+            (function clear() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                requestAnimationFrame(clear);
+            })();
+        })();
     </script>
 </body>
 
