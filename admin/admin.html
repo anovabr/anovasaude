@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
@@ -586,6 +586,11 @@
             text-decoration: line-through;
             color: #666;
         }
+        .response-card--same-user {
+            border-color: #f2d3a2;
+            background: linear-gradient(180deg, #fffaf0 0%, #ffffff 100%);
+            box-shadow: 0 2px 10px rgba(242, 211, 162, 0.28);
+        }
 
         /* Financeiro table */
         .finance-table {
@@ -658,6 +663,33 @@
             margin: 0;
             font-size: 12px;
             color: #666;
+        }
+        .user-status-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.1rem 0.45rem;
+            border-radius: 999px;
+            border: 1px solid #d8d8d8;
+            background: #f4f4f4;
+            color: #4f4f4f;
+            font-size: 11px;
+            font-weight: 600;
+            vertical-align: middle;
+        }
+        .user-status-pill.is-soft {
+            background: #e8f6ec;
+            border-color: #98d6a8;
+            color: #1f6a35;
+        }
+        .user-status-pill.is-strong {
+            background: #fff6e8;
+            border-color: #f2d3a2;
+            color: #8a5b16;
+        }
+        .user-status-pill.is-advanced {
+            background: #eaf2ff;
+            border-color: #b7cdf7;
+            color: #234c8e;
         }
 
         .response-card-actions {
@@ -814,6 +846,10 @@
             background: #e8f5e9;
             color: #2e7d32;
         }
+        .status-badge.mesmo-usuario {
+            background: #fff3cd;
+            color: #8a6d1f;
+        }
 
         .financial-grid {
             display: grid;
@@ -925,7 +961,7 @@
                 <button class="sidebar-btn" data-section="tests">☰ Meus Testes</button>
                 <button class="sidebar-btn" data-section="create">⊕ Novo Teste</button>
                 <button class="sidebar-btn" data-section="analytics">◈ Avaliados</button>
-                <button class="sidebar-btn" data-section="financeiro">＄ Financeiro</button>
+                <button class="sidebar-btn" data-section="financeiro">ï¼„ Financeiro</button>
                 
             </div>
 
@@ -952,7 +988,8 @@
 
                 <!-- Analytics Section -->
                 <div class="section" id="section-analytics">
-                    <h2>Análises</h2>
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;"><h2 style="margin:0;">Análises</h2><button type="button" class="btn btn-secondary" id="analytics-refresh-btn">Atualizar</button></div>
+                    <div id="analytics-fetch-status" style="margin:8px 0 12px;color:#4a4a4a;font-size:13px;">Aguardando carregamento...</div>
                     <div id="analytics-loading" class="loading-spinner">
                         <div class="spinner"></div>
                         <p>Carregando dados...</p>
@@ -983,6 +1020,20 @@
                                     <div class="number" id="last-response-time">-</div>
                                     <div class="label">Última Resposta</div>
                                 </div>
+                            </div>
+
+                            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
+                                <span style="font-size:13px;color:#555;font-weight:600;">Organizar:</span>
+                                <select id="responses-order" style="padding:0.45rem 0.65rem;border-radius:6px;border:1px solid #d0d0d0;background:#fff;">
+                                    <option value="desc">Última linha → primeira</option>
+                                    <option value="asc">Primeira linha → última</option>
+                                </select>
+                                <select id="responses-filter" style="padding:0.45rem 0.65rem;border-radius:6px;border:1px solid #d0d0d0;background:#fff;">
+                                    <option value="all">Todos</option>
+                                    <option value="same_user">Mesmo usuário</option>
+                                    <option value="paid">Pagamento</option>
+                                    <option value="report">Relatório</option>
+                                </select>
                             </div>
 
                             <!-- All Responses Cards -->
@@ -1145,10 +1196,12 @@
         let currentTests = [];
         let currentEditId = null;
         let analyticsData = [];
+        let analyticsTotalRows = 0;
+        let visibleResponses = [];
         let financeRowLimit = 0;
 
         // Google Sheets API Configuration
-        const GOOGLE_SHEETS_API_BASE = 'https://script.google.com/macros/s/AKfycbw7do5dNnHkuD0HEedMMplOqC_6jnRL2tP3kiEMCeRxDRO4tI6iuuvPsN1GvoG85Gld/exec';
+        const GOOGLE_SHEETS_API_BASE = 'https://script.google.com/macros/s/AKfycbzVZifIzJPeLNbGRQapGj0NQr-Xs6lRntuNWoEK9oUlEqHoI9Uc6nEQvn3INDurKrTs/exec';
         const GOOGLE_SHEETS_PASSWORD = 'Eugene2024##abc';
 
         // Load all tests on page load
@@ -1218,6 +1271,21 @@
                 }
             });
         });
+
+        const analyticsRefreshBtn = document.getElementById('analytics-refresh-btn');
+        if (analyticsRefreshBtn) {
+            analyticsRefreshBtn.addEventListener('click', () => {
+                loadAnalytics();
+            });
+        }
+        const responsesOrderEl = document.getElementById('responses-order');
+        if (responsesOrderEl) {
+            responsesOrderEl.addEventListener('change', () => renderResponseCards());
+        }
+        const responsesFilterEl = document.getElementById('responses-filter');
+        if (responsesFilterEl) {
+            responsesFilterEl.addEventListener('change', () => renderResponseCards());
+        }
 
         const financeApplyBtn = document.getElementById('finance-apply-limit');
         if (financeApplyBtn) {
@@ -1372,16 +1440,32 @@
             const errorEl = document.getElementById('analytics-error');
             const contentEl = document.getElementById('analytics-content');
             const progressEl = document.getElementById('loading-progress');
+            const statusEl = document.getElementById('analytics-fetch-status');
+            const refreshBtn = document.getElementById('analytics-refresh-btn');
+            const startedAt = Date.now();
+            let slowTimer = null;
 
             loadingEl.style.display = 'block';
             errorEl.style.display = 'none';
             contentEl.style.display = 'none';
+            if (statusEl) {
+                statusEl.style.color = '#1a4d2e';
+                statusEl.textContent = 'Carregando dados reais da planilha...';
+            }
+            if (refreshBtn) refreshBtn.disabled = true;
 
             try {
                 progressEl.textContent = 'Conectando ao Google Sheets...';
+                slowTimer = setTimeout(() => {
+                    progressEl.textContent = 'Demorando mais que o esperado...';
+                    if (statusEl) {
+                        statusEl.style.color = '#8a5b16';
+                        statusEl.textContent = 'Demorando mais que o esperado...';
+                    }
+                }, 8000);
 
                 const response = await fetch(
-                    `${GOOGLE_SHEETS_API_BASE}?password=${encodeURIComponent(GOOGLE_SHEETS_PASSWORD)}`
+                    `${GOOGLE_SHEETS_API_BASE}?password=${encodeURIComponent(GOOGLE_SHEETS_PASSWORD)}&t=${Date.now()}`
                 );
 
                 progressEl.textContent = 'Recebendo dados...';
@@ -1398,6 +1482,7 @@
                 } else if (result.debug && result.debug.allData) {
                     rawData = result.debug.allData;
                 }
+                analyticsTotalRows = Number(result.count) || rawData.length || 0;
 
                 progressEl.textContent = `Processando ${rawData.length} respostas...`;
 
@@ -1413,8 +1498,9 @@
 
                     // Handle different data formats
                     if (Array.isArray(row)) {
-                        // If it's an array, the first element should be the CSV string
-                        csvString = row[0] || '';
+                        // New format: [col A = user_id, col B = blob], old format: [blob]
+                        parsed._userId = String(row[0] || '').trim();
+                        csvString = row[1] || row[0] || '';
                     } else if (row && typeof row === 'object') {
                         // If it's an object with one key, combine key and value
                         const keys = Object.keys(row);
@@ -1454,6 +1540,9 @@
                         parsed.idade = calculateAge(parsed.nascimento, parsed.timestamp);
                     }
 
+                    // Keep spreadsheet row number (1-based) for display/reference.
+                    parsed._rowNumber = idx + 1;
+
                     return parsed;
                 }).filter(row => row && Object.keys(row).length > 0);
 
@@ -1465,11 +1554,24 @@
 
                 loadingEl.style.display = 'none';
                 contentEl.style.display = 'block';
+                const nowLabel = new Date().toLocaleTimeString('pt-BR');
+                const elapsed = ((Date.now() - startedAt) / 1000).toFixed(1);
+                if (statusEl) {
+                    statusEl.style.color = '#1f6a35';
+                    statusEl.textContent = `Atualizado em: ${nowLabel} | Linhas carregadas: ${analyticsTotalRows} | Tempo: ${elapsed}s`;
+                }
             } catch (error) {
                 console.error('Error loading analytics:', error);
                 loadingEl.style.display = 'none';
                 errorEl.style.display = 'block';
                 errorEl.textContent = `Erro ao carregar análises: ${error.message}. Verifique se o Google Script está configurado corretamente.`;
+                if (statusEl) {
+                    statusEl.style.color = '#b42318';
+                    statusEl.textContent = `Erro ao carregar: ${error.message}`;
+                }
+            } finally {
+                if (slowTimer) clearTimeout(slowTimer);
+                if (refreshBtn) refreshBtn.disabled = false;
             }
         }
 
@@ -1515,7 +1617,7 @@
             }
 
             // Overview stats
-            document.getElementById('total-responses').textContent = analyticsData.length;
+            document.getElementById('total-responses').textContent = analyticsTotalRows;
 
             // Count unique tests
             const uniqueTests = new Set(analyticsData.map(r => r.testId || r.testTitle).filter(Boolean));
@@ -1552,19 +1654,63 @@
             const container = document.getElementById('responses-list');
             if (!container) return;
 
-            // Sort by timestamp descending (newest first)
-            const sorted = [...analyticsData].sort((a, b) =>
-                new Date(b.timestamp || 0) - new Date(a.timestamp || 0)
-            );
+            const order = document.getElementById('responses-order')?.value || 'desc';
+            const filter = document.getElementById('responses-filter')?.value || 'all';
+            const sorted = getUiSortedResponses(order);
+            const recurrenceMap = buildIdentityRecurrenceMap(analyticsData);
+            const userIdRecurrenceMap = buildUserIdRecurrenceMap(analyticsData);
+            const filtered = sorted.filter((response) => {
+                const identityKey = getIdentityKey(response);
+                const identityStats = identityKey ? recurrenceMap.get(identityKey) : null;
+                const sameUser = !!(identityStats && identityStats.count > 1);
+                const userIdKey = normalizeIdentityValue(response?._userId);
+                const userIdStats = userIdKey ? userIdRecurrenceMap.get(userIdKey) : null;
+                const sameUserByUserId = !!(userIdStats && userIdStats.count > 1);
+                const sameUserBadge = sameUser || sameUserByUserId;
+                const paid = (response.pagamento || '').toString().toLowerCase() === 'sim';
+                const report = (response.relatorio_enviado || '').toString().toLowerCase() === 'sim';
+                if (filter === 'same_user') return sameUserBadge;
+                if (filter === 'paid') return paid;
+                if (filter === 'report') return report;
+                return true;
+            });
+            visibleResponses = filtered;
 
-            container.innerHTML = sorted.map((response, idx) => {
+            if (!filtered.length) {
+                container.innerHTML = '<div class="empty-state"><p>Nenhum resultado para este filtro.</p></div>';
+                return;
+            }
+
+            container.innerHTML = filtered.map((response, idx) => {
                 const timestamp = response.timestamp ? new Date(response.timestamp).toLocaleString('pt-BR') : 'Sem data';
-                const testTitle = response.testTitle || response.testId || 'Teste não identificado';
-                const nome = response.nome || 'Anônimo';
+                const nome = getDisplayName(response);
+                const rowNumberLabel = response._rowNumber ? `[${response._rowNumber}] ` : '';
+                const rowRef = Number(response._rowNumber) || idx;
+                const userStatusRaw = (response.user_status || '').toString().trim();
+                const userStatus = userStatusRaw || 'teste_completo';
+                const userStatusNorm = userStatus.toLowerCase();
+                const userStatusClass = userStatusNorm === 'clicou_interpretacao e enviou pedido'
+                    ? 'is-strong'
+                    : (userStatusNorm === 'clicou_interpretacao' ? 'is-soft' : '');
+                const userStatusLabel = userStatus
+                    .replace(/_/g, ' ')
+                    .replace(/\s+/g, ' ')
+                    .trim()
+                    .replace(/^./, c => c.toUpperCase());
+                const clickedAdvanced = ['sim', 'true', '1'].includes(
+                    (response.clicou_analise_avancada || '').toString().trim().toLowerCase()
+                );
                 const reportSent = (response.relatorio_enviado || "").toString().toLowerCase() === "sim";
                 
                 // Financial status
-                const usuarioStatus = response.usuario_status || 'novo';
+                const identityKey = getIdentityKey(response);
+                const identityStats = identityKey ? recurrenceMap.get(identityKey) : null;
+                const sameUser = !!(identityStats && identityStats.count > 1);
+                const userIdKey = normalizeIdentityValue(response?._userId);
+                const userIdStats = userIdKey ? userIdRecurrenceMap.get(userIdKey) : null;
+                const sameUserByUserId = !!(userIdStats && userIdStats.count > 1);
+                const sameUserBadge = sameUser || sameUserByUserId;
+                const usuarioStatus = identityStats && identityStats.dayCount > 1 ? 'recorrente' : 'novo';
                 const relatorioEnviado = response.relatorio_enviado === 'sim';
                 const dataRelatorio = response.data_relatorio_enviado || '';
                 const pagamento = response.pagamento === 'sim';
@@ -1612,24 +1758,24 @@
                         <div class="response-field-row">
                             <div class="response-field-label">Status</div>
                             <div class="response-field-value">
-                                <span class="status-badge ${usuarioStatus}">${usuarioStatus === 'novo' ? '🆕 Novo' : '👥 Recorrente'}</span>
+                                ${usuarioStatus === 'recorrente' ? '<span class="status-badge recorrente">👥 Recorrente</span>' : ''}
                             </div>
                         </div>
                         <div class="financial-grid">
-                            <div class="financial-item ${relatorioEnviado ? 'checked' : ''}" id="fin-relatorio-${idx}">
+                            <div class="financial-item ${relatorioEnviado ? 'checked' : ''}" id="fin-relatorio-${rowRef}">
                                 <label>
                                     <input type="checkbox" 
                                            ${relatorioEnviado ? 'checked' : ''}
-                                           onchange="updateFinancial(${idx}, 'relatorio_enviado', this.checked)">
+                                           onchange="updateFinancial(${rowRef}, 'relatorio_enviado', this.checked)">
                                     Relatório Enviado
                                 </label>
                                 ${dataRelatorio ? `<div class="financial-date">📅 ${new Date(dataRelatorio).toLocaleDateString('pt-BR')}</div>` : ''}
                             </div>
-                            <div class="financial-item ${pagamento ? 'checked' : ''}" id="fin-pagamento-${idx}">
+                            <div class="financial-item ${pagamento ? 'checked' : ''}" id="fin-pagamento-${rowRef}">
                                 <label>
                                     <input type="checkbox" 
                                            ${pagamento ? 'checked' : ''}
-                                           onchange="updateFinancial(${idx}, 'pagamento', this.checked)">
+                                           onchange="updateFinancial(${rowRef}, 'pagamento', this.checked)">
                                     Pagamento Recebido
                                 </label>
                                 ${dataPagamento ? `<div class="financial-date">💰 ${new Date(dataPagamento).toLocaleDateString('pt-BR')}</div>` : ''}
@@ -1637,28 +1783,28 @@
                         </div>
                         <div class="admin-notes">
                             <label style="font-weight: 500; font-size: 13px; display: block; margin-bottom: 6px;">📝 Notas Internas (Luis):</label>
-                            <textarea id="notes-${idx}" placeholder="Adicione suas notas sobre este usuário...">${comentariosLuis}</textarea>
-                            <button class="save-note-btn" onclick="saveNotes(${idx})">Salvar Notas</button>
-                            <span class="save-status" id="note-status-${idx}"></span>
+                            <textarea id="notes-${rowRef}" placeholder="Adicione suas notas sobre este usuário...">${comentariosLuis}</textarea>
+                            <button class="save-note-btn" onclick="saveNotes(${rowRef})">Salvar Notas</button>
+                            <span class="save-status" id="note-status-${rowRef}"></span>
                         </div>
                     </div>
                 `;
 
                 return `
-                    <div class="response-card${reportSent ? ' response-card--sent' : ''}">
-                        <div class="response-card-header" onclick="toggleResponse(${idx})">
+                    <div class="response-card${reportSent ? ' response-card--sent' : ''}${sameUserBadge ? ' response-card--same-user' : ''}">
+                        <div class="response-card-header" onclick="toggleResponse(${rowRef})">
                             <div class="response-card-title">
-                                <h4>${testTitle} - ${nome} <span class="status-badge ${usuarioStatus}">${usuarioStatus === 'novo' ? '🆕 Novo' : '👥 Recorrente'}</span></h4>
-                                <p>${timestamp}${relatorioEnviado ? ' | ✅' : ''}${pagamento ? ' | 💰' : ''}</p>
+                                <h4>${rowNumberLabel}${nome}${usuarioStatus === 'recorrente' ? ' <span class="status-badge recorrente">👥 Recorrente</span>' : ''}${sameUserBadge ? ' <span class="status-badge mesmo-usuario">🔁 Mesmo usuário</span>' : ''}</h4>
+                                <p>${timestamp} | <span class="user-status-pill ${userStatusClass}">${userStatusLabel}</span>${clickedAdvanced ? ' | <span class="user-status-pill is-advanced">Clicou análise avançada</span>' : ''}${relatorioEnviado ? ' | ✅' : ''}${pagamento ? ' | 💰' : ''}</p>
                             </div>
                             <div class="response-card-actions">
-                                <button class="btn btn-delete" onclick="event.stopPropagation(); deleteResponse(${idx})" type="button">
+                                <button class="btn btn-delete" onclick="event.stopPropagation(); deleteResponse(${rowRef})" type="button">
                                     Deletar
                                 </button>
-                                <span id="toggle-icon-${idx}" style="font-size: 20px; color: #666;">▼</span>
+                                <span id="toggle-icon-${rowRef}" style="font-size: 20px; color: #666;">▼</span>
                             </div>
                         </div>
-                        <div class="response-card-body" id="response-body-${idx}">
+                        <div class="response-card-body" id="response-body-${rowRef}">
                             ${financialSection}
                             ${sectionsHTML}
                         </div>
@@ -1676,9 +1822,7 @@
                 return;
             }
 
-            const sorted = [...analyticsData].sort((a, b) =>
-                new Date(b.timestamp || 0) - new Date(a.timestamp || 0)
-            );
+            const sorted = getUiSortedResponses();
 
             const rows = sorted.map((response, idx) => ({ response, idx }));
             const limit = financeRowLimit > 0 ? Math.min(financeRowLimit, rows.length) : rows.length;
@@ -1689,7 +1833,7 @@
             }
 
             const tbody = limitedRows.map(({ response, idx }) => {
-                const name = response.nome || response.email || 'Anonimo';
+                const name = getDisplayName(response);
                 const date = response.timestamp ? new Date(response.timestamp).toLocaleDateString('pt-BR') : 'Sem data';
                 const paid = (response.pagamento || '').toString().toLowerCase() === 'sim';
                 const paidDate = response.data_pagamento ? new Date(response.data_pagamento).toLocaleDateString('pt-BR') : '';
@@ -1725,9 +1869,9 @@
             `;
         }
 
-        function toggleResponse(idx) {
-            const body = document.getElementById(`response-body-${idx}`);
-            const icon = document.getElementById(`toggle-icon-${idx}`);
+        function toggleResponse(rowRef) {
+            const body = document.getElementById(`response-body-${rowRef}`);
+            const icon = document.getElementById(`toggle-icon-${rowRef}`);
 
             if (body.classList.contains('active')) {
                 body.classList.remove('active');
@@ -1747,13 +1891,8 @@
 
         // FIXED deleteResponse function - Replace in your admin.html
 
-        async function deleteResponse(idx) {
-            // Get the ORIGINAL response from analyticsData array
-            const sorted = [...analyticsData].sort((a, b) =>
-                new Date(b.timestamp || 0) - new Date(a.timestamp || 0)
-            );
-
-            const response = sorted[idx]; // Use sorted array since that's what we display
+        async function deleteResponse(rowRef) {
+            const response = findResponseByRowRef(rowRef);
 
             if (!response) {
                 alert('Erro: Resposta não encontrada');
@@ -1763,7 +1902,7 @@
             // Use the RAW timestamp from the data
             const timestamp = response.timestamp;
             const testId = response.testId || '';
-            const nome = response.nome || 'Anônimo';
+            const nome = getDisplayName(response);
 
             if (!timestamp) {
                 alert('Não foi possível deletar: timestamp ausente.');
@@ -1819,7 +1958,7 @@
             if (analyticsData.length === 0) return;
 
             // KPIs
-            document.getElementById('agg-total').textContent = analyticsData.length;
+            document.getElementById('agg-total').textContent = analyticsTotalRows;
 
             const now = new Date();
             const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -1924,18 +2063,15 @@
         }
         
         // Financial tracking functions
-        async function updateFinancial(idx, field, checked) {
-            const sorted = [...analyticsData].sort((a, b) =>
-                new Date(b.timestamp || 0) - new Date(a.timestamp || 0)
-            );
-            const response = sorted[idx];
+        async function updateFinancial(rowRef, field, checked) {
+            const response = findResponseByRowRef(rowRef);
             
             if (!response || !response.timestamp) {
                 alert('Erro: resposta não encontrada');
                 return;
             }
             
-            const finEl = document.getElementById(`fin-${field.replace('_enviado', '')}-${idx}`);
+            const finEl = document.getElementById(`fin-${field.replace('_enviado', '')}-${rowRef}`);
             
             try {
                 const params = new URLSearchParams({
@@ -1979,19 +2115,16 @@
             }
         }
         
-        async function saveNotes(idx) {
-            const sorted = [...analyticsData].sort((a, b) =>
-                new Date(b.timestamp || 0) - new Date(a.timestamp || 0)
-            );
-            const response = sorted[idx];
+        async function saveNotes(rowRef) {
+            const response = findResponseByRowRef(rowRef);
             
             if (!response || !response.timestamp) {
                 alert('Erro: resposta não encontrada');
                 return;
             }
             
-            const textarea = document.getElementById(`notes-${idx}`);
-            const statusEl = document.getElementById(`note-status-${idx}`);
+            const textarea = document.getElementById(`notes-${rowRef}`);
+            const statusEl = document.getElementById(`note-status-${rowRef}`);
             const notes = textarea.value;
             
             try {
@@ -2025,6 +2158,79 @@
                 statusEl.textContent = '✗ Erro';
                 alert('Erro: ' + error.message);
             }
+        }
+
+        // Keep UI order consistent everywhere: latest spreadsheet row first.
+        function getUiSortedResponses(order = 'desc') {
+            const sorted = [...analyticsData].sort((a, b) => {
+                const ra = Number(a._rowNumber) || 0;
+                const rb = Number(b._rowNumber) || 0;
+                if (ra && rb && ra !== rb) return rb - ra;
+                return new Date(b.timestamp || 0) - new Date(a.timestamp || 0);
+            });
+            return order === 'asc' ? sorted.reverse() : sorted;
+        }
+
+        function findResponseByRowRef(rowRef) {
+            const target = Number(rowRef);
+            if (!Number.isNaN(target)) {
+                const byRow = (analyticsData || []).find(r => Number(r._rowNumber) === target);
+                if (byRow) return byRow;
+            }
+            return visibleResponses[target] || getUiSortedResponses()[target] || null;
+        }
+
+        function normalizeIdentityValue(v) {
+            return String(v || '').replace(/\s+/g, ' ').trim().toLowerCase();
+        }
+
+        function getIdentityKey(response) {
+            const nome = normalizeIdentityValue(response?.nome);
+            const email = normalizeIdentityValue(response?.email);
+            if (!nome || !email) return '';
+            return `${nome}||${email}`;
+        }
+
+        function buildIdentityRecurrenceMap(rows) {
+            const map = new Map();
+            (rows || []).forEach((row) => {
+                const key = getIdentityKey(row);
+                if (!key) return;
+                const current = map.get(key) || { count: 0, days: new Set(), dayCount: 0 };
+                current.count += 1;
+                const ts = String(row?.timestamp || '').trim();
+                if (ts) {
+                    const d = new Date(ts);
+                    if (!Number.isNaN(d.getTime())) {
+                        const day = d.toISOString().slice(0, 10);
+                        current.days.add(day);
+                    } else {
+                        current.days.add(ts.slice(0, 10));
+                    }
+                }
+                current.dayCount = current.days.size;
+                map.set(key, current);
+            });
+            return map;
+        }
+
+        function buildUserIdRecurrenceMap(rows) {
+            const map = new Map();
+            (rows || []).forEach((row) => {
+                const key = normalizeIdentityValue(row?._userId);
+                if (!key) return;
+                const current = map.get(key) || { count: 0 };
+                current.count += 1;
+                map.set(key, current);
+            });
+            return map;
+        }
+
+        function getDisplayName(response) {
+            const nome = (response?.nome || '').toString().trim();
+            if (nome) return nome;
+            const userId = (response?._userId || '').toString().trim();
+            return userId ? `${userId} (Anônimo)` : 'Anônimo';
         }
     </script>
 </body>

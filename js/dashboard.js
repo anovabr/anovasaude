@@ -4,6 +4,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const nav = document.querySelector('.nav');
     if (!nav) return;
 
+    // Home-only: subtle logo zoom when user is at the top.
+    const isHomePage = /\/?(index\.html)?$/i.test(window.location.pathname);
+    if (isHomePage) {
+        let ticking = false;
+        const applyTopClass = () => {
+            const currentY = window.scrollY || 0;
+            document.body.classList.toggle('home-at-top', currentY <= 8);
+            ticking = false;
+        };
+        window.addEventListener('scroll', () => {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(applyTopClass);
+        }, { passive: true });
+        applyTopClass();
+    }
+
     const ensureNavBrand = () => {
         let brand = nav.querySelector('.nav-brand');
         if (brand) return brand;
@@ -50,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
             actions = document.createElement('div');
             actions.className = 'progress-actions';
             actions.innerHTML = `
-                <button type="button" class="progress-btn" id="view-results-btn" title="Ver resultados">Ver</button>
+                <button type="button" class="progress-btn" id="view-results-btn" title="Abrir painel">Painel</button>
                 <button type="button" class="progress-btn progress-btn--ghost" id="clear-results-btn" title="Limpar resultados">Limpar</button>
             `;
             brand.appendChild(actions);
@@ -61,8 +78,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 viewBtn.id = 'view-results-btn';
                 viewBtn.type = 'button';
                 viewBtn.className = 'progress-btn';
-                viewBtn.textContent = 'Ver';
-                viewBtn.title = 'Ver resultados';
+                viewBtn.textContent = 'Painel';
+                viewBtn.title = 'Abrir painel';
                 actions.appendChild(viewBtn);
             }
             let clearBtn = actions.querySelector('#clear-results-btn');
@@ -174,6 +191,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (clearBtn) {
         clearBtn.addEventListener('click', () => {
             Storage.clearAll();
+            const isDashboardPage = /\/?dashboard\.html$/i.test(window.location.pathname);
+            if (isDashboardPage) {
+                window.location.reload();
+                return;
+            }
             renderTakenState();
         });
     }

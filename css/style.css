@@ -172,6 +172,12 @@ body {
 .logo img {
     height: 50px;
     width: auto;
+    transition: transform 0.24s ease, filter 0.24s ease;
+    transform-origin: center;
+}
+
+body.home-at-top .logo img {
+    transform: scale(1.15);
 }
 
 .nav-links {
@@ -364,6 +370,8 @@ body {
     z-index: 120;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
     gap: 0.4rem;
     margin: 0;
     padding: 0.65rem 1.1rem;
@@ -376,6 +384,8 @@ body {
     text-transform: uppercase;
     letter-spacing: 0.06em;
     font-size: 0.78rem;
+    width: 260px;
+    text-align: center;
 }
 
 @media (max-width: 768px) {
@@ -392,8 +402,119 @@ body {
     font-size: 0.9rem;
 }
 
+.tests-stamp__action {
+    flex-basis: 100%;
+    border: 1px solid rgba(26, 77, 46, 0.35);
+    background: rgba(26, 77, 46, 0.1);
+    color: var(--primary);
+    border-radius: 999px;
+    padding: 0.3rem 0.7rem;
+    margin-top: 0.2rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: normal;
+    text-transform: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tests-stamp__action:hover {
+    background: rgba(26, 77, 46, 0.16);
+}
+
+.tests-stamp__more {
+    background: rgba(212, 165, 116, 0.14);
+    border-color: rgba(212, 165, 116, 0.45);
+    color: #5f3b16;
+}
+
+.tests-stamp__more:hover {
+    background: rgba(212, 165, 116, 0.22);
+}
+
+.tests-stamp__userid {
+    flex-basis: 100%;
+    margin-top: 0.2rem;
+    font-size: 0.66rem;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0.01em;
+    color: #6b4b28;
+    word-break: break-all;
+}
+
+.payment-drawer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(18, 24, 20, 0.4);
+    z-index: 2000;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.22s ease;
+}
+
+.payment-drawer-overlay.is-open {
+    opacity: 1;
+}
+
+.payment-drawer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: min(420px, 92vw);
+    height: 100%;
+    background: #ffffff;
+    border-left: 1px solid var(--border);
+    box-shadow: -18px 0 36px rgba(0, 0, 0, 0.18);
+    padding: 1.1rem 1rem 1.4rem;
+    transform: translateX(104%);
+    transition: transform 0.22s ease;
+    overflow-y: auto;
+}
+
+.payment-drawer-overlay.is-open .payment-drawer {
+    transform: translateX(0);
+}
+
+.payment-drawer__close {
+    border: 1px solid var(--border);
+    background: var(--bg-white);
+    color: var(--text-dark);
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    font-size: 1.3rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.payment-drawer__title {
+    margin: 0.7rem 0 0.35rem;
+    font-family: 'Crimson Pro', serif;
+    color: var(--primary);
+    font-size: 1.6rem;
+}
+
+.payment-drawer__desc {
+    margin: 0 0 0.9rem;
+    color: var(--text-light);
+}
+
+.payment-drawer__actions {
+    display: grid;
+    gap: 0.8rem;
+}
+
+.payment-drawer__labels {
+    margin-top: 0.6rem;
+    display: grid;
+    gap: 0.4rem;
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
 .dashboard-info {
-    margin: 1.5rem 0 2rem;
+    margin: 0.9rem 0 1.5rem;
     padding: 1.25rem 1.5rem;
     border: 1px solid var(--border);
     border-radius: 10px;
@@ -1717,6 +1838,15 @@ body {
     gap: 0.5rem;
 }
 
+.result-row__actions {
+    grid-area: toggle;
+    align-self: start;
+    justify-self: end;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
 .status-action {
     display: inline-flex;
     align-items: center;
@@ -1737,10 +1867,8 @@ body {
     transform: translateY(-1px);
 }
 
-.row-toggle {
-    grid-area: toggle;
-    align-self: start;
-    justify-self: end;
+.row-toggle,
+.row-delete {
     border: 1px solid var(--border);
     background: var(--bg-white);
     color: var(--primary);
@@ -1752,29 +1880,22 @@ body {
     white-space: nowrap;
 }
 
-.row-toggle:hover {
+.row-toggle:hover,
+.row-delete:hover {
     border-color: var(--accent);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
 }
 
 .row-delete {
-    grid-area: toggle;
-    align-self: end;
-    justify-self: end;
     border: 1px solid rgba(244, 67, 54, 0.3);
     background: rgba(244, 67, 54, 0.08);
     color: #c62828;
-    padding: 0.3rem 0.7rem;
-    border-radius: 999px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    margin-top: 0.4rem;
 }
 
 .row-delete:hover {
     background: rgba(244, 67, 54, 0.16);
     border-color: rgba(244, 67, 54, 0.5);
+    box-shadow: 0 4px 10px rgba(198, 40, 40, 0.14);
 }
 
 .status-flag {
@@ -2045,6 +2166,23 @@ body {
     .payment-message p {
         font-size: 0.95rem;
     }
+}
+
+.analysis-btn {
+  background: #1a4d2e;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: background 0.3s;
+}
+
+.analysis-btn:hover {
+  background: #2d7a47;
 }
 
 .actions-bar { flex-wrap: nowrap; align-items: center; gap: 1rem; }

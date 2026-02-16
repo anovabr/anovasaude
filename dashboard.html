@@ -23,19 +23,29 @@
                         <span class="progress-chip__count"><strong id="tests-taken-count-header" data-count-tests>0</strong> testes</span>
                     </div>
                     <div class="progress-actions">
-                        <button type="button" class="progress-btn" id="view-results-btn" title="Ver resultados">Ver</button>
+                        <button type="button" class="progress-btn" id="view-results-btn" title="Abrir painel">Painel</button>
                         <button type="button" class="progress-btn progress-btn--ghost" id="clear-results-btn" title="Limpar resultados">Limpar</button>
                     </div>
                     <button type="button" class="nav-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
                 </div>
                 <ul class="nav-links">
-                    <li><a href="index.html#testes">Catálogo de Testes</a></li>
+                    <li><a href="catalogo.html">Catálogo de Testes</a></li>
+                    <li><a href="mailto:contato@anovasaude.com">Contato</a></li>
+                    <li>
+                        <a class="nav-icon" href="https://instagram.com/anovaneurostat" target="_blank" rel="noopener"
+                            aria-label="Instagram">
+                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <path
+                                    d="M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4zm0 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H7zm5 3a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm6.2-.7a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+                            </svg>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>
     </header>
 
-    <section class="tests-section" style="padding-top:4rem;">
+    <section class="tests-section" style="padding-top:2.4rem;">
         <canvas class="signature-canvas" id="signature-canvas"></canvas>
         <div class="container">
             <h2 class="section-title">Seus Resultados</h2>
@@ -150,5 +160,9 @@
   requestAnimationFrame(renderFrame);
 })();
     </script>
+
+
+
+
 </body>
 </html>

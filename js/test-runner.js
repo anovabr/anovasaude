@@ -15,9 +15,25 @@
   const params = new URLSearchParams(window.location.search);
   const testId = params.get('id') || 'demo-test';
   const isPreview = params.get('preview') === 'true';
-
+  const SHEETS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbzVZifIzJPeLNbGRQapGj0NQr-Xs6lRntuNWoEK9oUlEqHoI9Uc6nEQvn3INDurKrTs/exec';
+  const SHEETS_SECRET = 'Eugene2024##abc';
+  const SESSION_USER_ID_KEY = 'anova_user_id';
   let testData = null;
   let answers = [];
+  let testStartedAt = null;
+
+  function getOrCreateSessionUserId() {
+    try {
+      const existing = sessionStorage.getItem(SESSION_USER_ID_KEY);
+      if (existing) return existing;
+      const randomPart = Math.random().toString(36).slice(2, 10);
+      const created = `nonreg_user_${Date.now().toString(36)}_${randomPart}`;
+      sessionStorage.setItem(SESSION_USER_ID_KEY, created);
+      return created;
+    } catch (e) {
+      return `nonreg_user_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`;
+    }
+  }
 
   function loadTest() {
     // Preview mode: load from sessionStorage instead of fetching
@@ -50,6 +66,8 @@
   }
 
   function init() {
+    testStartedAt = new Date().toISOString();
+    getOrCreateSessionUserId();
     document.getElementById('test-title').textContent = testData.title;
     document.getElementById('test-description').innerHTML = formatMarkdown(testData.description) || '';
     const instr = document.getElementById('test-instructions');
@@ -406,19 +424,137 @@
     }
 
     // Save to storage
+    let createdResultId = null;
     if (typeof Storage !== 'undefined') {
       const resultId = Storage.saveResult(results.testId, results);
+      createdResultId = resultId || null;
       Storage.recordTestTaken(results.testId, results.testTitle);
       if (resultId) {
         Storage.setFunnelEvent(resultId, 'results_viewed');
+        if (!isPreview) {
+          sendResultToSheets(results, resultId);
+        }
       }
     }
     if (window.ProgressDashboard && typeof window.ProgressDashboard.refresh === 'function') {
       window.ProgressDashboard.refresh();
     }
 
+    if (!isPreview) {
+      if (createdResultId) {
+        window.location.href = `dashboard.html?open_result=${encodeURIComponent(createdResultId)}`;
+      } else {
+        window.location.href = 'dashboard.html';
+      }
+      return;
+    }
+
     document.getElementById('results-page').style.display = 'block';
     window.scrollTo({ top: 0, behavior: 'auto' });
+  }
+
+  function sendResultToSheets(results, resultId) {
+    if (!resultId || !SHEETS_WEBHOOK_URL || !SHEETS_SECRET) return;
+    const sentKey = `sheet_sent_${resultId}`;
+    if (localStorage.getItem(sentKey) === '1') return;
+
+    const answersForSheet = Array.isArray(results.answers)
+      ? results.answers.map(ans => {
+          const q = (ans.questionTitle || '').toString().trim();
+          const a = (ans.label || ans.value || '').toString().trim();
+          return q && a ? `${q}, ${a}` : (q || a);
+        }).filter(Boolean)
+      : [];
+
+    const finishedAt = new Date().toISOString();
+    const startedAt = testStartedAt || '';
+    const durationSeconds = startedAt ? Math.max(0, Math.round((Date.parse(finishedAt) - Date.parse(startedAt)) / 1000)) : null;
+    const userId = getOrCreateSessionUserId();
+    const payload = {
+      token: SHEETS_SECRET,
+      user_id: userId,
+      user_status: 'teste_completo',
+      clicou_analise_avancada: '',
+      resultId,
+      testId: results.testId || testId,
+      testTitle: results.testTitle || testData?.title || testId,
+      score: results.score ?? null,
+      maxScore: results.maxScore ?? null,
+      interpretation: results.interpretation?.level || '',
+      description: results.interpretation?.description || '',
+      time_started: startedAt,
+      time_finished: finishedAt,
+      duration_seconds: durationSeconds,
+      factors: results.factors || [],
+      answers: answersForSheet,
+      demographics: {
+        fullName: '',
+        birthDate: '',
+        state: '',
+        gender: '',
+        maritalStatus: '',
+        education: '',
+        diagnosisReceived: false,
+        diagnosisList: [],
+        diagnosisOther: '',
+        therapyFollowup: false,
+        therapyDetails: '',
+        children: '',
+        medsUse: false,
+        medsDetails: '',
+        behaviorChanges: false,
+        behaviorDetails: '',
+        phone: '',
+        email: '',
+        comments: ''
+      },
+      consent: false,
+      metadata: {
+        user_id: userId,
+        pageUrl: window.location.href,
+        userAgent: navigator.userAgent || '',
+        eventType: 'test_completed',
+        interpretationRequestedTests: [],
+        interpretationRequestedCount: 0,
+        testStartedAt: startedAt,
+        testFinishedAt: finishedAt
+      }
+    };
+
+    const body = JSON.stringify(payload);
+    const markSent = () => {
+      try {
+        localStorage.setItem(sentKey, '1');
+      } catch (e) {
+        // no-op
+      }
+    };
+
+    let beaconSent = false;
+    try {
+      if (navigator.sendBeacon) {
+        const blob = new Blob([body], { type: 'text/plain' });
+        beaconSent = navigator.sendBeacon(SHEETS_WEBHOOK_URL, blob);
+      }
+    } catch (e) {
+      beaconSent = false;
+    }
+
+    if (beaconSent) {
+      markSent();
+      return;
+    }
+
+    fetch(SHEETS_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body,
+      keepalive: true
+    }).then(() => {
+      markSent();
+    }).catch(() => {
+      // no-op: keep local flag unset to retry on next completion
+    });
   }
 
   document.addEventListener('DOMContentLoaded', loadTest);

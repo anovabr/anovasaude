@@ -6,8 +6,18 @@ function injectSharedPages() {
 
   const SHEETS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbzVZifIzJPeLNbGRQapGj0NQr-Xs6lRntuNWoEK9oUlEqHoI9Uc6nEQvn3INDurKrTs/exec';
   const SHEETS_SECRET = 'Eugene2024##abc';
+  const SESSION_USER_ID_KEY = 'anova_user_id';
 
   const sharedPagesHTML = `
+    <!--
+      MAINTENANCE NOTE (2026-02-16):
+      Keep this PAGE 2 block for now.
+      Even though users are redirected to dashboard after finishing tests,
+      test-runner.js and shared-pages.js still reference these IDs
+      (e.g., results-page, result-score/result-max/result-level/result-description,
+      factors-breakdown, result-answers-container, interpretation/download buttons).
+      Remove this block only after those dependencies are fully migrated.
+    -->
     <!-- PAGE 2: RESULTS PAGE -->
     <div id="results-page" class="page-section" style="display: none;">
       <div class="test-header">
@@ -48,8 +58,7 @@ function injectSharedPages() {
         <br><span class="result-symbol" aria-hidden="true">❖</span>É possível que <span class="highlight-marker">um psicólogo da equipe</span> tenha acesso aos 
         seus resultados e faça um relatório técnico sobre eles, explicando de maneira mais detalhada e precisa.  
         <br><span class="result-symbol" aria-hidden="true">❖</span>Caso você tenha esse interesse, clique em <button class="interpretation-link highlight-marker" style="border:none;text-decoration:none;cursor:pointer;padding:0;font:inherit;background:transparent;font-weight:bold;">"Quero interpretação humana"</button>. 
-        Você irá deverá preenher algumas informações extras, poderá fazer novos testes e irá pagar uma taxa de serviço. 
-        O valor para um teste é <span class="highlight-marker"><span id="finance-price-one">—</span></span>. O valor para até 3 testes é <span class="highlight-marker"><span id="finance-price-three">—</span></span>.
+        Você irá deverá preenher algumas informações extras, poderá fazer novos testes e irá pagar uma taxa de serviço.
         Após 2 dias úteis, um documento técnico será enviado para você via e-mail ou whatsapp por um acesso seguro.
         <br><span class="result-symbol" aria-hidden="true">❖</span>Caso você tenha executado mais do que 3 testes, nossa equipe entrará em contato com outros prazos e valores.</p>
 
@@ -67,7 +76,12 @@ function injectSharedPages() {
     <div id="demographics-page" class="page-section" style="display: none;">
       <div class="test-header">
         <h1 id="demographics-title">Informações Pessoais</h1>
-        <p id="demographics-desc">As perguntas abaixo são opcionais, porém, elas vão possibilitar uma melhor interpretação dos resultados. Assim, preencha todas as informações que você quiser. Se você já preencheu este formulário anteriormente, apenas indique seu nome e e-mail.</p>
+        <p id="demographics-desc">As perguntas abaixo são opcionais, mas ao preencher, elas vão possibilitar uma melhor interpretação dos resultados.
+        Você receberá um único relatório técnico sobre os seguintes testes:</p>
+        <div id="interpretation-tests-notice" class="result-answers" style="display:none; margin:0.5rem 0 0.75rem 0; padding:0.8rem 1rem;">
+          <p style="margin:0 0 0.5rem 0; font-weight:600;"></p>
+          <ul id="interpretation-tests-list" style="margin:0; padding-left:0; list-style:none;"></ul>
+        </div>
       </div>
 
       <form id="demographics-form">
@@ -159,7 +173,7 @@ function injectSharedPages() {
           <input type="tel" id="phone" name="phone" placeholder="(11) 99999-9999">
         </div>
         <div class="form-group">
-          <label for="email">Email</label>
+          <label for="email">Email (Obrigatório)</label>
           <input type="email" id="email" name="email">
         </div>
         <div class="form-group">
@@ -197,17 +211,17 @@ function injectSharedPages() {
           </div>
           <label style="display:flex;align-items:center;gap:8px;margin-top:0.5rem;">
             <input type="checkbox" id="therapy-checkbox">
-            Faz acompanhamento psicológico ou psiquiátrico
+            Faço acompanhamento psicológico ou psiquiátrico
           </label>
           <textarea id="therapy-details" style="display:none;margin-top:0.75rem;" placeholder="Descreva brevemente (opcional)"></textarea>
           <label style="display:flex;align-items:center;gap:8px;margin-top:0.75rem;">
             <input type="checkbox" id="meds-checkbox">
-            Faz uso de algum remédio psiquiátrico (por exemplo, remédios para dormir)
+            Faço uso de algum remédio psiquiátrico (por exemplo, remédios para dormir)
           </label>
           <textarea id="meds-details" style="display:none;margin-top:0.75rem;" placeholder="Descreva brevemente (opcional)"></textarea>
           <label style="display:flex;align-items:center;gap:8px;margin-top:0.75rem;">
             <input type="checkbox" id="behavior-checkbox">
-            Notou alguma alteração em seu comportamento nos últimos meses
+            Notei alterações   em seu comportamento nos últimos meses
           </label>
           <textarea id="behavior-details" style="display:none;margin-top:0.75rem;" placeholder="Por exemplo, comecei a ter mais sono ou fiquei com menos fome"></textarea>
         </div>
@@ -218,18 +232,16 @@ function injectSharedPages() {
         <div class="form-group" style="border:1px solid #d4a574;background:#fff7ee;padding:1rem;border-radius:6px;">
           <label style="display:flex;align-items:flex-start;gap:8px;">
             <input type="checkbox" id="consent-checkbox" required>
-            Autorizo enviar meus resultados e entendo que deverei pagar para receber o relatório.
+            Declaro ser maior de idade e autorizo o envio dos meus resultados. O relatório técnico será elaborado e enviado após a confirmação do pagamento.
           </label>
         </div>
 
         <div id="post-send-message" class="payment-message" style="display:none;"></div>
       </form>
       <div class="test-navigation">
-        <button type="button" id="back-to-results-btn" class="btn btn-secondary">Voltar</button>
+        <button type="button" id="back-to-results-btn" class="btn btn-secondary" style="display:none;">Voltar</button>
         <button type="button" id="submit-results-btn" class="btn btn-primary">Enviar Resultados</button>
         <a href="../index.html#testes" class="btn btn-secondary post-action" style="display:none;">Fazer Outro Teste</a>
-        <div id="mp-checkout-container" style="display:none; text-align: center; padding: 10px; background: #f1fbf5; border: 1px solid #9bd0af; border-radius: 8px; box-shadow: 0 2px 8px rgba(26,77,46,0.1); width: fit-content; margin: 0 auto; zoom: 0.65;" data-preference-id-one="63317762-5eeb54d6-3242-4b6c-8bd7-3176fad46396" data-preference-id-three="63317762-195fd6d9-b3a9-47a0-a261-5cb1d63bd83e"></div>
-        <div id="mp-warning-text" style="display:none; padding: 0.6rem 0.9rem; background: #fff7ee; border: 1px solid #d4a574; border-radius: 8px; color: #6b3d14; font-weight: 600;">Nossa equipe vai entrar em contato.</div>
       </div>
     </div>
 
@@ -251,6 +263,19 @@ function injectSharedPages() {
     const id = params.get('id');
     if (id) return id;
     return (window.location.pathname.split('/').pop() || '').replace('.html','');
+  }
+
+  function getOrCreateSessionUserId() {
+    try {
+      const existing = sessionStorage.getItem(SESSION_USER_ID_KEY);
+      if (existing) return existing;
+      const randomPart = Math.random().toString(36).slice(2, 10);
+      const created = `nonreg_user_${Date.now().toString(36)}_${randomPart}`;
+      sessionStorage.setItem(SESSION_USER_ID_KEY, created);
+      return created;
+    } catch (e) {
+      return `nonreg_user_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`;
+    }
   }
 
   function findLatestResultIdForTest(testId) {
@@ -279,6 +304,31 @@ function injectSharedPages() {
     }
   }
 
+  function markInterpretationClickedServer() {
+    const userId = sessionStorage.getItem(SESSION_USER_ID_KEY);
+    if (!userId || !SHEETS_WEBHOOK_URL || !SHEETS_SECRET) return;
+    const url = new URL(SHEETS_WEBHOOK_URL);
+    url.searchParams.set('password', SHEETS_SECRET);
+    url.searchParams.set('action', 'mark_interpretation_clicked');
+    url.searchParams.set('user_id', userId);
+
+    try {
+      fetch(url.toString(), {
+        method: 'GET',
+        mode: 'no-cors',
+        keepalive: true,
+        cache: 'no-store'
+      }).catch(() => {});
+    } catch (e) {
+      try {
+        const img = new Image();
+        img.src = url.toString();
+      } catch (err) {
+        // no-op
+      }
+    }
+  }
+
   function openDemographicsPage() {
     const resultsPage = document.getElementById('results-page');
     const demographicsPage = document.getElementById('demographics-page');
@@ -286,13 +336,73 @@ function injectSharedPages() {
     if (resultsPage) resultsPage.style.display = 'none';
     if (testPage) testPage.style.display = 'none';
     if (demographicsPage) demographicsPage.style.display = 'block';
+    renderInterpretationTestsNotice();
     window.scrollTo({ top: 0, behavior: 'auto' });
+  }
+
+  function renderInterpretationTestsNotice() {
+    const noticeEl = document.getElementById('interpretation-tests-notice');
+    const listEl = document.getElementById('interpretation-tests-list');
+    if (!noticeEl || !listEl) return;
+
+    if (typeof Storage === 'undefined') {
+      noticeEl.style.display = 'none';
+      return;
+    }
+
+    let index = [];
+    try {
+      index = Storage.getResultsIndex() || [];
+    } catch (e) {
+      index = [];
+    }
+
+    const seen = new Set();
+    const titles = [];
+    index.forEach(item => {
+      const rawTitle = (item?.testTitle || item?.testId || '').toString().trim();
+      if (!rawTitle) return;
+      const key = rawTitle.toLowerCase();
+      if (seen.has(key)) return;
+      seen.add(key);
+      titles.push(rawTitle);
+    });
+
+    if (!titles.length) {
+      noticeEl.style.display = 'none';
+      return;
+    }
+
+    listEl.innerHTML = '';
+    titles.forEach((title) => {
+      const li = document.createElement('li');
+      const label = document.createElement('label');
+      label.style.display = 'inline-flex';
+      label.style.alignItems = 'center';
+      label.style.gap = '0.5rem';
+
+      const input = document.createElement('input');
+      input.type = 'checkbox';
+      input.className = 'interpretation-test-checkbox';
+      input.value = title;
+      input.checked = true;
+
+      const span = document.createElement('span');
+      span.textContent = title;
+
+      label.appendChild(input);
+      label.appendChild(span);
+      li.appendChild(label);
+      listEl.appendChild(li);
+    });
+    noticeEl.style.display = 'block';
   }
 
   // Navigation handlers
   document.addEventListener("click", e => {
     if (e.target.id === "interpretation-btn" || e.target.classList.contains("interpretation-link")) {
       markFunnelEvent('interpretation_clicked');
+      markInterpretationClickedServer();
       openDemographicsPage();
     }
     if (e.target.id === "back-to-results-btn") {
@@ -315,6 +425,7 @@ function injectSharedPages() {
   const params = new URLSearchParams(window.location.search);
   if (params.get('flow') === 'interpretation') {
     markFunnelEvent('interpretation_clicked');
+    markInterpretationClickedServer();
     openDemographicsPage();
   }
 
@@ -416,70 +527,6 @@ function injectSharedPages() {
     });
   }
 
-  function formatBRL(value) {
-    const num = Number(value);
-    if (Number.isNaN(num)) return '';
-    if (typeof Intl !== 'undefined' && Intl.NumberFormat) {
-      return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(num);
-    }
-    return `R$ ${num.toFixed(2)}`;
-  }
-
-  async function loadFinanceiro() {
-    try {
-      const response = await fetch('/financeiro.json', { cache: 'no-store' });
-      if (!response.ok) throw new Error('Falha ao carregar preços');
-      return await response.json();
-    } catch (e) {
-      return null;
-    }
-  }
-
-  function updateFinanceInlineText(fin) {
-    const oneEl = document.getElementById('finance-price-one');
-    const threeEl = document.getElementById('finance-price-three');
-    if (!oneEl || !threeEl) return;
-    if (fin && fin.preco_um_teste != null && fin.preco_ate_tres != null) {
-      oneEl.textContent = formatBRL(fin.preco_um_teste);
-      threeEl.textContent = formatBRL(fin.preco_ate_tres);
-    } else {
-      oneEl.textContent = '—';
-      threeEl.textContent = '—';
-    }
-  }
-
-  loadFinanceiro().then(updateFinanceInlineText);
-
-  function renderMercadoPagoButton(count) {
-    const container = document.getElementById('mp-checkout-container');
-    const warning = document.getElementById('mp-warning-text');
-    if (!container) return;
-    if (count >= 4) {
-      container.style.display = 'none';
-      container.dataset.rendered = 'false';
-      container.dataset.currentPref = '';
-      container.innerHTML = '';
-      if (warning) warning.style.display = 'inline-flex';
-      return;
-    }
-    if (warning) warning.style.display = 'none';
-    const preferenceId = count <= 1 ? container.dataset.preferenceIdOne : container.dataset.preferenceIdThree;
-    if (!preferenceId) return;
-    if (container.dataset.rendered === 'true' && container.dataset.currentPref === preferenceId) {
-      container.style.display = 'inline-flex';
-      return;
-    }
-    container.innerHTML = '';
-    container.style.display = 'inline-flex';
-    const script = document.createElement('script');
-    script.src = 'https://www.mercadopago.com.br/integrations/v1/web-payment-checkout.js';
-    script.setAttribute('data-preference-id', preferenceId);
-    script.setAttribute('data-source', 'button');
-    container.appendChild(script);
-    container.dataset.rendered = 'true';
-    container.dataset.currentPref = preferenceId;
-  }
-
   if (submitBtn) {
     submitBtn.addEventListener('click', (ev) => {
       ev.preventDefault();
@@ -538,8 +585,17 @@ function injectSharedPages() {
           }).filter(Boolean);
         }
       }
+      const selectedInterpretationTests = Array.from(document.querySelectorAll('.interpretation-test-checkbox:checked'))
+        .map(el => (el.value || '').trim())
+        .filter(Boolean);
+      const whichTestsComment = `[User want these tests in report: [${selectedInterpretationTests.join(' | ')}]]`;
+
+      const userId = getOrCreateSessionUserId();
       const payload = {
         token: SHEETS_SECRET,
+        action: 'update_demographics_by_user',
+        user_id: userId,
+        which_tests: whichTestsComment,
         testId,
         testTitle: document.getElementById('test-title')?.textContent || storedResult?.testTitle || testId,
         score: Number(document.getElementById('result-score')?.textContent) || storedResult?.score || null,
@@ -569,7 +625,13 @@ function injectSharedPages() {
           comments: document.getElementById('comments')?.value || ''
         },
         consent: true,
-        metadata: { pageUrl: window.location.href }
+        metadata: {
+          user_id: userId,
+          pageUrl: window.location.href,
+          whichTestsComment,
+          interpretationRequestedTests: selectedInterpretationTests,
+          interpretationRequestedCount: selectedInterpretationTests.length
+        }
       };
 
       submitBtn.disabled = true;
@@ -580,8 +642,11 @@ function injectSharedPages() {
         headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify(payload)
       })
-      .then(r => r.text())
-      .then(async () => {
+      .then(r => r.json())
+      .then((resp) => {
+        if (!resp || resp.success !== true) {
+          throw new Error(resp?.error || 'Falha ao atualizar dados');
+        }
         submitBtn.textContent = '✓ Enviado';
         const formEl = document.getElementById('demographics-form');
         if (formEl) formEl.style.display = 'none';
@@ -589,7 +654,7 @@ function injectSharedPages() {
         const descEl = document.getElementById('demographics-desc');
         if (titleEl) titleEl.textContent = 'Próximos passos';
         if (descEl) {
-          descEl.textContent = 'Agora você pode optar por fazer outros testes ou realizar seu pagamento. Caso queira pagar, você deverá clicar no botão do Mercado Pago. Quando seu pagamento for confirmado, nossa equipe entrará em contato, preferencialmente por e-mail, seja para solicitar mais informações, seja para enviar seu relatório técnico.';
+          descEl.textContent = 'Agora você pode optar por fazer outros testes ou ir para o dashboard para realizar o pagamento. Quando seu pagamento for confirmado, nossa equipe entrará em contato, preferencialmente por e-mail, seja para solicitar mais informações, seja para enviar seu relatório técnico.';
         }
         document.querySelectorAll('.post-action').forEach(a => a.style.display = 'inline-flex');
         let count = 0;
@@ -600,20 +665,15 @@ function injectSharedPages() {
             count = 0;
           }
         }
-        renderMercadoPagoButton(count);
         const msgEl = document.getElementById('post-send-message');
         if (msgEl) {
           const plural = count === 1 ? 'teste' : 'testes';
-          const fin = await loadFinanceiro();
-          if (fin && fin.preco_um_teste != null && fin.preco_ate_tres != null) {
-            const precoUm = formatBRL(fin.preco_um_teste);
-            const precoTres = formatBRL(fin.preco_ate_tres);
-            msgEl.textContent = `Você realizou ${count} ${plural}. Você pode realizar novas avaliações ou fazer o pagamento da interpretação deste teste. O preço para a produção de documentos para 1 teste é de ${precoUm}. Para até 3 testes, o preço é ${precoTres}. Caso você tenha executado mais do que 3 testes, nossa equipe entrará em contato com outros prazos e valores.`;
-          } else {
-            msgEl.textContent = `Você realizou ${count} ${plural}. Você pode realizar novas avaliações ou fazer o pagamento da interpretação deste teste. Não foi possível carregar os preços no momento.`;
-          }
+          msgEl.textContent = `Você realizou ${count} ${plural}. Você pode realizar novas avaliações ou ir para o dashboard para concluir o pagamento da interpretação. Caso você tenha executado mais do que 3 testes, nossa equipe entrará em contato com outros prazos e valores.`;
           msgEl.style.display = 'block';
         }
+
+        // After successful submit, return user to dashboard.
+        window.location.href = 'dashboard.html';
       })
       .catch(() => {
         submitBtn.disabled = false;

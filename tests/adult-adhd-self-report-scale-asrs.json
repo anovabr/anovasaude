@@ -1,0 +1,679 @@
+{
+  "id": "adult-adhd-self-report-scale-asrs",
+  "title": "Adult ADHD Self-Report Scale (ASRS)",
+  "description": "Teste para avaliar sintomas de Transtorno do déficit de atenção/hiperatividade (TDAH), composto por 18 questões. Avalia a frequência dos sintomas nos últimos 6 meses.",
+  "tag": "TDAH",
+  "category": "para-voce",
+  "articleUrl": "https://www.scielo.br/j/rpc/a/nnhNLNxkFSmQwVBSGZYdp6d/?format=html&lang=pt",
+  "featured": true,
+  "curadoria": false,
+  "testType": "questionnaire",
+  "visibility": "public",
+  "isPremium": false,
+  "instructions": "Por favor, responda às perguntas abaixo se avaliando honestamente e indique o número que corresponde a como você se sentiu e se comportou **nos últimos seis meses**.",
+  "estimatedTime": "5",
+  "questionCount": 18,
+  "createdAt": "2026-02-15T20:04:44.900Z",
+  "questions": [
+    {
+      "id": 1,
+      "title": "Com que frequência você deixa um projeto pela metade depois de já ter feito as partes mais difíceis?",
+      "type": "likert",
+      "options": [
+        {
+          "value": 0,
+          "text": "Nunca"
+        },
+        {
+          "value": 1,
+          "text": "Quase nunca"
+        },
+        {
+          "value": 2,
+          "text": "De vez em quando"
+        },
+        {
+          "value": 3,
+          "text": "Quase sempre"
+        },
+        {
+          "value": 4,
+          "text": "Sempre"
+        }
+      ],
+      "weight": 1,
+      "reverse": false
+    },
+    {
+      "id": 2,
+      "title": "Com que frequência você tem dificuldade para fazer um trabalho que exige organização?",
+      "type": "likert",
+      "options": [
+        {
+          "value": 0,
+          "text": "Nunca"
+        },
+        {
+          "value": 1,
+          "text": "Quase nunca"
+        },
+        {
+          "value": 2,
+          "text": "De vez em quando"
+        },
+        {
+          "value": 3,
+          "text": "Quase sempre"
+        },
+        {
+          "value": 4,
+          "text": "Sempre"
+        }
+      ],
+      "weight": 1,
+      "reverse": false
+    },
+    {
+      "id": 3,
+      "title": "Com que frequência você tem dificuldade para lembrar de compromissos ou obrigações?",
+      "type": "likert",
+      "options": [
+        {
+          "value": 0,
+          "text": "Nunca"
+        },
+        {
+          "value": 1,
+          "text": "Quase nunca"
+        },
+        {
+          "value": 2,
+          "text": "De vez em quando"
+        },
+        {
+          "value": 3,
+          "text": "Quase sempre"
+        },
+        {
+          "value": 4,
+          "text": "Sempre"
+        }
+      ],
+      "weight": 1,
+      "reverse": false
+    },
+    {
+      "id": 4,
+      "title": "Quando você precisa fazer algo que exige muita concentração, com que frequência você evita ou adia o início?",
+      "type": "likert",
+      "options": [
+        {
+          "value": 0,
+          "text": "Nunca"
+        },
+        {
+          "value": 1,
+          "text": "Quase nunca"
+        },
+        {
+          "value": 2,
+          "text": "De vez em quando"
+        },
+        {
+          "value": 3,
+          "text": "Quase sempre"
+        },
+        {
+          "value": 4,
+          "text": "Sempre"
+        }
+      ],
+      "weight": 1,
+      "reverse": false
+    },
+    {
+      "id": 5,
+      "title": "Com que frequência você fica se mexendo na cadeira ou balançando as mãos ou os pés quando precisa ficar sentado(a) por muito tempo?",
+      "type": "likert",
+      "options": [
+        {
+          "value": 0,
+          "text": "Nunca"
+        },
+        {
+          "value": 1,
+          "text": "Quase nunca"
+        },
+        {
+          "value": 2,
+          "text": "De vez em quando"
+        },
+        {
+          "value": 3,
+          "text": "Quase sempre"
+        },
+        {
+          "value": 4,
+          "text": "Sempre"
+        }
+      ],
+      "weight": 1,
+      "reverse": false
+    },
+    {
+      "id": 6,
+      "title": "Com que frequência você se sente ativo(a) demais e necessitando fazer coisas, como se estivesse “com um motor ligado”?",
+      "type": "likert",
+      "options": [
+        {
+          "value": 0,
+          "text": "Nunca"
+        },
+        {
+          "value": 1,
+          "text": "Quase nunca"
+        },
+        {
+          "value": 2,
+          "text": "De vez em quando"
+        },
+        {
+          "value": 3,
+          "text": "Quase sempre"
+        },
+        {
+          "value": 4,
+          "text": "Sempre"
+        }
+      ],
+      "weight": 1,
+      "reverse": false
+    },
+    {
+      "id": 7,
+      "title": "Com que frequência você comete erros bobos por falta de atenção quando tem de trabalhar num projeto chato ou difícil?",
+      "type": "likert",
+      "options": [
+        {
+          "value": 0,
+          "text": "Nunca"
+        },
+        {
+          "value": 1,
+          "text": "Quase nunca"
+        },
+        {
+          "value": 2,
+          "text": "De vez em quando"
+        },
+        {
+          "value": 3,
+          "text": "Quase sempre"
+        },
+        {
+          "value": 4,
+          "text": "Sempre"
+        }
+      ],
+      "weight": 1,
+      "reverse": false
+    },
+    {
+      "id": 8,
+      "title": "Com que frequência você tem dificuldade para manter a atenção quando está fazendo um trabalho chato ou repetitivo?",
+      "type": "likert",
+      "options": [
+        {
+          "value": 0,
+          "text": "Nunca"
+        },
+        {
+          "value": 1,
+          "text": "Quase nunca"
+        },
+        {
+          "value": 2,
+          "text": "De vez em quando"
+        },
+        {
+          "value": 3,
+          "text": "Quase sempre"
+        },
+        {
+          "value": 4,
+          "text": "Sempre"
+        }
+      ],
+      "weight": 1,
+      "reverse": false
+    },
+    {
+      "id": 9,
+      "title": "Com que frequência você tem dificuldade para se concentrar no que as pessoas dizem, mesmo quando elas estão falando diretamente com você?",
+      "type": "likert",
+      "options": [
+        {
+          "value": 0,
+          "text": "Nunca"
+        },
+        {
+          "value": 1,
+          "text": "Quase nunca"
+        },
+        {
+          "value": 2,
+          "text": "De vez em quando"
+        },
+        {
+          "value": 3,
+          "text": "Quase sempre"
+        },
+        {
+          "value": 4,
+          "text": "Sempre"
+        }
+      ],
+      "weight": 1,
+      "reverse": false
+    },
+    {
+      "id": 10,
+      "title": "Com que frequência você coloca as coisas fora do lugar ou tem dificuldade de encontrar as coisas em casa ou no trabalho?",
+      "type": "likert",
+      "options": [
+        {
+          "value": 0,
+          "text": "Nunca"
+        },
+        {
+          "value": 1,
+          "text": "Quase nunca"
+        },
+        {
+          "value": 2,
+          "text": "De vez em quando"
+        },
+        {
+          "value": 3,
+          "text": "Quase sempre"
+        },
+        {
+          "value": 4,
+          "text": "Sempre"
+        }
+      ],
+      "weight": 1,
+      "reverse": false
+    },
+    {
+      "id": 11,
+      "title": "Com que frequência você se distrai com atividades ou barulho à sua volta?",
+      "type": "likert",
+      "options": [
+        {
+          "value": 0,
+          "text": "Nunca"
+        },
+        {
+          "value": 1,
+          "text": "Quase nunca"
+        },
+        {
+          "value": 2,
+          "text": "De vez em quando"
+        },
+        {
+          "value": 3,
+          "text": "Quase sempre"
+        },
+        {
+          "value": 4,
+          "text": "Sempre"
+        }
+      ],
+      "weight": 1,
+      "reverse": false
+    },
+    {
+      "id": 12,
+      "title": "Com que frequência você se sente inquieto(a) ou agitado(a)?",
+      "type": "likert",
+      "options": [
+        {
+          "value": 0,
+          "text": "Nunca"
+        },
+        {
+          "value": 1,
+          "text": "Quase nunca"
+        },
+        {
+          "value": 2,
+          "text": "De vez em quando"
+        },
+        {
+          "value": 3,
+          "text": "Quase sempre"
+        },
+        {
+          "value": 4,
+          "text": "Sempre"
+        }
+      ],
+      "weight": 1,
+      "reverse": false
+    },
+    {
+      "id": 13,
+      "title": "Com que frequência você tem dificuldade para sossegar e relaxar quando tem tempo livre para você?",
+      "type": "likert",
+      "options": [
+        {
+          "value": 0,
+          "text": "Nunca"
+        },
+        {
+          "value": 1,
+          "text": "Quase nunca"
+        },
+        {
+          "value": 2,
+          "text": "De vez em quando"
+        },
+        {
+          "value": 3,
+          "text": "Quase sempre"
+        },
+        {
+          "value": 4,
+          "text": "Sempre"
+        }
+      ],
+      "weight": 1,
+      "reverse": false
+    },
+    {
+      "id": 14,
+      "title": "Com que frequência você se pega falando demais em situações sociais?",
+      "type": "likert",
+      "options": [
+        {
+          "value": 0,
+          "text": "Nunca"
+        },
+        {
+          "value": 1,
+          "text": "Quase nunca"
+        },
+        {
+          "value": 2,
+          "text": "De vez em quando"
+        },
+        {
+          "value": 3,
+          "text": "Quase sempre"
+        },
+        {
+          "value": 4,
+          "text": "Sempre"
+        }
+      ],
+      "weight": 1,
+      "reverse": false
+    },
+    {
+      "id": 15,
+      "title": "Com que frequência você se levanta da cadeira em reuniões ou em outras situações onde deveria ficar sentado(a)?",
+      "type": "likert",
+      "options": [
+        {
+          "value": 0,
+          "text": "Nunca"
+        },
+        {
+          "value": 1,
+          "text": "Quase nunca"
+        },
+        {
+          "value": 2,
+          "text": "De vez em quando"
+        },
+        {
+          "value": 3,
+          "text": "Quase sempre"
+        },
+        {
+          "value": 4,
+          "text": "Sempre"
+        }
+      ],
+      "weight": 1,
+      "reverse": false
+    },
+    {
+      "id": 16,
+      "title": "Quando você está conversando, com que frequência você se pega terminando as frases das pessoas antes delas?",
+      "type": "likert",
+      "options": [
+        {
+          "value": 0,
+          "text": "Nunca"
+        },
+        {
+          "value": 1,
+          "text": "Quase nunca"
+        },
+        {
+          "value": 2,
+          "text": "De vez em quando"
+        },
+        {
+          "value": 3,
+          "text": "Quase sempre"
+        },
+        {
+          "value": 4,
+          "text": "Sempre"
+        }
+      ],
+      "weight": 1,
+      "reverse": false
+    },
+    {
+      "id": 17,
+      "title": "Com que frequência você tem dificuldade para esperar nas situações onde cada um tem a sua vez?",
+      "type": "likert",
+      "options": [
+        {
+          "value": 0,
+          "text": "Nunca"
+        },
+        {
+          "value": 1,
+          "text": "Quase nunca"
+        },
+        {
+          "value": 2,
+          "text": "De vez em quando"
+        },
+        {
+          "value": 3,
+          "text": "Quase sempre"
+        },
+        {
+          "value": 4,
+          "text": "Sempre"
+        }
+      ],
+      "weight": 1,
+      "reverse": false
+    },
+    {
+      "id": 18,
+      "title": "Com que frequência você interrompe os outros quando eles estão ocupados?",
+      "type": "likert",
+      "options": [
+        {
+          "value": 0,
+          "text": "Nunca"
+        },
+        {
+          "value": 1,
+          "text": "Quase nunca"
+        },
+        {
+          "value": 2,
+          "text": "De vez em quando"
+        },
+        {
+          "value": 3,
+          "text": "Quase sempre"
+        },
+        {
+          "value": 4,
+          "text": "Sempre"
+        }
+      ],
+      "weight": 1,
+      "reverse": false
+    }
+  ],
+  "scoring": {
+    "min": 0,
+    "max": 72,
+    "factors": [
+      {
+        "id": "fator-geral",
+        "name": "Fator Geral",
+        "questionIds": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18
+        ],
+        "ranges": [
+          {
+            "min": 0,
+            "max": 18,
+            "level": "Baixo",
+            "description": "Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **baixo**."
+          },
+          {
+            "min": 19,
+            "max": 36,
+            "level": "Médio",
+            "description": "Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **médio**."
+          },
+          {
+            "min": 37,
+            "max": 54,
+            "level": "Alto",
+            "description": "Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **alto**."
+          },
+          {
+            "min": 55,
+            "max": 72,
+            "level": "Muito Alto",
+            "description": "Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **muito alto**."
+          }
+        ]
+      },
+      {
+        "id": "desateno",
+        "name": "Desatenção",
+        "questionIds": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "ranges": [
+          {
+            "min": 0,
+            "max": 9,
+            "level": "Baixo",
+            "description": "Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **baixo**."
+          },
+          {
+            "min": 10,
+            "max": 18,
+            "level": "Médio",
+            "description": "Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **médio**."
+          },
+          {
+            "min": 19,
+            "max": 27,
+            "level": "Alto",
+            "description": "Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **alto**."
+          },
+          {
+            "min": 28,
+            "max": 36,
+            "level": "Muito Alto",
+            "description": "Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **muito alto**."
+          }
+        ]
+      },
+      {
+        "id": "impulsividade",
+        "name": "Impulsividade",
+        "questionIds": [
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18
+        ],
+        "ranges": [
+          {
+            "min": 0,
+            "max": 9,
+            "level": "Baixo",
+            "description": "Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **baixo**."
+          },
+          {
+            "min": 10,
+            "max": 18,
+            "level": "Médio",
+            "description": "Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **médio**."
+          },
+          {
+            "min": 19,
+            "max": 27,
+            "level": "Alto",
+            "description": "Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **alto**."
+          },
+          {
+            "min": 28,
+            "max": 36,
+            "level": "Muito Alto",
+            "description": "Este teste não apresenta tabelas de referência. Com base em quartis, seu resultado se mostra **muito alto**."
+          }
+        ]
+      }
+    ]
+  }
+}
